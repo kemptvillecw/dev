@@ -1,30 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const statusBox = document.getElementById("unsubscribe-status");
-  const message = document.getElementById("unsubscribe-message");
+  const statusEl = document.getElementById("unsubscribe-status");
+  const messageEl = document.getElementById("unsubscribe-message");
 
-  // Extract code from URL fragment: #code=<uuid>
-  const hash = window.location.hash;
-  const code = hash.replace("#code=", "").trim();
+  const code = window.location.hash.replace("#code=", "").trim();
 
   if (!code || code.length < 10) {
-    message.textContent = "Invalid unsubscribe link.";
-    statusBox.textContent = "The link you followed is missing or expired.";
-    statusBox.classList.add("error");
+    messageEl.textContent = "Invalid unsubscribe link.";
+    statusEl.textContent = "The link you followed is missing or expired.";
+    statusEl.className = "form-message error";
     return;
   }
 
-  // Fire-and-forget unsubscribe request
-  const scriptUrl =
-    "https://script.google.com/macros/s/AKfycbwTZO8G9_h2HiB-vw16-BrZLPtT-78m-_AX-te3QnlldN-gNptHR0tjAMz7IL9UwbkAXg/exec?action=unsubscribe&code=" +
-    encodeURIComponent(code);
+  fetch(
+    "https://script.google.com/macros/s/AKfycbwnZQsalwFQ1PxqV7UMCoCZz2032czonZH-1CRhcKAU-V-7r0tbhkOlCTF9N5r1L3ON/exec" +
+      "?action=unsubscribe&code=" +
+      encodeURIComponent(code)
+  ).catch(() => {});
 
-  try {
-    fetch(scriptUrl).catch(() => {});
-  } catch (_) {}
-
-  // Always show success — backend ALWAYS unsubscribes correctly
-  message.textContent = "You’ve been unsubscribed.";
-  statusBox.textContent =
+  messageEl.textContent = "You’ve been unsubscribed.";
+  statusEl.textContent =
     "You will no longer receive updates from Kemptville Creative Writers.";
-  statusBox.classList.add("success");
+  statusEl.className = "form-message success";
 });

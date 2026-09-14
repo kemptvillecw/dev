@@ -3,33 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>Unsubscribe | Kemptville Creative Writers</title>
 
-  <!-- Same styles as index.html -->
   <link rel="stylesheet" href="../styles/styles.css">
   <link rel="stylesheet" href="../styles/form-helpers.css">
 </head>
 
 <body>
-  <header>
-    <h1>Kemptville Creative Writers</h1>
-    <p class="tagline">Where stories find their voice</p>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-brand" href="../index.html">
+        <img src="../images/logo.svg"
+             alt="Kemptville Creative Writers — Where stories find their voice">
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false">
+        Menu
+      </button>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About Us</a>
+        <a href="../schedule.html">Schedule &amp; Events</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <section class="coming-soon">
-      <h2>Unsubscribe</h2>
-      <p id="unsubscribe-message">Processing your request…</p>
-
-      <div class="subscribe-box" style="margin-top: 2rem;">
-        <div id="unsubscribe-status" class="form-message"></div>
+    <section class="hero hero-unsubscribed">
+      <div class="hero-copy">
+        <p class="eyebrow">We'll Miss You</p>
+        <h1>Unsubscribe</h1>
+        <p>We understand. You can manage your subscription below.</p>
       </div>
+    </section>
+
+    <section class="simple-page">
+      <section class="panel simple-card">
+        <h1>Unsubscribe</h1>
+        <p id="unsubscribe-message">Processing your request…</p>
+        <div id="unsubscribe-status" class="form-message"></div>
+      </section>
     </section>
   </main>
 
-  <footer>
-    <p>© 2026 Kemptville Creative Writers</p>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© 2026 Kemptville Creative Writers</span>
+
+      <nav>
+        <a href="../index.html">Home</a>
+        <a href="../about.html">About</a>
+        <a href="../schedule.html">Schedule</a>
+        <a href="../contact.html">Contact</a>
+      </nav>
+
+      <span>Where stories find their voice</span>
+    </div>
   </footer>
 
   <script src="../scripts/unsubscribe.js"></script>

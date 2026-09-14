@@ -1,80 +1,122 @@
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("newsletter-form");
-  const formStartedField = document.getElementById("form_started");
+  const messageBox = document.getElementById("newsletter-message");
 
-  // Record when the form became available (for honeypot timing)
-  if (formStartedField) {
-    formStartedField.value = Date.now().toString();
+  if (!form || !messageBox) return;
+
+  const CHECKSUM = "abc123";
+  const MIN_SUBMIT_MS = 3000;
+
+  function restoreSpamFields() {
+    const formStarted = form.querySelector("#form_started");
+    if (formStarted) formStarted.value = Date.now();
+
+    const interacted = form.querySelector('input[name="interacted"]');
+    if (interacted) interacted.value = "no";
+
+    const checksum = form.querySelector('input[name="checksum"]');
+    if (checksum) checksum.value = CHECKSUM;
+
+    const honeypot = form.querySelector("#middle_name");
+    if (honeypot) honeypot.value = "";
+  }
+
+  function isBotSubmission() {
+    const honeypot = form.querySelector("#middle_name");
+    if (honeypot && honeypot.value.trim()) return true;
+
+    const checksum = form.querySelector('input[name="checksum"]');
+    if (checksum && checksum.value !== CHECKSUM) return true;
+
+    return false;
+  }
+
+  function isTooFast() {
+    const formStarted = form.querySelector("#form_started");
+    if (!formStarted || !formStarted.value) return true;
+    return Date.now() - Number(formStarted.value) < MIN_SUBMIT_MS;
+  }
+
+  function showFakeSuccess() {
+    messageBox.textContent =
+      "Thanks! Please check your inbox for a confirmation link.";
+    messageBox.classList.add("success");
+    form.reset();
+    restoreSpamFields();
   }
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const formData = new FormData(form);
-    const messageBox = document.getElementById("newsletter-message");
-    const submitButton = form.querySelector("button[type='submit']");
-
-    // Reset message area
-    messageBox.textContent = "";
     messageBox.className = "form-message";
+    messageBox.textContent = "";
 
-    // Disable button + visual feedback
-    submitButton.disabled = true;
-    submitButton.textContent = "Submitting…";
+    const submitButton = form.querySelector("button[type='submit']");
+    const defaultButtonText = submitButton ? submitButton.textContent : "Join Newsletter";
+
+    if (isBotSubmission()) {
+      showFakeSuccess();
+      return;
+    }
+
+    if (isTooFast()) {
+      messageBox.textContent = "Please wait a moment before submitting.";
+      messageBox.classList.add("error");
+      return;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Joining…";
+    }
 
     try {
       const response = await fetch(form.action, {
         method: "POST",
-        body: formData,
+        body: new FormData(form),
+        redirect: "manual"
       });
 
       let result;
       try {
         result = await response.json();
       } catch {
-        // If backend returns non-JSON, treat as generic success
         result = { status: "success" };
       }
 
-      if (result.status === "success") {
+      if (result.status === "success" || result.status === "ok") {
         messageBox.textContent =
-          "Thanks for subscribing! You will be sent a confirmation e‑mail. If it does not appear, check your Junk/Spam folder.";
+          "Thanks! Please check your inbox for a confirmation link.";
         messageBox.classList.add("success");
+
+        if (submitButton) {
+          submitButton.disabled = result.disable === true;
+        }
+
         form.reset();
-      }
-
-      else if (result.status === "already_pending") {
+        restoreSpamFields();
+      } else if (result.status === "error") {
         messageBox.textContent =
-          "You’ve already started the subscription process. If you haven’t received your confirmation e‑mail, please check your Junk/Spam folder. If it still hasn’t arrived, you can try subscribing again in about 10 minutes and a new confirmation e‑mail will be sent.";
-        messageBox.classList.add("success");
-      }
-
-      else if (result.status === "already_confirmed") {
-        messageBox.textContent =
-          "You're already confirmed and on our list. You'll continue to receive newsletters.";
-        messageBox.classList.add("success");
-      }
-
-      else if (result.status === "error") {
-        messageBox.textContent = result.message || "Something went wrong.";
+          result.message || "Unable to complete your subscription. Please try again.";
         messageBox.classList.add("error");
-      }
-
-      else {
-        // Honeypot or silent rejection — treat as normal success
+        if (submitButton) submitButton.disabled = false;
+      } else {
         messageBox.textContent =
-          "Thanks for subscribing! You will be sent a confirmation e‑mail. If it does not appear, check your Junk/Spam folder.";
+          "Thanks! Please check your inbox for a confirmation link.";
         messageBox.classList.add("success");
+        if (submitButton) submitButton.disabled = false;
+        form.reset();
+        restoreSpamFields();
       }
-
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      messageBox.textContent = "Network error. Please try again later.";
+    } catch (err) {
+      messageBox.textContent =
+        "We couldn't reach the newsletter service right now. Please try again later.";
       messageBox.classList.add("error");
+      if (submitButton) submitButton.disabled = false;
+    } finally {
+      if (submitButton && !submitButton.disabled) {
+        submitButton.textContent = defaultButtonText;
+      }
     }
-
-    // Re-enable button after response
-    submitButton.disabled = false;
-    submitButton.textContent = "Join Newsletter";
   });
 });

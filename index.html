@@ -3,111 +3,216 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home | Kemptville Creative Writers</title>
 
-  <title>Kemptville Creative Writers</title>
-
-  <!-- Main site styling -->
   <link rel="stylesheet" href="styles/styles.css">
-
-  <!-- Helper field styling -->
   <link rel="stylesheet" href="styles/form-helpers.css">
 </head>
+
 <body>
-  <header>
-    <h1>Kemptville Creative Writers</h1>
-    <p class="tagline">Where stories find their voice</p>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-brand" href="index.html">
+        <img src="images/logo.svg" alt="Kemptville Creative Writers — Where stories find their voice">
+      </a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false">Menu</button>
+
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="schedule.html">Schedule &amp; Events</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <section class="coming-soon">
-      <h2>Coming Soon</h2>
-      <p>A new home for storytellers and creative minds in Kemptville.</p>
+    <section class="hero hero-home">
+      <div class="hero-copy">
+        <p class="eyebrow">Writers in the Kemptville area</p>
 
-      <!-- Subscribe Box -->
-      <div class="subscribe-box" style="margin-top: 2rem;">
-        <h3>Join Our Newsletter</h3>
-        <p>Get updates as we build our creative community.</p>
+        <h1>Stay connected to the writing community.</h1>
 
-        <form 
+        <p>
+          Get the latest KCW meeting dates, writing events, and opportunities
+          to learn and share with other local writers.
+        </p>
+
+        <a class="button button-primary" href="#newsletter">
+          Find your place →
+        </a>
+      </div>
+    </section>
+
+    <section class="newsletter-reasons">
+      <div class="reasons-inner">
+        <h2>Why join the KCW newsletter?</h2>
+
+        <div class="reason-grid">
+          <div class="reason">
+            <span class="reason-icon">▦</span>
+            <div>
+              <h3>Know what's coming up</h3>
+              <p>Meeting dates, guest speakers, workshops, and special events.</p>
+            </div>
+          </div>
+
+          <div class="reason">
+            <span class="reason-icon">▤</span>
+            <div>
+              <h3>Discover opportunities</h3>
+              <p>Writing activities, resources, and support for local writers.</p>
+            </div>
+          </div>
+
+          <div class="reason">
+            <span class="reason-icon">⌂</span>
+            <div>
+              <h3>Never miss a meeting</h3>
+              <p>Receive schedule changes and optional library closure updates.</p>
+            </div>
+          </div>
+
+          <div class="reason">
+            <span class="reason-icon">✦</span>
+            <div>
+              <h3>Stay connected</h3>
+              <p>Keep in touch with a welcoming community of writers.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter-strip" id="newsletter">
+      <div class="newsletter-inner">
+        <div class="newsletter-copy">
+          <span class="leaf-mark">❧</span>
+          <div>
+            <h2>Stay in the Loop</h2>
+            <p>Get updates on meetings, events, and writing opportunities.</p>
+          </div>
+        </div>
+
+        <form
           id="newsletter-form"
-          action="https://script.google.com/macros/s/AKfycbwTZO8G9_h2HiB-vw16-BrZLPtT-78m-_AX-te3QnlldN-gNptHR0tjAMz7IL9UwbkAXg/exec"
+          class="newsletter-form"
+          action="https://script.google.com/macros/s/AKfycbwnZQsalwFQ1PxqV7UMCoCZz2032czonZH-1CRhcKAU-V-7r0tbhkOlCTF9N5r1L3ON/exec"
           method="POST"
         >
-
-          <!-- Quiet helper field -->
           <div class="form-helper">
             <label for="middle_name">Middle Name</label>
-            <input 
-              type="text"
-              id="middle_name"
-              name="middle_name"
-              autocomplete="one-time-code"
-              tabindex="-1"
-            >
+            <input id="middle_name" name="middle_name" type="text" autocomplete="one-time-code" tabindex="-1">
           </div>
 
-          <!-- Quiet metadata field -->
-          <input 
-            type="text" 
-            name="checksum" 
-            value="abc123" 
-            class="form-checksum"
-          >
-
-          <!-- Interaction metadata -->
+          <input class="form-checksum" type="text" name="checksum" value="abc123" tabindex="-1">
           <input type="hidden" name="interacted" value="no">
-
-          <!-- Timing metadata -->
           <input type="hidden" name="form_started" id="form_started">
 
-          <!-- Visible name field (optional) -->
-          <label for="name">Name (optional)</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            style="margin-top: 0.5rem;"
-          >
-
-          <!-- Visible email field -->
-          <label for="email" style="margin-top: 1rem;">Email</label>
-          <input 
-            type="email"
-            id="email"
-            name="email"
-            required
-            style="margin-top: 0.5rem;"
-          >
-
-          <!-- Weekly calendar opt-in -->
-          <div style="margin-top: 1rem;">
-            <label>
-              <input
-                type="checkbox"
-                name="weekly_calendar"
-                value="yes"
-              >
-              Send me weekly updates about library closures and schedule changes
-            </label>
+          <div>
+            <label for="name">Name (optional)</label>
+            <input id="name" name="name" type="text">
           </div>
 
-          <button type="submit" style="margin-top: 1rem;">
-            Join Newsletter
-          </button>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+
+          <button class="button button-primary" type="submit">Join Newsletter</button>
+
+          <label class="newsletter-option">
+            <input type="checkbox" name="weekly_calendar" value="yes">
+            Send me weekly updates about KCW meetings, events, library hours, and local weather
+          </label>
         </form>
-  
-        <!-- Success / error message area -->
-        <div id="newsletter-message" class="form-message" style="margin-top: 1rem;"></div>
+
+        <div id="newsletter-message" class="form-message" role="status"></div>
+      </div>
+    </section>
+
+    <section class="section home-panels">
+      <div class="grid-3">
+        <article class="panel home-panel">
+          <h2>About KCW</h2>
+
+          <p>
+            Kemptville Creative Writers (KCW) brings together writers of all levels, from those 
+			just beginning to write to experienced and published authors. Our members write across 
+			genres and forms, including fiction, non-fiction, poetry and memoir.
+          </p>
+
+          <p>
+            We meet to write, share ideas, explore the craft of writing, and learn from authors
+            and subject-matter experts. It's a place to develop your writing, connect with other
+            writers, and encourage one another along the way.
+          </p>
+
+          <a class="home-link" href="about.html">Learn more about us →</a>
+        </article>
+
+        <article class="panel home-panel">
+          <h2>Next Meeting</h2>
+
+          <p>
+            <strong>Monday evenings</strong><br>
+            6:00 p.m. – 7:50 p.m.
+          </p>
+
+          <div class="meta">
+            <div>
+              <strong>Where</strong>
+              North Grenville Public Library<br>
+              Tallman Room
+            </div>
+
+            <div>
+              <strong>When</strong>
+              January–May and September–December
+            </div>
+
+            <div>
+              <strong>Membership</strong>
+              Free — new members welcome.
+            </div>
+          </div>
+
+          <a class="home-link" href="schedule.html">View full schedule →</a>
+        </article>
+
+        <article class="panel home-panel">
+          <h2>What to Expect</h2>
+
+          <ul class="checks">
+            <li>Writing exercises</li>
+            <li>Group discussions</li>
+            <li>Supportive community</li>
+            <li>Guest authors &amp; speakers</li>
+          </ul>
+
+          <p><em>All are welcome!</em></p>
+        </article>
       </div>
     </section>
   </main>
 
-  <footer>
-    <p>© 2026 Kemptville Creative Writers</p>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© 2026 Kemptville Creative Writers</span>
+
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <span>Where stories find their voice</span>
+    </div>
   </footer>
 
-  <!-- External JavaScript -->
+  <script src="scripts/site.js"></script>
   <script src="scripts/form-helpers.js"></script>
-
 </body>
 </html>

@@ -1,99 +1,74 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const message = document.getElementById("pref-message");
-  const statusBox = document.getElementById("pref-status");
-  const form = document.getElementById("preferences-form");
+  const m = document.getElementById("pref-message");
+  const s = document.getElementById("pref-status");
+  const f = document.getElementById("preferences-form");
+  const e = document.getElementById("pref-email-display");
+  const w = document.getElementById("pref-weekly");
 
-  const emailDisplay = document.getElementById("pref-email-display");
-  const weeklyField = document.getElementById("pref-weekly");
+  const c = new URLSearchParams(location.search).get("code");
+  const base =
+    "https://script.google.com/macros/s/AKfycbwnZQsalwFQ1PxqV7UMCoCZz2032czonZH-1CRhcKAU-V-7r0tbhkOlCTF9N5r1L3ON/exec";
 
-  // Extract code from URL fragment: #code=<uuid>
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-
-  if (!code || code.length < 10) {
-    message.textContent = "Invalid preferences link.";
-    statusBox.textContent = "The link you followed is missing or expired.";
-    statusBox.classList.add("error");
-    form.style.display = "none";
+  if (!c || c.length < 10) {
+    m.textContent = "Invalid preferences link.";
+    s.textContent = "The link you followed is missing or expired.";
+    s.className = "form-message error";
+    f.style.display = "none";
     return;
   }
-
-  // Backend endpoint
-  const baseUrl =
-    "https://script.google.com/macros/s/AKfycbwTZO8G9_h2HiB-vw16-BrZLPtT-78m-_AX-te3QnlldN-gNptHR0tjAMz7IL9UwbkAXg/exec";
-
-  const fetchUrl = `${baseUrl}?action=update_preferences&code=${encodeURIComponent(code)}`;
-
-  let result = null;
 
   try {
-    const response = await fetch(fetchUrl);
-    result = await response.json();
-  } catch (err) {
-    console.error("Error loading preferences:", err);
-    message.textContent = "Unable to load preferences.";
-    statusBox.textContent = "Network error. Please try again later.";
-    statusBox.classList.add("error");
-    form.style.display = "none";
+    const r = await fetch(
+      base + "?action=update_preferences&code=" + encodeURIComponent(c)
+    );
+    const j = await r.json();
+
+    if (j.status !== "ok") throw 0;
+
+    e.textContent = "Email: " + (j.email || "");
+    w.checked = j.weekly_calendar === "Yes";
+    m.textContent = "Update your newsletter preferences below.";
+  } catch (_) {
+    m.textContent = "Unable to load preferences.";
+    s.textContent = "Please try again later.";
+    s.className = "form-message error";
+    f.style.display = "none";
     return;
   }
 
-  if (result.status !== "ok") {
-    message.textContent = "Invalid preferences link.";
-    statusBox.textContent = "The preferences code appears to be invalid or expired.";
-    statusBox.classList.add("error");
-    form.style.display = "none";
-    return;
-  }
+  f.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    s.className = "form-message";
 
-  // Populate fields
-  message.textContent = "Update your newsletter preferences below.";
-  emailDisplay.textContent = `Email: ${result.email || ""}`;
-  weeklyField.checked = result.weekly_calendar === "Yes";
-
-  // === Save handler ===
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    statusBox.textContent = "";
-    statusBox.className = "form-message";
-
-    const submitButton = form.querySelector("button[type='submit']");
-    submitButton.disabled = true;
-    submitButton.textContent = "Saving…";
-
-    // Only weekly_calendar + code now
-    const saveData = new URLSearchParams({
-      action: "save_preferences",
-      code: code,
-      weekly_calendar: weeklyField.checked ? "Yes" : "No",
-    });
+    const b = f.querySelector("button");
+    b.disabled = true;
 
     try {
-      const response = await fetch(baseUrl, {
-        method: "POST",
-        body: saveData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
+      const d = new URLSearchParams({
+        action: "save_preferences",
+        code: c,
+        weekly_calendar: w.checked ? "Yes" : "No",
       });
 
-      const saveResult = await response.json();
+      const r = await fetch(base, {
+        method: "POST",
+        body: d,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      });
 
-      if (saveResult.status === "updated") {
-        statusBox.textContent = "Your preferences have been updated.";
-        statusBox.classList.add("success");
+      const j = await r.json();
+
+      if (j.status === "updated") {
+        s.textContent = "Your preferences have been updated.";
+        s.className = "form-message success";
       } else {
-        statusBox.textContent = "Unable to update preferences.";
-        statusBox.classList.add("error");
+        throw 0;
       }
-    } catch (err) {
-      console.error("Error saving preferences:", err);
-      statusBox.textContent = "Network error. Please try again later.";
-      statusBox.classList.add("error");
+    } catch (_) {
+      s.textContent = "Unable to update preferences.";
+      s.className = "form-message error";
     }
 
-    submitButton.disabled = false;
-    submitButton.textContent = "Save Preferences";
+    b.disabled = false;
   });
 });
