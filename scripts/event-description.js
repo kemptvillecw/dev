@@ -22,6 +22,9 @@
       const parsed = JSON.parse(match[1]);
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
       const result = { featured: parsed.featured === true };
+      if (Object.prototype.hasOwnProperty.call(parsed, 'status')) {
+        result.status = typeof parsed.status === 'string' ? parsed.status.trim() : '';
+      }
       for (const key of ['type', 'eventTitle', 'learningTopic', 'learningOutcome', 'format',
         'speaker', 'speakerRole', 'speakerUrl', 'image', 'imageAlt', 'hoverText', 'address',
         'directions', 'featureStart', 'featureEnd']) {
@@ -32,11 +35,15 @@
       return {};
     }
   }
+  function isPublic(metadata) {
+    // Older calendar entries without an editorial status remain visible.
+    return metadata.status === undefined || metadata.status.toLowerCase() === 'published';
+  }
   function isFeatured(metadata, today) {
     const validDate = (value) => !value || /^\d{4}-\d{2}-\d{2}$/.test(value);
-    return metadata.featured === true && validDate(metadata.featureStart) && validDate(metadata.featureEnd)
+    return isPublic(metadata) && metadata.featured === true && validDate(metadata.featureStart) && validDate(metadata.featureEnd)
       && (!metadata.featureStart || today >= metadata.featureStart)
       && (!metadata.featureEnd || today <= metadata.featureEnd);
   }
-  root.KCWEventDescription = { plainText, metadata, isFeatured };
+  root.KCWEventDescription = { plainText, metadata, isPublic, isFeatured };
 })(window);

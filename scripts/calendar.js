@@ -95,6 +95,8 @@
         }
         if (!Array.isArray(data.items)) throw new Error('Invalid calendar response');
         data.items.filter((item) => item.status !== 'cancelled').forEach((item) => {
+          const metadata = window.KCWEventDescription.metadata(item.description);
+          if (!window.KCWEventDescription.isPublic(metadata)) return;
           const start = Date.parse(item.start?.dateTime || item.start?.date);
           const end = Date.parse(item.end?.dateTime || item.end?.date);
           if (!Number.isFinite(start) || !Number.isFinite(end)) throw new Error('Invalid event date');

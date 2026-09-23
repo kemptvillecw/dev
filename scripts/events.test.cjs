@@ -51,6 +51,30 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('[data-event-outcomes]').isVisible(), true);
     assert.match((await page.evaluate(() => window.requests))[1], /pageToken=second/);
     await page.close();
+    const draft = event('draft', '01', { status: 'Draft', featured: true });
+    const published = event('published', '20', { status: 'Published', featured: true });
+    page = await render([{ items: [draft], nextPageToken: 'published-page' }, { items: [published] }]);
+    assert.equal(await page.locator('#featured-heading').textContent(), 'published');
+    assert.equal(await page.evaluate(() => window.KCWEventDescription.isFeatured(
+      { status: 'Draft', featured: true }, '2026-09-23')), false);
+    await page.close();
+    page = await render([{ items: [draft, event('ordinary', '20')] }]);
+    assert.equal(await page.locator('#featured-heading').textContent(), 'ordinary');
+    await page.close();
+
+    // Verify the separate schedule loader applies the same publication rule.
+    page = await browser.newPage();
+    await page.setContent(`<section data-public-calendar><p data-calendar-status></p>
+      <button data-calendar-retry></button><table data-calendar-table-wrap><tbody data-calendar-rows></tbody></table></section>`);
+    await page.evaluate((items) => {
+      window.KCW_CALENDAR = { id: 'test', timezone: 'America/Toronto', apiKey: 'test', daysAhead: 21 };
+      window.fetch = async () => ({ ok: true, json: async () => ({ items }) });
+    }, [draft, published, event('ordinary', '21')]);
+    await page.addScriptTag({ path: path.join(__dirname, 'event-description.js') });
+    await page.addScriptTag({ path: path.join(__dirname, 'calendar.js') });
+    await page.waitForFunction(() => document.querySelector('[data-public-calendar]').getAttribute('aria-busy') === 'false');
+    assert.deepEqual(await page.locator('[data-calendar-rows] strong').allTextContents(), ['published', 'ordinary']);
+    await page.close();
 
     for (const metadata of [{ featured: false }, { featured: true, featureStart: '2026-09-24' },
       { featured: true, featureEnd: '2026-09-22' }]) {
