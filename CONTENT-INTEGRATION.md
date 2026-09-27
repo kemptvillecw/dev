@@ -35,3 +35,7 @@ Merging to `dev` activates the existing workflow that mirrors to `kemptvillecw/d
 ## Review to-do list
 
 - [x] Change the Link button label to “View website ↗”.
+
+## Activation — 2026-09-27
+
+Backend PR #21 is merged and deployed as Apps Script version 8, with CMS_PUBLIC_API_ENABLED=true. Anonymous requests from https://kemptvillecw.github.io/dev/ successfully validated the live listing, article detail, a missing ID, and the Link filter. The catalogue currently contains one approved Article, with no author attribution, and no Links. The website configuration is now enabled. Publication/removal timing and existing author migration still need separate live acceptance checks; no content was created or withdrawn during deployment verification.
