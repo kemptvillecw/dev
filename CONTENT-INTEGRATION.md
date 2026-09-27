@@ -31,3 +31,7 @@ The website refreshes visible listings every 30 seconds and on returning to a ta
 Existing approved content needs an attribution backfill to appear under author filters. Hero images must already exist under this site's `images/` directory; missing images hide gracefully. Structured editor changes, inline-image authoring, and image synchronization remain later work. No live Google screening claim is made by the link notice.
 
 Merging to `dev` activates the existing workflow that mirrors to `kemptvillecw/dev`. This branch has not been merged or deployed. Review locally before promotion to Dev, then UAT and production.
+
+## Review to-do list
+
+- [x] Change the Link button label to “View website ↗”.

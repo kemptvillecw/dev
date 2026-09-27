@@ -63,7 +63,7 @@ try {
   console.log('PASS semantic reader, deferred edits, safe text rendering, and withdrawal');
 
   await page.goto(base + '/browse.html?type=LINK'); await page.waitForFunction(() => document.querySelector('[data-content-count]').textContent === '9 items');
-  const external = page.getByRole('link', { name: 'Visit resource' }).first();
+  const external = page.getByRole('link', { name: 'View website' }).first();
   assert.equal(await external.getAttribute('rel'), 'noopener noreferrer'); assert.equal(await external.getAttribute('target'), '_blank');
   await page.goto(base + '/browse.html'); await page.locator('.content-card').first().waitFor();
   await fs.mkdir(new URL('../artifacts/', import.meta.url), { recursive: true });

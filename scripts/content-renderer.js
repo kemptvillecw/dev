@@ -44,7 +44,7 @@ export function contentCard(item) {
   body.append(element('p', item.summary), tagLinks(item));
   if (item.type === 'LINK') {
     const href = safeLink(item.externalUrl);
-    if (href) { body.append(element('p', new URL(href).hostname, 'content-domain')); const action = link('Visit resource ↗', href, true); action.className = 'button'; body.append(action); }
+    if (href) { body.append(element('p', new URL(href).hostname, 'content-domain')); const action = link('View website ↗', href, true); action.className = 'button'; body.append(action); }
   } else {
     const action = link(item.type === 'STORY' ? 'Read story →' : 'Read article →', 'content.html?' + new URLSearchParams({ id: item.id }));
     action.className = 'button'; body.append(action);
