@@ -1,0 +1,1 @@
+export default { refreshMs: 30000, pageSize: 12 };
