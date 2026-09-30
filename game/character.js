@@ -635,7 +635,7 @@ const practicePools = {
   gate: [
     {
       id: 'g1', type: 'single',
-      prompt: 'Gate: Kai is the second-most important character in the story. The protagonist trusts him with fears and secrets she shares with no one else. Over the course of the story, Kai changes from fearful to decisive and is ultimately portrayed as heroic. Which story-function term describes Kai?',
+      prompt: 'Gate: Kai is the second-most important character in the story. The protagonist trusts him with fears and secrets she shares with no one else. Kai is also written with several conflicting loyalties and is ultimately portrayed as heroic. Which story-function term describes Kai?',
       options: ['Deuteragonist', 'Confidant', 'Round', 'Hero'], answer: 1,
       explanation: 'Confidant describes Kai’s story function because the protagonist trusts him with private fears and secrets. Deuteragonist describes his narrative importance, round describes his complexity, and hero describes his moral/heroic framing.'
     },
@@ -1439,6 +1439,7 @@ function advanceQuiz() {
   state.quizIndex++;
   if (state.quizIndex >= QUIZ_LENGTH) {
     state.quizPassed = state.quizCorrect >= QUIZ_PASS;
+    if (state.quizPassed) state.completed = true;
     state.view = 'quizResult';
   }
   saveState(); render();
@@ -1503,7 +1504,7 @@ function renderComplete() {
     saveState(); render();
   });
   document.getElementById('viewMapDone').addEventListener('click', () => mapDialog.showModal());
-  document.getElementById('startGoal').addEventListener('click', () => window.writecraftNavigate('goal'));
+  document.getElementById('startGoal').addEventListener('click', () => window.storyConstructionNavigate('goal'));
 }
 
 function renderGameOver() {
