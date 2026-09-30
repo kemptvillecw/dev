@@ -1603,4 +1603,134 @@ function renderProof() {
   shell({
     kicker: 'Stage 9 · Real-world proof',
     title: 'Goal is visible in published stories.',
-    body: `<p class="lede">These examples reinforce Goal using public-domai
+    body: `<p class="lede">These examples reinforce Goal using public-domain works. They are evidence screens, not scored questions.</p><div class="proof-grid">${realWorldProof.map(p => `<article class="proof-card"><span class="mini-label">${p.work}</span><h3>${p.title}</h3><p>${p.body}</p><div class="proof-source"><span>${p.source}</span><a href="${p.url}" target="_blank" rel="noopener noreferrer">Open source ↗</a></div></article>`).join('')}</div>`,
+    actions: `<button class="primary-button" id="finishLevel" type="button">Complete level 2</button>`
+  });
+  document.getElementById('finishLevel').addEventListener('click', () => { state.completed = true; state.view = 'complete'; saveState(); render(); });
+}
+
+
+function renderComplete() {
+  shell({
+    body: `<div class="level-complete"><div class="seal" aria-hidden="true">✦</div><span class="mini-label">Story Construction · Goal</span><h1>Level complete.</h1><p>You can identify what a character is trying to achieve, distinguish a goal from actions and circumstances, infer an unstated goal from behaviour, and recognize when a goal changes.</p><div class="callout"><strong>Next concept: Motivation</strong><p>Motivation is next in the agreed sequence, but Level 3 has not been built yet.</p></div></div>`,
+    actions: `<button class="secondary-button" id="replayLevel" type="button">Replay Goal</button><button class="secondary-button" id="reviewCharacter" type="button">Review Character</button><button class="primary-button" id="viewMapDone" type="button">View concept path</button>`
+  });
+  document.getElementById('replayLevel').addEventListener('click', () => {
+    const hearts = state.hearts;
+    state = defaultState();
+    state.hearts = hearts;
+    state.view = 'lesson';
+    state.startedAt = new Date().toISOString();
+    saveState(); render();
+  });
+  document.getElementById('reviewCharacter').addEventListener('click', () => window.writecraftNavigate('character'));
+  document.getElementById('viewMapDone').addEventListener('click', () => mapDialog.showModal());
+}
+
+
+function renderGameOver() {
+  shell({
+    kicker: '0 hearts',
+    title: 'This run has ended.',
+    body: `<p class="lede">Only challenge-gate misses can remove hearts. The curriculum has not yet fixed exactly where a learner should restart after game over, so this prototype returns you to the Goal lesson with three hearts.</p>`,
+    actions: `<button class="primary-button" id="restartAfterGameOver" type="button">Restart from lesson</button>`
+  });
+  document.getElementById('restartAfterGameOver').addEventListener('click', () => {
+    state.hearts = MAX_HEARTS;
+    state.streak = 0;
+    state.practicePhase = 'basic';
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    state.currentQuestion = null;
+    state.selectedQuestionIds = { basic: [], hard: [], gate: [] };
+    state.lessonIndex = 0;
+    state.view = 'lesson';
+    saveState(); render();
+  });
+}
+
+function getTermExamples(key) {
+  const entry = conceptGlossary[key];
+  return entry ? [entry.example, ...(glossaryExampleVariants[key] || [])] : [];
+}
+
+function showTermExample(key, requestedIndex = null) {
+  const examples = getTermExamples(key);
+  if (!examples.length) return;
+  const previous = variationHistory.examples[key];
+  let index = requestedIndex;
+  if (index === null) {
+    const candidates = examples.map((_, i) => i).filter(i => i !== previous);
+    const pool = candidates.length ? candidates : examples.map((_, i) => i);
+    index = pool[Math.floor(Math.random() * pool.length)];
+  }
+  currentTermExampleIndex = ((index % examples.length) + examples.length) % examples.length;
+  termDialogExample.textContent = examples[currentTermExampleIndex];
+  termExampleLabel.textContent = `Illustrative example ${currentTermExampleIndex + 1} of ${examples.length}`;
+  anotherTermExample.hidden = examples.length < 2;
+  variationHistory.examples[key] = currentTermExampleIndex;
+  saveVariationHistory();
+}
+
+function openTermDialog(key) {
+  const entry = conceptGlossary[key];
+  if (!entry) return;
+  currentTermKey = key;
+  termDialogCategory.textContent = entry.category;
+  termDialogTitle.textContent = entry.label;
+  termDialogDefinition.textContent = entry.definition;
+  showTermExample(key);
+  termDialog.showModal();
+}
+
+function closeTermDialog() {
+  currentTermKey = null;
+  if (termDialog.open) termDialog.close();
+}
+
+
+function renderConceptMap() {
+  let characterCompleted = false;
+  try {
+    const characterState = JSON.parse(localStorage.getItem(CHARACTER_STORAGE_KEY));
+    characterCompleted = Boolean(characterState && characterState.completed);
+  } catch {}
+  conceptMap.innerHTML = concepts.map((name, i) => {
+    if (i === 0) {
+      return `<li class="${characterCompleted ? 'current' : 'locked'}"><span class="map-number">1</span><span class="map-name">Character</span><span class="map-state">${characterCompleted ? 'Completed' : 'Prerequisite'}</span></li>`;
+    }
+    if (i === 1) {
+      return `<li class="current"><span class="map-number">2</span><span class="map-name">Goal</span><span class="map-state">${state.completed ? 'Completed' : 'Current'}</span></li>`;
+    }
+    const prereq = i === 2 ? 'Complete Goal' : 'Locked';
+    return `<li class="locked"><span class="map-number">${i + 1}</span><span class="map-name">${name}</span><span class="map-state">${prereq}</span></li>`;
+  }).join('');
+}
+
+screen.addEventListener('click', event => {
+  const trigger = event.target.closest('[data-term]');
+  if (trigger) openTermDialog(trigger.dataset.term);
+});
+
+anotherTermExample.addEventListener('click', () => {
+  if (!currentTermKey) return;
+  const examples = getTermExamples(currentTermKey);
+  showTermExample(currentTermKey, (currentTermExampleIndex + 1) % examples.length);
+});
+
+closeTerm.addEventListener('click', closeTermDialog);
+termDialog.addEventListener('click', event => {
+  const rect = termDialog.getBoundingClientRect();
+  const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  if (outside) closeTermDialog();
+});
+
+mapButton.addEventListener('click', () => mapDialog.showModal());
+closeMap.addEventListener('click', () => mapDialog.close());
+mapDialog.addEventListener('click', e => {
+  const rect = mapDialog.getBoundingClientRect();
+  const outside = e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom;
+  if (outside) mapDialog.close();
+});
+
+render();
