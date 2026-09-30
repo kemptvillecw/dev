@@ -1466,4 +1466,152 @@ function renderQuizResult() {
     return;
   }
 
-  const secondFailure = state.quizAttem
+  const secondFailure = state.quizAttempt >= 2;
+  shell({
+    kicker: 'Completion checkpoint',
+    title: secondFailure ? 'Return to the lesson before another attempt.' : 'One immediate retry is available.',
+    body: `<p class="lede">The quiz is a completion checkpoint, not a punishment. ${secondFailure ? 'The second attempt did not pass, so the learning sequence resets to the Character lesson.' : 'Review the explanations you just saw, then make one immediate retry.'}</p>`,
+    actions: secondFailure
+      ? `<button class="primary-button" id="returnLesson" type="button">Return to Character lesson</button>`
+      : `<button class="secondary-button" id="reviewQuizLesson" type="button">Review first</button><button class="primary-button" id="retryQuiz" type="button">Retry quiz</button>`
+  });
+
+  if (secondFailure) {
+    document.getElementById('returnLesson').addEventListener('click', () => {
+      state.quizAttempt = 1; state.quizIndex = 0; state.quizCorrect = 0; state.quizPassed = false; state.quizSet = []; state.previousQuizIds = [];
+      state.lessonIndex = 0; state.view = 'lesson'; saveState(); render();
+    });
+  } else {
+    document.getElementById('reviewQuizLesson').addEventListener('click', () => { state.view = 'lesson'; state.lessonIndex = 0; saveState(); render(); });
+    document.getElementById('retryQuiz').addEventListener('click', () => {
+      state.quizAttempt = 2; state.quizIndex = 0; state.quizCorrect = 0; state.quizPassed = false; buildQuizSet(); state.view = 'quiz'; saveState(); render();
+    });
+  }
+}
+
+function renderProof() {
+  shell({
+    kicker: 'Stage 9 · Real-world proof',
+    title: 'Character is visible in published stories.',
+    body: `<p class="lede">These examples reinforce narrative importance using public-domain works. They are evidence screens, not scored questions.</p><div class="proof-grid">${realWorldProof.map(p => `<article class="proof-card"><span class="mini-label">${p.work}</span><h3>${p.title}</h3><p>${p.body}</p><div class="proof-source"><span>${p.source}</span><a href="${p.url}" target="_blank" rel="noopener noreferrer">Open source ↗</a></div></article>`).join('')}</div>`,
+    actions: `<button class="primary-button" id="finishLevel" type="button">Complete level 1</button>`
+  });
+  document.getElementById('finishLevel').addEventListener('click', () => { state.completed = true; state.view = 'complete'; saveState(); render(); });
+}
+
+function renderComplete() {
+  shell({
+    body: `<div class="level-complete"><div class="seal" aria-hidden="true">✦</div><span class="mini-label">Story Construction · Character</span><h1>Level complete.</h1><p>You can recognize Character terms, keep the descriptive systems and dimensions distinct, and see how several terms can describe one character at the same time.</p><div class="callout"><strong>Next concept: Goal</strong><p>Level 2 is now available. It builds on Character by asking what result a character is trying to achieve.</p></div></div>`,
+    actions: `<button class="secondary-button" id="replayLevel" type="button">Replay Character</button><button class="secondary-button" id="viewMapDone" type="button">View concept path</button><button class="primary-button" id="startGoal" type="button">Start Level 2 · Goal</button>`
+  });
+  document.getElementById('replayLevel').addEventListener('click', () => {
+    const hearts = state.hearts;
+    state = defaultState();
+    state.hearts = hearts;
+    state.view = 'lesson';
+    state.startedAt = new Date().toISOString();
+    saveState(); render();
+  });
+  document.getElementById('viewMapDone').addEventListener('click', () => mapDialog.showModal());
+  document.getElementById('startGoal').addEventListener('click', () => window.writecraftNavigate('goal'));
+}
+
+function renderGameOver() {
+  shell({
+    kicker: '0 hearts',
+    title: 'This run has ended.',
+    body: `<p class="lede">Only challenge-gate misses can remove hearts. The curriculum has not yet fixed exactly where a learner should restart after game over, so this prototype returns you to the Character lesson with three hearts.</p>`,
+    actions: `<button class="primary-button" id="restartAfterGameOver" type="button">Restart from lesson</button>`
+  });
+  document.getElementById('restartAfterGameOver').addEventListener('click', () => {
+    state.hearts = MAX_HEARTS;
+    state.streak = 0;
+    state.practicePhase = 'basic';
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    state.currentQuestion = null;
+    state.selectedQuestionIds = { basic: [], hard: [], gate: [] };
+    state.lessonIndex = 0;
+    state.view = 'lesson';
+    saveState(); render();
+  });
+}
+
+function getTermExamples(key) {
+  const entry = conceptGlossary[key];
+  return entry ? [entry.example, ...(glossaryExampleVariants[key] || [])] : [];
+}
+
+function showTermExample(key, requestedIndex = null) {
+  const examples = getTermExamples(key);
+  if (!examples.length) return;
+  const previous = variationHistory.examples[key];
+  let index = requestedIndex;
+  if (index === null) {
+    const candidates = examples.map((_, i) => i).filter(i => i !== previous);
+    const pool = candidates.length ? candidates : examples.map((_, i) => i);
+    index = pool[Math.floor(Math.random() * pool.length)];
+  }
+  currentTermExampleIndex = ((index % examples.length) + examples.length) % examples.length;
+  termDialogExample.textContent = examples[currentTermExampleIndex];
+  termExampleLabel.textContent = `Illustrative example ${currentTermExampleIndex + 1} of ${examples.length}`;
+  anotherTermExample.hidden = examples.length < 2;
+  variationHistory.examples[key] = currentTermExampleIndex;
+  saveVariationHistory();
+}
+
+function openTermDialog(key) {
+  const entry = conceptGlossary[key];
+  if (!entry) return;
+  currentTermKey = key;
+  termDialogCategory.textContent = entry.category;
+  termDialogTitle.textContent = entry.label;
+  termDialogDefinition.textContent = entry.definition;
+  showTermExample(key);
+  termDialog.showModal();
+}
+
+function closeTermDialog() {
+  currentTermKey = null;
+  if (termDialog.open) termDialog.close();
+}
+
+function renderConceptMap() {
+  conceptMap.innerHTML = concepts.map((name, i) => {
+    if (i === 0) {
+      return `<li class="current"><span class="map-number">1</span><span class="map-name">Character</span><span class="map-state">${state.completed ? 'Completed' : 'Current'}</span></li>`;
+    }
+    if (i === 1) {
+      return `<li class="${state.completed ? 'current' : 'locked'}"><span class="map-number">2</span><span class="map-name">Goal</span><span class="map-state">${state.completed ? 'Unlocked' : 'Complete Character'}</span></li>`;
+    }
+    return `<li class="locked"><span class="map-number">${i + 1}</span><span class="map-name">${name}</span><span class="map-state">Locked</span></li>`;
+  }).join('');
+}
+
+screen.addEventListener('click', event => {
+  const trigger = event.target.closest('[data-term]');
+  if (trigger) openTermDialog(trigger.dataset.term);
+});
+
+anotherTermExample.addEventListener('click', () => {
+  if (!currentTermKey) return;
+  const examples = getTermExamples(currentTermKey);
+  showTermExample(currentTermKey, (currentTermExampleIndex + 1) % examples.length);
+});
+
+closeTerm.addEventListener('click', closeTermDialog);
+termDialog.addEventListener('click', event => {
+  const rect = termDialog.getBoundingClientRect();
+  const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  if (outside) closeTermDialog();
+});
+
+mapButton.addEventListener('click', () => mapDialog.showModal());
+closeMap.addEventListener('click', () => mapDialog.close());
+mapDialog.addEventListener('click', e => {
+  const rect = mapDialog.getBoundingClientRect();
+  const outside = e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom;
+  if (outside) mapDialog.close();
+});
+
+render();
