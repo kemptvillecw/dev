@@ -624,4 +624,173 @@ const practicePools = {
       id: 'h3', type: 'order',
       prompt: 'Put these narrative-importance terms in order from primary to third-most important.',
       items: ['Tritagonist', 'Protagonist', 'Deuteragonist'], answer: ['Protagonist', 'Deuteragonist', 'Tritagonist'],
-      explanation: 'Protagonist is primary, deuteragonist is second-most important, and tritagonist is thir
+      explanation: 'Protagonist is primary, deuteragonist is second-most important, and tritagonist is third-most important.'
+    },
+    {
+      id: 'h4', type: 'single',
+      prompt: 'A character blocks the protagonist from carrying out a dangerous plan because doing so would protect a community. Which statement is best supported?',
+      options: [
+        'The character can be an antagonist without automatically being a villain.',
+        'The character must be a villain because they oppose the protagonist.',
+        'The character cannot be an antagonist unless they are the main character.',
+        'Antagonist is a Change term like dynamic or static.'
+      ], answer: 0,
+      explanation: 'Antagonist describes opposition. Whether the character is villainous belongs to moral/heroic framing.'
+    },
+    {
+      id: 'h5', type: 'single',
+      prompt: 'Mara is the protagonist’s older sister. Mara tells her private fears to June, who listens, keeps those fears secret, and gives Mara a place to admit doubts she hides from everyone else. June later betrays Mara. Which story-function term best describes June during those private conversations?',
+      options: ['Confidant', 'Antagonist', 'Deuteragonist', 'Dynamic'], answer: 0,
+      explanation: 'Confidant describes the role June performs in those conversations: receiving private thoughts and feelings. A character can perform that function even if the relationship later changes.'
+    },
+    {
+      id: 'h6', type: 'single',
+      prompt: 'A respected judge is the third-most important character in the story. She opposes several of the protagonist’s choices, but from beginning to end her beliefs, outlook, and usual way of responding remain fundamentally unchanged. Which Change term best describes the judge?',
+      options: ['Static', 'Tritagonist', 'Antagonist', 'Hero'], answer: 0,
+      explanation: 'Static describes the judge’s Change dimension because the description establishes that she undergoes no significant internal change. Tritagonist describes narrative importance, antagonist describes opposition in the story, and hero describes moral/heroic framing.'
+    },
+    {
+      id: 'h7', type: 'multi',
+      prompt: 'A story follows Leena most closely. Her adviser has an important supporting role without sharing primary narrative weight, teaches Leena difficult skills, changes from cynical to hopeful, and is framed as heroic despite sometimes using ruthless methods. Which terms could all apply to the adviser without contradiction?',
+      options: ['Supporting character', 'Mentor', 'Dynamic', 'Antihero'], answer: [0,1,2,3],
+      explanation: 'Each term is supported by a separate clue: supporting character describes narrative importance, mentor describes story function, dynamic describes the Change dimension, and antihero describes moral/heroic framing.'
+    },
+    {
+      id: 'h8', type: 'single',
+      prompt: 'A character appears briefly in one chapter, delivers information that changes the protagonist’s plan, holds authority over the protagonist as the local police chief, and is portrayed as heroic. Which narrative-importance term answers the question “How much narrative weight does this character carry?”',
+      options: ['Minor character', 'Authority figure', 'Herald / messenger', 'Hero'], answer: 0,
+      explanation: 'Minor character describes the character’s narrative importance. Authority figure and herald/messenger describe story functions, while hero describes moral/heroic framing.'
+    },
+    {
+      id: 'h9', type: 'single',
+      prompt: 'A familiar “gruff innkeeper who distrusts strangers” appears briefly and is understood almost immediately. Which Pattern term best fits that use?',
+      options: ['Stock', 'Dynamic', 'Deuteragonist', 'Anti-villain'], answer: 0,
+      explanation: 'Stock characters rely on familiar, quickly recognizable types.'
+    },
+    {
+      id: 'h10', type: 'single',
+      prompt: 'A central character exposes corruption but blackmails witnesses and steals evidence to do it. Which moral/heroic framing term is supported by the description?',
+      options: ['Antihero', 'Protagonist', 'Deuteragonist', 'Supporting character'], answer: 0,
+      explanation: 'Antihero describes moral/heroic framing. Protagonist, deuteragonist, and supporting character describe narrative importance.'
+    }
+  ],
+  gate: [
+    {
+      id: 'g1', type: 'single',
+      prompt: 'Gate: Kai is the second-most important character in the story. The protagonist trusts him with fears and secrets she shares with no one else. Over the course of the story, Kai changes from fearful to decisive and is ultimately portrayed as heroic. Which story-function term describes Kai?',
+      options: ['Deuteragonist', 'Confidant', 'Dynamic', 'Hero'], answer: 1,
+      explanation: 'Confidant describes Kai’s story function because the protagonist trusts him with private fears and secrets. Deuteragonist describes his narrative importance, dynamic describes how he changes, and hero describes his moral/heroic framing.'
+    },
+    {
+      id: 'g2', type: 'single',
+      prompt: 'Gate: Nessa carries most of the story. She frequently lies and intimidates people, yet the narrative still centers on her goals and choices. Which narrative-importance term describes her?',
+      options: ['Protagonist', 'Antihero', 'Villain', 'Dynamic'], answer: 0,
+      explanation: 'Protagonist describes Nessa’s narrative importance. Her questionable behaviour may affect moral framing, but it does not change which term answers the narrative-importance question.'
+    },
+    {
+      id: 'g3', type: 'single',
+      prompt: 'Gate: Tomas begins convinced that asking for help is weakness. Repeated failures force him to depend on others, and by the end he openly asks his team for support. Which Change term describes him?',
+      options: ['Dynamic', 'Mentor', 'Supporting character', 'Hero'], answer: 0,
+      explanation: 'Dynamic is a Change term for meaningful character change over time. The other choices describe different aspects of the character.'
+    },
+    {
+      id: 'g4', type: 'single',
+      prompt: 'Gate: The expedition leader is the third-most important character. She repeatedly controls who is allowed into dangerous areas, remains unchanged, and is portrayed as admirable. Which story-function term describes her role?',
+      options: ['Gatekeeper', 'Tritagonist', 'Static', 'Hero'], answer: 0,
+      explanation: 'Gatekeeper describes what she does in the story: controlling access. Tritagonist is narrative importance, static describes the Change dimension, and hero is framing.'
+    },
+    {
+      id: 'g5', type: 'multi',
+      prompt: 'Gate: Which statements correctly keep these character descriptions distinct?',
+      options: [
+        'Narrative importance asks how much story weight a character carries.',
+        'Story function asks what a character does in the story.',
+        'Dynamic and static describe moral goodness.',
+        'Hero and villain tell you whether a character is primary or minor.'
+      ], answer: [0,1],
+      explanation: 'Narrative importance and story function answer different questions. Dynamic/static belong to the Change dimension; hero/villain belong to moral/heroic framing.'
+    },
+    {
+      id: 'g6', type: 'multi',
+      prompt: 'Gate: A character is the second-most important person in the story, teaches and advises the protagonist, changes significantly in outlook, and is framed as heroic despite using morally questionable methods. Which terms could describe that one character?',
+      options: ['Deuteragonist', 'Mentor', 'Dynamic', 'Antihero'], answer: [0,1,2,3],
+      explanation: 'All four are directly supported: deuteragonist describes narrative importance, mentor describes story function, dynamic describes the Change dimension, and antihero describes moral/heroic framing.'
+    }
+  ]
+};
+
+const quizPools = {
+  narrative: [
+    {
+      id: 'qn1', type: 'single',
+      prompt: 'Which narrative-importance term identifies the primary character whose goals, choices, and struggles carry the narrative?',
+      options: ['Protagonist', 'Supporting character', 'Mentor', 'Villain'], answer: 0,
+      explanation: 'Protagonist is the primary narrative-importance term.'
+    },
+    {
+      id: 'qn2', type: 'single',
+      prompt: 'A character receives the second-greatest narrative weight after the protagonist. Which narrative-importance term best fits?',
+      options: ['Deuteragonist', 'Tritagonist', 'Foil', 'Mentor'], answer: 0,
+      explanation: 'Deuteragonist describes the second-most important character in the narrative.'
+    },
+    {
+      id: 'qn3', type: 'single',
+      prompt: 'A story divides its major goals, conflicts, and viewpoint time across four equally important characters. Which narrative-importance term best fits the group?',
+      options: ['Ensemble', 'Supporting characters', 'Tritagonist', 'Minor characters'], answer: 0,
+      explanation: 'An ensemble distributes narrative importance across a group rather than centering it entirely on one primary character.'
+    },
+    {
+      id: 'qn4', type: 'single',
+      prompt: 'A character appears in only two scenes and performs a small but useful role. Which narrative-importance term is most likely?',
+      options: ['Minor character', 'Protagonist', 'Deuteragonist', 'Hero'], answer: 0,
+      explanation: 'Minor character describes a smaller narrative role.'
+    }
+  ],
+  function: [
+    {
+      id: 'qf1', type: 'single',
+      prompt: 'A character’s contrast with the protagonist makes the protagonist’s impatience much easier to notice. Which story function is being used?',
+      options: ['Foil', 'Mentor', 'Confidant', 'Catalyst'], answer: 0,
+      explanation: 'A foil highlights another character through contrast.'
+    },
+    {
+      id: 'qf2', type: 'single',
+      prompt: 'The protagonist reveals fears to one person that she hides from everyone else. Which function best describes that trusted listener?',
+      options: ['Confidant', 'Rival', 'Gatekeeper', 'Henchman'], answer: 0,
+      explanation: 'A confidant is trusted with private thoughts, fears, plans, or feelings.'
+    },
+    {
+      id: 'qf3', type: 'single',
+      prompt: 'A character teaches the protagonist skills and prepares them for a difficult task. Which story-function term fits?',
+      options: ['Mentor', 'Deuteragonist', 'Static', 'Antihero'], answer: 0,
+      explanation: 'Mentor describes a guiding or teaching function.'
+    },
+    {
+      id: 'qf4', type: 'single',
+      prompt: 'A character controls access to the records the protagonist needs and must be persuaded before progress can continue. Which function fits?',
+      options: ['Gatekeeper', 'Comic relief', 'Love interest', 'Minor character'], answer: 0,
+      explanation: 'A gatekeeper controls access to a place, resource, group, stage, or opportunity.'
+    }
+  ],
+  dimensions: [
+    {
+      id: 'qc1', type: 'single',
+      prompt: 'A character remains fundamentally unchanged despite being tested repeatedly. Which Change term fits?',
+      options: ['Static', 'Dynamic', 'Round', 'Protagonist'], answer: 0,
+      explanation: 'Static is a Change term for a character who remains fundamentally unchanged.'
+    },
+    {
+      id: 'qc2', type: 'single',
+      prompt: 'A character changes from avoiding responsibility to accepting it openly by the end of the story. Which Change term fits?',
+      options: ['Dynamic', 'Static', 'Stock', 'Antagonist'], answer: 0,
+      explanation: 'Dynamic is a Change term for meaningful character change over time.'
+    },
+    {
+      id: 'qc3', type: 'single',
+      prompt: 'A character has conflicting motives, several distinct traits, and different sides that appear in different relationships. Which Complexity term best fits?',
+      options: ['Round', 'Flat', 'Minor', 'Hero'], answer: 0,
+      explanation: 'Round is a Complexity term for a character presented with multiple traits, tensions, motives, or sides.'
+    },
+    {
+      id: 'qc4', type: 'single',
+      prompt: 'A briefly used character is built from a familiar,
