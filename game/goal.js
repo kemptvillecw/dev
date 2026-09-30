@@ -814,4 +814,447 @@ const quizPools = {
         "Through behaviour the reader can infer from",
         "Through a direct statement of the intended achievement",
         "Through narrative-importance terms",
-        "Through mo
+        "Through moral framing"
+      ],
+      "answer": 0,
+      "explanation": "The reader must infer the intended achievement from a pattern of behaviour."
+    },
+    {
+      "id": "gqa3",
+      "type": "truefalse",
+      "prompt": "True or false: A goal may remain understandable across several scenes even when it is not restated in every scene.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 0,
+      "explanation": "True. A continuing intended achievement can give direction to actions across a larger stretch of writing."
+    },
+    {
+      "id": "gqa4",
+      "type": "single",
+      "prompt": "A character says, 'Before the doors close, I need to get this medicine onto the train.' Which description best fits the goal's scale in that moment?",
+      "options": [
+        "A near-term intended achievement",
+        "A Character Dimensions term",
+        "A situation only",
+        "A moral judgment"
+      ],
+      "answer": 0,
+      "explanation": "The goal concerns something the character is trying to accomplish in the immediate situation."
+    }
+  ],
+  "mechanism": [
+    {
+      "id": "gqm1",
+      "type": "single",
+      "prompt": "What does a clear goal add to a character's sequence of choices?",
+      "options": [
+        "A recognizable direction toward an intended result",
+        "A guarantee of success",
+        "A moral/heroic framing term",
+        "A replacement for conflict"
+      ],
+      "answer": 0,
+      "explanation": "The goal helps the reader see what result the choices are meant to pursue."
+    },
+    {
+      "id": "gqm2",
+      "type": "single",
+      "prompt": "Why can a goal help a reader understand progress?",
+      "options": [
+        "The reader can judge whether events move the character closer to or farther from the intended result.",
+        "The goal tells the reader exactly how the story ends.",
+        "The goal makes every action successful.",
+        "The goal determines the character's narrative importance."
+      ],
+      "answer": 0,
+      "explanation": "The goal provides a reference point for understanding movement, setbacks, change, or achievement."
+    },
+    {
+      "id": "gqm3",
+      "type": "single",
+      "prompt": "A character chooses a dangerous shortcut instead of the safe road because the medicine must arrive before dawn. What does the goal help explain?",
+      "options": [
+        "Why that choice is worth making to the character",
+        "Whether the character is a protagonist",
+        "Whether the character is morally good",
+        "How many scenes the story needs"
+      ],
+      "answer": 0,
+      "explanation": "Knowing the intended achievement helps the reader understand why one option is chosen over another."
+    },
+    {
+      "id": "gqm4",
+      "type": "truefalse",
+      "prompt": "True or false: Several different actions can feel connected when the reader understands the single result they are all meant to achieve.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 0,
+      "explanation": "True. A goal can give a sequence of different actions a shared direction."
+    }
+  ],
+  "change": [
+    {
+      "id": "gqc1",
+      "type": "single",
+      "prompt": "Kai begins the story trying to sell the family shop. After discovering why his sister secretly kept it open, he abandons the sale and tries to save the business. What has changed?",
+      "options": [
+        "Kai's goal",
+        "The definition of protagonist",
+        "Whether Kai is a character",
+        "The meaning of action"
+      ],
+      "answer": 0,
+      "explanation": "The intended achievement changes from selling the shop to saving it."
+    },
+    {
+      "id": "gqc2",
+      "type": "single",
+      "prompt": "Which example shows a goal being achieved rather than merely an action being completed?",
+      "options": [
+        "After weeks of searching, Imani finds her missing brother.",
+        "Imani opens a drawer.",
+        "Imani drives across town.",
+        "Imani asks a neighbour a question."
+      ],
+      "answer": 0,
+      "explanation": "Finding her brother completes the intended achievement; the other choices are individual actions."
+    },
+    {
+      "id": "gqc3",
+      "type": "single",
+      "prompt": "A character stops pursuing one intended result after new information makes it irrelevant and begins pursuing another. What does this demonstrate?",
+      "options": [
+        "Goals can change as the story develops.",
+        "Actions and goals are identical.",
+        "Goals must remain fixed.",
+        "Goal is a moral/heroic framing term."
+      ],
+      "answer": 0,
+      "explanation": "A goal can be replaced when events or discoveries change what the character is trying to achieve."
+    },
+    {
+      "id": "gqc4",
+      "type": "multi",
+      "prompt": "Which statements can describe a goal over a larger stretch of writing?",
+      "options": [
+        "It can persist across several actions.",
+        "It can be achieved.",
+        "It can be abandoned or replaced.",
+        "It must be restated word-for-word in every scene."
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "A goal can continue, be achieved, or change. It does not need constant word-for-word restatement."
+    }
+  ]
+};
+
+const realWorldProof = [
+  {
+    "title": "Dorothy — getting home",
+    "work": "The Wonderful Wizard of Oz · L. Frank Baum",
+    "body": "Dorothy's repeated decisions are organized around returning home to Kansas. The goal gives direction to the journey even as the specific actions required to pursue it change.",
+    "url": "https://www.gutenberg.org/ebooks/55",
+    "source": "Project Gutenberg #55"
+  },
+  {
+    "title": "Phileas Fogg — around the world in eighty days",
+    "work": "Around the World in Eighty Days · Jules Verne",
+    "body": "Fogg's wager gives him a concrete intended achievement: complete a journey around the world within eighty days. The deadline makes progress toward the goal especially visible.",
+    "url": "https://www.gutenberg.org/ebooks/103",
+    "source": "Project Gutenberg #103"
+  }
+];
+
+const defaultState = () => ({
+  view: 'welcome',
+  lessonIndex: 0,
+  practicePhase: 'basic',
+  practiceIndex: 0,
+  selectedQuestionIds: { basic: [], hard: [], gate: [] },
+  currentQuestion: null,
+  mistakesInPhase: 0,
+  hearts: MAX_HEARTS,
+  streak: 0,
+  gatePassed: false,
+  quizAttempt: 1,
+  quizIndex: 0,
+  quizCorrect: 0,
+  quizAnswered: false,
+  quizSet: [],
+  previousQuizIds: [],
+  quizPassed: false,
+  completed: false,
+  startedAt: null
+});
+
+let state = loadState();
+let variationHistory = loadVariationHistory();
+let feedbackLock = false;
+let currentTermKey = null;
+let currentTermExampleIndex = 0;
+
+const screen = document.getElementById('screen');
+const progressBar = document.getElementById('progressBar');
+const progressLabel = document.getElementById('progressLabel');
+const eyebrow = document.getElementById('eyebrow');
+const heartDisplay = document.getElementById('heartDisplay');
+const streakDisplay = document.getElementById('streakDisplay');
+const mapDialog = document.getElementById('mapDialog');
+const mapButton = document.getElementById('mapButton');
+const closeMap = document.getElementById('closeMap');
+const conceptMap = document.getElementById('conceptMap');
+const termDialog = document.getElementById('termDialog');
+const closeTerm = document.getElementById('closeTerm');
+const termDialogCategory = document.getElementById('termDialogCategory');
+const termDialogTitle = document.getElementById('termDialogTitle');
+const termDialogDefinition = document.getElementById('termDialogDefinition');
+const termDialogExample = document.getElementById('termDialogExample');
+const termExampleLabel = document.getElementById('termExampleLabel');
+const anotherTermExample = document.getElementById('anotherTermExample');
+
+
+function loadVariationHistory() {
+  const fallback = { practice: { basic: [], hard: [], gate: [] }, quiz: [], examples: {} };
+  try {
+    const parsed = JSON.parse(localStorage.getItem(VARIATION_HISTORY_KEY));
+    return parsed ? { ...fallback, ...parsed, practice: { ...fallback.practice, ...(parsed.practice || {}) }, examples: parsed.examples || {} } : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveVariationHistory() {
+  localStorage.setItem(VARIATION_HISTORY_KEY, JSON.stringify(variationHistory));
+}
+
+function shuffle(values) {
+  const copy = [...values];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function prepareQuestion(source) {
+  const q = JSON.parse(JSON.stringify(source));
+  q.sourceId = source.id;
+
+  if (q.type === 'single' || q.type === 'multi') {
+    const correctIndexes = Array.isArray(q.answer) ? q.answer : [q.answer];
+    const shuffledOptions = shuffle(q.options.map((text, originalIndex) => ({
+      text,
+      correct: correctIndexes.includes(originalIndex)
+    })));
+    q.options = shuffledOptions.map(item => item.text);
+    const remapped = shuffledOptions.map((item, index) => item.correct ? index : -1).filter(index => index >= 0);
+    q.answer = Array.isArray(source.answer) ? remapped : remapped[0];
+  } else if (q.type === 'order') {
+    let items = shuffle(q.items);
+    if (items.every((item, index) => item === q.answer[index]) && items.length > 1) {
+      [items[0], items[1]] = [items[1], items[0]];
+    }
+    q.items = items;
+  }
+  return q;
+}
+
+function chooseWithHistory(pool, recentIds = [], usedIds = []) {
+  const unused = pool.filter(q => !usedIds.includes(q.id));
+  const fresh = unused.filter(q => !recentIds.includes(q.id));
+  const candidates = fresh.length ? fresh : unused.length ? unused : pool;
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+function rememberQuestion(kind, id, limit) {
+  if (kind === 'quiz') {
+    variationHistory.quiz = [...variationHistory.quiz.filter(value => value !== id), id].slice(-limit);
+  } else {
+    const current = variationHistory.practice[kind] || [];
+    variationHistory.practice[kind] = [...current.filter(value => value !== id), id].slice(-limit);
+  }
+  saveVariationHistory();
+}
+
+function buildQuizSet() {
+  const previous = new Set(state.previousQuizIds || []);
+  const selected = [];
+  for (const pool of Object.values(quizPools)) {
+    const recent = variationHistory.quiz || [];
+    const strongest = pool.filter(q => !previous.has(q.id) && !recent.includes(q.id));
+    const alternate = pool.filter(q => !previous.has(q.id));
+    const candidates = strongest.length ? strongest : alternate.length ? alternate : pool;
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+    selected.push(prepareQuestion(chosen));
+    rememberQuestion('quiz', chosen.id, 12);
+  }
+  state.quizSet = shuffle(selected);
+  state.previousQuizIds = state.quizSet.map(q => q.sourceId);
+}
+
+function loadState() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return parsed ? { ...defaultState(), ...parsed } : defaultState();
+  } catch {
+    return defaultState();
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function resetState() {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(VARIATION_HISTORY_KEY);
+  state = defaultState();
+  variationHistory = loadVariationHistory();
+  render();
+}
+
+function setView(view) {
+  state.view = view;
+  saveState();
+  render();
+}
+
+
+function updateStatus() {
+  heartDisplay.innerHTML = Array.from({ length: MAX_HEARTS }, (_, i) =>
+    `<span class="heart ${i < state.hearts ? '' : 'empty'}" aria-hidden="true">♥</span>`
+  ).join('');
+  heartDisplay.setAttribute('aria-label', `${state.hearts} ${state.hearts === 1 ? 'heart' : 'hearts'} remaining`);
+  streakDisplay.textContent = `${state.streak} / ${STREAK_TARGET}`;
+
+  const map = {
+    welcome: ['Level 2 · Goal', 'Welcome', 0],
+    lesson: ['Learn · Goal', `Lesson ${state.lessonIndex + 1} of ${lessonScreens.length}`, 8 + (state.lessonIndex / lessonScreens.length) * 32],
+    practiceIntro: ['Practice · Goal', 'Difficulty ladder', 42],
+    practice: ['Practice · Goal', state.practicePhase === 'basic' ? 'Basic challenges' : state.practicePhase === 'hard' ? 'Harder challenges' : 'Challenge gate', state.practicePhase === 'basic' ? 48 + state.practiceIndex * 4 : state.practicePhase === 'hard' ? 62 + state.practiceIndex * 5 : 74],
+    gateSuccess: ['Checkpoint · Goal', 'Gate cleared', 78],
+    quizIntro: ['Quiz · Goal', 'Completion checkpoint', 80],
+    quiz: ['Quiz · Goal', `Question ${state.quizIndex + 1} of ${QUIZ_LENGTH}`, 82 + (state.quizIndex / QUIZ_LENGTH) * 10],
+    quizResult: ['Quiz · Goal', state.quizPassed ? 'Concept completed' : 'Review needed', state.quizPassed ? 94 : 86],
+    proof: ['Real-world proof', 'Goal in published work', 97],
+    complete: ['Level 2 · Goal', 'Completed', 100],
+    gameOver: ['Level 2 · Goal', 'Game over', 74]
+  };
+  const [eye, label, pct] = map[state.view] || map.welcome;
+  eyebrow.textContent = eye;
+  progressLabel.textContent = label;
+  progressBar.style.width = `${pct}%`;
+}
+
+function render() {
+  feedbackLock = false;
+  updateStatus();
+  renderConceptMap();
+
+  if (state.view === 'welcome') renderWelcome();
+  else if (state.view === 'lesson') renderLesson();
+  else if (state.view === 'practiceIntro') renderPracticeIntro();
+  else if (state.view === 'practice') renderPractice();
+  else if (state.view === 'gateSuccess') renderGateSuccess();
+  else if (state.view === 'quizIntro') renderQuizIntro();
+  else if (state.view === 'quiz') renderQuiz();
+  else if (state.view === 'quizResult') renderQuizResult();
+  else if (state.view === 'proof') renderProof();
+  else if (state.view === 'complete') renderComplete();
+  else if (state.view === 'gameOver') renderGameOver();
+}
+
+function shell({ kicker = '', title = '', body = '', actions = '' }) {
+  screen.innerHTML = `
+    <div class="screen-stack">
+      <div class="content-grow">
+        ${kicker ? `<span class="stage-kicker">${kicker}</span>` : ''}
+        ${title ? `<h2>${title}</h2>` : ''}
+        ${body}
+      </div>
+      <div class="screen-actions">${actions}</div>
+    </div>`;
+}
+
+
+function characterIsComplete() {
+  try {
+    const prior = JSON.parse(localStorage.getItem(CHARACTER_STORAGE_KEY));
+    return Boolean(prior && prior.completed);
+  } catch {
+    return false;
+  }
+}
+
+function renderWelcome() {
+  if (!characterIsComplete()) {
+    shell({
+      kicker: 'Story Construction · Level 2',
+      title: 'Goal unlocks after Character.',
+      body: `<p class="lede">The agreed teaching sequence completes one concept before introducing the next. Finish Level 1 · Character to unlock Goal.</p><div class="callout"><strong>Prerequisite</strong><p>Character must be completed before Goal begins.</p></div>`,
+      actions: `<button class="primary-button" id="characterBtn" type="button">Go to Level 1 · Character</button>`
+    });
+    document.getElementById('characterBtn').addEventListener('click', () => window.writecraftNavigate('character'));
+    return;
+  }
+
+  shell({
+    kicker: 'Story Construction · Level 2',
+    title: 'Learn to recognize what a character is trying to achieve.',
+    body: `
+      <p class="lede">This level builds directly on Character. You’ll learn to identify a goal when it is stated or implied, separate the goal from the actions used to pursue it, and follow how a goal gives choices direction.</p>
+      <div class="gate-banner"><strong>Game rules</strong><p>Practice mistakes teach; they do not cost hearts. Only a failed challenge gate costs one. Five correct challenges in a row restore one heart, up to three.</p></div>
+      <div class="connection-grid">
+        <div><strong>Learn</strong><span>8 guided screens</span></div>
+        <div><strong>Practice</strong><span>3 basic + 2 harder</span></div>
+        <div><strong>Gate</strong><span>Required checkpoint</span></div>
+        <div><strong>Quiz</strong><span>Goal only</span></div>
+      </div>`,
+    actions: `<button class="secondary-button" id="characterBtn" type="button">Review Character</button><button class="secondary-button" id="resetBtn" type="button">Reset Goal progress</button><button class="primary-button" id="startBtn" type="button">Start level 2</button>`
+  });
+  document.getElementById('characterBtn').addEventListener('click', () => window.writecraftNavigate('character'));
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if (!state.startedAt) state.startedAt = new Date().toISOString();
+    state.view = 'lesson';
+    state.lessonIndex = 0;
+    saveState(); render();
+  });
+  document.getElementById('resetBtn').addEventListener('click', resetState);
+}
+
+function renderLesson() {
+  const item = lessonScreens[state.lessonIndex];
+  const last = state.lessonIndex === lessonScreens.length - 1;
+  shell({
+    kicker: item.stage,
+    title: item.title,
+    body: item.html,
+    actions: `${state.lessonIndex > 0 ? '<button class="secondary-button" id="backBtn" type="button">Back</button>' : ''}<button class="primary-button" id="nextBtn" type="button">${last ? 'Start practice' : 'Continue'}</button>`
+  });
+  if (state.lessonIndex > 0) document.getElementById('backBtn').addEventListener('click', () => { state.lessonIndex--; saveState(); render(); });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (last) {
+      state.view = 'practiceIntro';
+    } else {
+      state.lessonIndex++;
+    }
+    saveState(); render();
+  });
+}
+
+
+function renderPracticeIntro() {
+  shell({
+    kicker: 'Stage 7 · Progressive practice',
+    title: 'Identify it. Separate it. Infer it.',
+    body: `
+      <p class="lede">The first rung asks you to recognize goals and separate them from actions or situations. Harder questions make you infer goals from behaviour, track changes, and apply the distinction in context. Replays draw different variants where possible.</p>
+      <div class="category-li
