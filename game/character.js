@@ -472,13 +472,13 @@ const practicePools = {
     {
       id: 'b1', type: 'single',
       prompt: 'Which narrative-importance term means the primary character whose goals, choices, and struggles carry the story?',
-      options: ['Protagonist', 'Mentor', 'Dynamic character', 'Villain'], answer: 0,
+      options: ['Protagonist', 'Mentor', 'Round character', 'Villain'], answer: 0,
       explanation: 'Protagonist is the narrative-importance term for the primary character carrying the story.'
     },
     {
       id: 'b2', type: 'single',
       prompt: 'A veteran sailor teaches the inexperienced lead how to navigate dangerous waters and prepares her for the final crossing. Which story-function term describes that role?',
-      options: ['Mentor', 'Tritagonist', 'Antihero', 'Static character'], answer: 0,
+      options: ['Mentor', 'Tritagonist', 'Antihero', 'Flat character'], answer: 0,
       explanation: 'Mentor describes what the sailor does in the story: teaching, guiding, and preparing another character.'
     },
     {
@@ -495,9 +495,9 @@ const practicePools = {
     },
     {
       id: 'b5', type: 'single',
-      prompt: 'A character begins afraid to speak up but gradually learns to confront people openly. Which Change term fits?',
-      options: ['Dynamic', 'Static', 'Minor', 'Hero'], answer: 0,
-      explanation: 'Dynamic is a Change term for a character who changes in a meaningful way over the story.'
+      prompt: 'A character is written with conflicting motives, several distinct traits, and different behaviour in different relationships. Which complexity term best fits?',
+      options: ['Round', 'Flat', 'Minor', 'Hero'], answer: 0,
+      explanation: 'Round describes meaningful depth and multiple facets. It is a complexity term, not a measure of narrative importance or moral goodness.'
     },
     {
       id: 'b6', type: 'truefalse',
@@ -519,9 +519,9 @@ const practicePools = {
     },
     {
       id: 'b9', type: 'single',
-      prompt: 'A character faces pressure throughout the story but keeps the same core beliefs and behaviour. Which Change term fits?',
-      options: ['Static', 'Dynamic', 'Round', 'Antagonist'], answer: 0,
-      explanation: 'Static is a Change term for a character who remains fundamentally unchanged in the relevant part of the story.'
+      prompt: 'A suspicious innkeeper appears briefly, distrusts every stranger, and is immediately recognizable as a familiar story type. Which Character pattern term best fits?',
+      options: ['Stock', 'Archetypal', 'Round', 'Antagonist'], answer: 0,
+      explanation: 'Stock describes a familiar, quickly recognizable character type. Pattern and complexity are separate questions.'
     },
     {
       id: 'b10', type: 'single',
@@ -550,7 +550,7 @@ const practicePools = {
     {
       id: 'b14', type: 'single',
       prompt: 'A character is built around one or two clear traits and a limited role rather than extensive complexity. Which Complexity term best fits?',
-      options: ['Flat', 'Round', 'Dynamic', 'Rival'], answer: 0,
+      options: ['Flat', 'Round', 'Round', 'Rival'], answer: 0,
       explanation: 'Flat is a Complexity term for a character presented with a limited set of clear traits or functions.'
     },
     {
@@ -563,9 +563,9 @@ const practicePools = {
   hard: [
     {
       id: 'h1', type: 'single',
-      prompt: 'Rina is the second-most important character. She trains the protagonist, changes from distrusting everyone to relying on a team, and the story frames her as heroic despite the morally questionable methods she sometimes uses. Which narrative-importance term describes her?',
-      options: ['Deuteragonist', 'Mentor', 'Dynamic', 'Antihero'], answer: 0,
-      explanation: 'Deuteragonist describes Rina’s narrative importance. Mentor describes her story function, dynamic describes the Change dimension, and antihero describes her moral/heroic framing.'
+      prompt: 'Rina is the second-most important character. She trains the protagonist, is developed with several conflicting loyalties, fears, and strengths, and the story frames her as heroic despite the morally questionable methods she sometimes uses. Which narrative-importance term describes her?',
+      options: ['Deuteragonist', 'Mentor', 'Round', 'Antihero'], answer: 0,
+      explanation: 'Deuteragonist describes Rina’s narrative importance. Mentor describes her story function, round describes her character complexity, and antihero describes her moral/heroic framing.'
     },
     {
       id: 'h2', type: 'multi',
@@ -573,10 +573,10 @@ const practicePools = {
       options: [
         'A character can be a deuteragonist and a mentor.',
         'A character can be a protagonist and an antihero.',
-        'A character can be dynamic and also function as a foil.',
+        'A character can be round and also function as a foil.',
         'A character can only fit one descriptive system or dimension.'
       ], answer: [0,1,2],
-      explanation: 'These descriptive systems and dimensions can overlap. One character can simultaneously have narrative importance, a story function, one or more Character Dimensions terms, and a moral/heroic framing.'
+      explanation: 'These descriptive systems and dimensions can overlap. One character can simultaneously have narrative importance, a story function, one or more Character classifications terms, and a moral/heroic framing.'
     },
     {
       id: 'h3', type: 'order',
@@ -591,27 +591,27 @@ const practicePools = {
         'The character can be an antagonist without automatically being a villain.',
         'The character must be a villain because they oppose the protagonist.',
         'The character cannot be an antagonist unless they are the main character.',
-        'Antagonist is a Change term like dynamic or static.'
+        'Antagonist is a complexity term like round or flat.'
       ], answer: 0,
       explanation: 'Antagonist describes opposition. Whether the character is villainous belongs to moral/heroic framing.'
     },
     {
       id: 'h5', type: 'single',
       prompt: 'Mara is the protagonist’s older sister. Mara tells her private fears to June, who listens, keeps those fears secret, and gives Mara a place to admit doubts she hides from everyone else. June later betrays Mara. Which story-function term best describes June during those private conversations?',
-      options: ['Confidant', 'Antagonist', 'Deuteragonist', 'Dynamic'], answer: 0,
+      options: ['Confidant', 'Antagonist', 'Deuteragonist', 'Round'], answer: 0,
       explanation: 'Confidant describes the role June performs in those conversations: receiving private thoughts and feelings. A character can perform that function even if the relationship later changes.'
     },
     {
       id: 'h6', type: 'single',
-      prompt: 'A respected judge is the third-most important character in the story. She opposes several of the protagonist’s choices, but from beginning to end her beliefs, outlook, and usual way of responding remain fundamentally unchanged. Which Change term best describes the judge?',
-      options: ['Static', 'Tritagonist', 'Antagonist', 'Hero'], answer: 0,
-      explanation: 'Static describes the judge’s Change dimension because the description establishes that she undergoes no significant internal change. Tritagonist describes narrative importance, antagonist describes opposition in the story, and hero describes moral/heroic framing.'
+      prompt: 'A judge is the third-most important character. The story gives her competing loyalties, private fears, public confidence, and different behaviour with family than in court. Which complexity term is supported?',
+      options: ['Round', 'Tritagonist', 'Antagonist', 'Hero'], answer: 0,
+      explanation: 'Round describes the judge’s complexity. Tritagonist describes narrative importance, antagonist describes opposition, and hero describes moral framing.'
     },
     {
       id: 'h7', type: 'multi',
-      prompt: 'A story follows Leena most closely. Her adviser has an important supporting role without sharing primary narrative weight, teaches Leena difficult skills, changes from cynical to hopeful, and is framed as heroic despite sometimes using ruthless methods. Which terms could all apply to the adviser without contradiction?',
-      options: ['Supporting character', 'Mentor', 'Dynamic', 'Antihero'], answer: [0,1,2,3],
-      explanation: 'Each term is supported by a separate clue: supporting character describes narrative importance, mentor describes story function, dynamic describes the Change dimension, and antihero describes moral/heroic framing.'
+      prompt: 'A story follows Leena most closely. Her adviser has an important supporting role without sharing primary narrative weight, teaches Leena difficult skills, is developed with competing loyalties and vulnerabilities, and is framed as heroic despite sometimes using ruthless methods. Which terms could all apply to the adviser without contradiction?',
+      options: ['Supporting character', 'Mentor', 'Round', 'Antihero'], answer: [0,1,2,3],
+      explanation: 'Each term is supported by a separate clue: supporting character describes narrative importance, mentor describes story function, round describes character complexity, and antihero describes moral/heroic framing.'
     },
     {
       id: 'h8', type: 'single',
@@ -622,7 +622,7 @@ const practicePools = {
     {
       id: 'h9', type: 'single',
       prompt: 'A familiar “gruff innkeeper who distrusts strangers” appears briefly and is understood almost immediately. Which Pattern term best fits that use?',
-      options: ['Stock', 'Dynamic', 'Deuteragonist', 'Anti-villain'], answer: 0,
+      options: ['Stock', 'Round', 'Deuteragonist', 'Anti-villain'], answer: 0,
       explanation: 'Stock characters rely on familiar, quickly recognizable types.'
     },
     {
@@ -636,26 +636,26 @@ const practicePools = {
     {
       id: 'g1', type: 'single',
       prompt: 'Gate: Kai is the second-most important character in the story. The protagonist trusts him with fears and secrets she shares with no one else. Over the course of the story, Kai changes from fearful to decisive and is ultimately portrayed as heroic. Which story-function term describes Kai?',
-      options: ['Deuteragonist', 'Confidant', 'Dynamic', 'Hero'], answer: 1,
-      explanation: 'Confidant describes Kai’s story function because the protagonist trusts him with private fears and secrets. Deuteragonist describes his narrative importance, dynamic describes how he changes, and hero describes his moral/heroic framing.'
+      options: ['Deuteragonist', 'Confidant', 'Round', 'Hero'], answer: 1,
+      explanation: 'Confidant describes Kai’s story function because the protagonist trusts him with private fears and secrets. Deuteragonist describes his narrative importance, round describes his complexity, and hero describes his moral/heroic framing.'
     },
     {
       id: 'g2', type: 'single',
       prompt: 'Gate: Nessa carries most of the story. She frequently lies and intimidates people, yet the narrative still centers on her goals and choices. Which narrative-importance term describes her?',
-      options: ['Protagonist', 'Antihero', 'Villain', 'Dynamic'], answer: 0,
+      options: ['Protagonist', 'Antihero', 'Villain', 'Round'], answer: 0,
       explanation: 'Protagonist describes Nessa’s narrative importance. Her questionable behaviour may affect moral framing, but it does not change which term answers the narrative-importance question.'
     },
     {
       id: 'g3', type: 'single',
-      prompt: 'Gate: Tomas begins convinced that asking for help is weakness. Repeated failures force him to depend on others, and by the end he openly asks his team for support. Which Change term describes him?',
-      options: ['Dynamic', 'Mentor', 'Supporting character', 'Hero'], answer: 0,
-      explanation: 'Dynamic is a Change term for meaningful character change over time. The other choices describe different aspects of the character.'
+      prompt: 'Gate: A briefly used character is immediately recognizable as the boastful travelling salesman: fast-talking, exaggerated, and built from a familiar type. Which Character pattern term best fits?',
+      options: ['Stock', 'Round', 'Mentor', 'Hero'], answer: 0,
+      explanation: 'Stock describes a familiar, quickly recognizable pattern. It does not tell us whether the character is morally good or how much narrative weight the character carries.'
     },
     {
       id: 'g4', type: 'single',
-      prompt: 'Gate: The expedition leader is the third-most important character. She repeatedly controls who is allowed into dangerous areas, remains unchanged, and is portrayed as admirable. Which story-function term describes her role?',
-      options: ['Gatekeeper', 'Tritagonist', 'Static', 'Hero'], answer: 0,
-      explanation: 'Gatekeeper describes what she does in the story: controlling access. Tritagonist is narrative importance, static describes the Change dimension, and hero is framing.'
+      prompt: 'Gate: The expedition leader is the third-most important character. She repeatedly controls who is allowed into dangerous areas, is developed with several competing values, and is portrayed as admirable. Which story-function term describes her role?',
+      options: ['Gatekeeper', 'Tritagonist', 'Flat', 'Hero'], answer: 0,
+      explanation: 'Gatekeeper describes what she does in the story: controlling access. Tritagonist is narrative importance, round describes complexity, and hero is framing.'
     },
     {
       id: 'g5', type: 'multi',
@@ -663,16 +663,16 @@ const practicePools = {
       options: [
         'Narrative importance asks how much story weight a character carries.',
         'Story function asks what a character does in the story.',
-        'Dynamic and static describe moral goodness.',
+        'Round and flat describe moral goodness.',
         'Hero and villain tell you whether a character is primary or minor.'
       ], answer: [0,1],
-      explanation: 'Narrative importance and story function answer different questions. Dynamic/static belong to the Change dimension; hero/villain belong to moral/heroic framing.'
+      explanation: 'Narrative importance and story function answer different questions. Round/flat describe complexity; hero/villain belong to moral/heroic framing.'
     },
     {
       id: 'g6', type: 'multi',
-      prompt: 'Gate: A character is the second-most important person in the story, teaches and advises the protagonist, changes significantly in outlook, and is framed as heroic despite using morally questionable methods. Which terms could describe that one character?',
-      options: ['Deuteragonist', 'Mentor', 'Dynamic', 'Antihero'], answer: [0,1,2,3],
-      explanation: 'All four are directly supported: deuteragonist describes narrative importance, mentor describes story function, dynamic describes the Change dimension, and antihero describes moral/heroic framing.'
+      prompt: 'Gate: A character is the second-most important person in the story, teaches and advises the protagonist, is developed with multiple conflicting motives, and is framed as heroic despite using morally questionable methods. Which terms could describe that one character?',
+      options: ['Deuteragonist', 'Mentor', 'Round', 'Antihero'], answer: [0,1,2,3],
+      explanation: 'All four are directly supported: deuteragonist describes narrative importance, mentor describes story function, round describes character complexity, and antihero describes moral/heroic framing.'
     }
   ]
 };
@@ -720,7 +720,7 @@ const quizPools = {
     {
       id: 'qf3', type: 'single',
       prompt: 'A character teaches the protagonist skills and prepares them for a difficult task. Which story-function term fits?',
-      options: ['Mentor', 'Deuteragonist', 'Static', 'Antihero'], answer: 0,
+      options: ['Mentor', 'Deuteragonist', 'Flat', 'Antihero'], answer: 0,
       explanation: 'Mentor describes a guiding or teaching function.'
     },
     {
@@ -733,15 +733,15 @@ const quizPools = {
   dimensions: [
     {
       id: 'qc1', type: 'single',
-      prompt: 'A character remains fundamentally unchanged despite being tested repeatedly. Which Change term fits?',
-      options: ['Static', 'Dynamic', 'Round', 'Protagonist'], answer: 0,
-      explanation: 'Static is a Change term for a character who remains fundamentally unchanged.'
+      prompt: 'A character is developed around a narrow role and only the few traits needed to perform it. Which complexity term best fits?',
+      options: ['Flat', 'Round', 'Protagonist', 'Hero'], answer: 0,
+      explanation: 'Flat describes deliberately limited complexity. It is not automatically bad writing.'
     },
     {
       id: 'qc2', type: 'single',
-      prompt: 'A character changes from avoiding responsibility to accepting it openly by the end of the story. Which Change term fits?',
-      options: ['Dynamic', 'Static', 'Stock', 'Antagonist'], answer: 0,
-      explanation: 'Dynamic is a Change term for meaningful character change over time.'
+      prompt: 'A reluctant heir is forced from safety, tested by loss, and pushed toward leadership in a pattern that recurs across many stories. Which Character pattern term best fits?',
+      options: ['Archetypal', 'Stock', 'Round', 'Antagonist'], answer: 0,
+      explanation: 'Archetypal describes a broad recurring storytelling pattern. It does not by itself determine complexity or moral framing.'
     },
     {
       id: 'qc3', type: 'single',
@@ -752,7 +752,7 @@ const quizPools = {
     {
       id: 'qc4', type: 'single',
       prompt: 'A briefly used character is built from a familiar, instantly recognizable type with little extra complexity. Which Pattern term best fits?',
-      options: ['Stock', 'Dynamic', 'Deuteragonist', 'Foil'], answer: 0,
+      options: ['Stock', 'Round', 'Deuteragonist', 'Foil'], answer: 0,
       explanation: 'Stock is a Pattern term for a familiar, quickly recognizable character type.'
     }
   ],
@@ -770,14 +770,14 @@ const quizPools = {
     },
     {
       id: 'qs2', type: 'single',
-      prompt: 'Which statement is correct?',
+      prompt: 'Which statement correctly separates story function from character complexity?',
       options: [
-        'Mentor describes story function, while dynamic describes the Change dimension.',
-        'Mentor and dynamic are both narrative-importance terms.',
-        'Dynamic describes moral goodness.',
+        'Mentor describes story function, while round describes complexity.',
+        'Mentor and round are both narrative-importance terms.',
+        'Round describes moral goodness.',
         'Story function tells you whether a character is primary or minor.'
       ], answer: 0,
-      explanation: 'Mentor tells us what a character does; dynamic tells us whether the character changes.'
+      explanation: 'Mentor tells us what a character does; round tells us about meaningful depth and dimensionality.'
     },
     {
       id: 'qs3', type: 'single',
@@ -786,7 +786,7 @@ const quizPools = {
         'The character may be an antagonist without being a villain.',
         'The character must be evil.',
         'The character must be the deuteragonist.',
-        'The character must be static.'
+        'The character must be round.'
       ], answer: 0,
       explanation: 'Opposition and moral framing are separate. Antagonist does not automatically mean villain.'
     },
@@ -805,8 +805,8 @@ const quizPools = {
   overlap: [
     {
       id: 'qo1', type: 'multi',
-      prompt: 'A character is second-most important, teaches the protagonist, changes significantly in outlook, and is framed as heroic despite using morally questionable methods. Which terms could all apply?',
-      options: ['Deuteragonist', 'Mentor', 'Dynamic', 'Antihero'], answer: [0,1,2,3],
+      prompt: 'A character is second-most important, teaches the protagonist, is developed with multiple conflicting motives, and is framed as heroic despite using morally questionable methods. Which terms could all apply?',
+      options: ['Deuteragonist', 'Mentor', 'Round', 'Antihero'], answer: [0,1,2,3],
       explanation: 'All four are supported by separate evidence and can overlap because they describe different aspects of the same character.'
     },
     {
@@ -815,16 +815,16 @@ const quizPools = {
       options: [
         'A protagonist can also be a villain.',
         'A minor character can function as a herald.',
-        'A mentor can be static.',
+        'A mentor can be round.',
         'An antagonist must be a villain.'
       ], answer: [0,1,2],
-      explanation: 'Narrative importance, story function, Character Dimensions, and moral/heroic framing can overlap. Antagonist does not require villain framing.'
+      explanation: 'Narrative importance, story function, Character classifications, and moral/heroic framing can overlap. Antagonist does not require villain framing.'
     },
     {
       id: 'qo3', type: 'single',
-      prompt: 'Mina is the primary character, mentors her younger brother, remains fundamentally unchanged in outlook and behaviour, and is framed as morally admirable. Which term answers only the question of narrative importance?',
-      options: ['Protagonist', 'Mentor', 'Static', 'Hero'], answer: 0,
-      explanation: 'Protagonist describes narrative importance. Mentor describes story function, static describes the Change dimension, and hero describes moral/heroic framing.'
+      prompt: 'Mina is the primary character, mentors her younger brother, is developed with several conflicting motives, values, and fears, and is framed as morally admirable. Which term answers only the question of narrative importance?',
+      options: ['Protagonist', 'Mentor', 'Flat', 'Hero'], answer: 0,
+      explanation: 'Protagonist describes narrative importance. Mentor describes story function, round describes complexity, and hero describes moral/heroic framing.'
     },
     {
       id: 'qo4', type: 'multi',
@@ -839,16 +839,30 @@ const realWorldProof = [
   {
     title: 'Alice — protagonist',
     work: 'Alice’s Adventures in Wonderland · Lewis Carroll',
-    body: 'Alice carries the primary narrative focus: the story follows her experiences, choices, questions, and movement through Wonderland.',
+    body: 'Evidence: the narrative follows Alice’s experiences, questions, decisions, and movement through Wonderland. How and why it fits: she carries the primary narrative weight, so protagonist is the relevant narrative-importance term. Writer takeaway: justify narrative importance by what the story actually follows.',
     url: 'https://www.gutenberg.org/ebooks/11',
     source: 'Project Gutenberg #11'
   },
   {
-    title: 'Jim Hawkins — protagonist',
+    title: 'Long John Silver — round character',
     work: 'Treasure Island · Robert Louis Stevenson',
-    body: 'Jim is the central character through whose actions and experiences the adventure unfolds, making him a clear example of narrative importance.',
+    body: 'Evidence: Silver is charismatic and helpful in some interactions, calculating and dangerous in others, and his loyalties and behaviour cannot be reduced to one simple trait. How and why it fits: those multiple meaningful facets support round character complexity. Writer takeaway: complexity comes from consequential dimensions and tensions, not from a checklist of traits.',
     url: 'https://www.gutenberg.org/ebooks/120',
     source: 'Project Gutenberg #120'
+  },
+  {
+    title: 'Passepartout — sidekick function',
+    work: 'Around the World in Eighty Days · Jules Verne',
+    body: 'Evidence: Passepartout travels with Phileas Fogg, assists him repeatedly, solves practical problems, and participates in the journey while Fogg remains the principal figure. How and why it fits: that recurring close-companion assistance supports the sidekick story function. Writer takeaway: a function label is justified by what the character does.',
+    url: 'https://www.gutenberg.org/ebooks/103',
+    source: 'Project Gutenberg #103'
+  },
+  {
+    title: 'The Wicked Witch of the West — villain framing',
+    work: 'The Wonderful Wizard of Oz · L. Frank Baum',
+    body: 'Evidence: the Witch threatens Dorothy and her companions and repeatedly attempts to control or harm them. How and why it fits: the story frames those actions as harmful and threatening, supporting villain framing. Writer takeaway: moral framing is separate from narrative importance or story function.',
+    url: 'https://www.gutenberg.org/ebooks/55',
+    source: 'Project Gutenberg #55'
   }
 ];
 
