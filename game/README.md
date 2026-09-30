@@ -1,139 +1,78 @@
-# WriteCraft — Story Construction Levels 1–2
+# Story Construction Writing Game — Levels 1–2
 
-A zero-build, static HTML/CSS/JavaScript prototype based on the **Learning Gamification of Writing** plan.
+Static HTML/CSS/JavaScript implementation of the **Learning Gamification of Writing** plan.
 
-Implemented concepts:
+Playable concepts:
 
 1. **Character**
 2. **Goal**
 
-Goal unlocks after Character is completed. Later Story Construction concepts remain visible and locked.
+Goal unlocks after Character. The remaining Story Construction concepts stay visible and locked in the concept path.
 
-## Why vanilla HTML/CSS/JavaScript
+## Plan rules implemented
 
-The game remains a static, mobile-first, text-focused learning application. Vanilla web technology is still a strong fit because it deploys directly to a static host, needs no package/build chain, keeps the teaching logic inspectable, and already supports local state, dialogs, accessibility, responsive layout, randomized question banks, and drag-and-drop.
+- Teach before testing.
+- One text challenge at a time.
+- Explain both correct and incorrect answers.
+- Practice uses **3 basic → 2 harder → 1 challenge gate**.
+- Ordinary practice misses do not cost hearts.
+- Two ordinary misses restart the current difficulty rung with different selections where possible.
+- A failed challenge gate costs one heart.
+- Five correct practice challenges in a row restore one heart, capped at three.
+- Each concept ends with its own quiz.
+- One immediate quiz retry is allowed; a second failure returns the learner to the lesson.
+- Passing the concept quiz marks the concept completed; completion is not full mastery.
+- Real-World Proof follows the quiz and is evidence/reinforcement, not another scored challenge.
+- Future concepts may be named as signposts but are not tested before they are taught.
 
-A framework such as React, Vue, or Svelte becomes more attractive once the project gains a larger authoring pipeline, many reusable concept components, accounts/cloud saves, adaptive learning, analytics, or substantial shared application state.
+The current five-question quiz with four required correct answers remains a reversible prototype choice because the plan has not fixed final quiz length or pass threshold.
 
-## Run it
+## Short-term answer and variant memory
 
-Open `index.html` in a modern browser. No install step is required.
+Recent-history balancing runs continuously during normal play — not only during replay.
 
-For development, serving the directory is more predictable for browser storage and navigation:
+For basic practice, harder practice, gates, quizzes, restarted rungs, review, and replay, the selector prefers alternatives that avoid:
 
-```bash
-python -m http.server 8080
-```
+- recently used question variants;
+- recently used **correct answers/classifications/results**;
+- duplicate correct results inside the same quiz attempt where the bank permits.
 
-Then open `http://localhost:8080`.
+Answer order is also shuffled, and ordering questions begin in shuffled positions.
 
-## Level 1 — Character
+The current correct-answer memory window is **3 selections**. That value is intentionally provisional because the plan leaves the exact window to testing. If a bank is too small, constraints relax rather than blocking progress.
 
-Character preserves the first playable level and its refinements:
+## Character
 
-- guided teaching before testing;
-- point-of-use popup definitions and multiple examples;
-- narrative importance, story function, Character Dimensions, and moral/heroic framing kept distinct;
-- 15 basic-practice variants;
-- 10 harder-practice variants;
-- 6 challenge-gate variants;
-- 20 quiz questions across five balanced assessment areas;
-- 3 examples for each of 40 popup terms;
-- shuffled answer/order positions and recent-variant avoidance;
-- explanations after every answer;
-- 3 hearts, with heart loss only at the challenge gate;
-- five-correct streak restores one heart, capped at three;
-- Character-only quiz with one immediate retry;
-- real-world proof after completion.
+Character now follows the latest plan:
 
-## Level 2 — Goal
+- **Narrative importance:** protagonist, co-protagonist, deuteragonist, co-deuteragonist, tritagonist, antagonist, supporting character, minor character, ensemble.
+- **Story function:** ally, sidekick, confidant, mentor, foil, rival, love interest, comic relief, herald/messenger, gatekeeper, catalyst, sacrificial character, false antagonist, henchman/enforcer, minion/follower, authority figure, innocent/dependent.
+- **Character complexity:** round and flat.
+- **Character patterns:** stock and archetypal.
+- **Moral / heroic framing:** hero, antihero, villain, anti-villain, tragic hero, sympathetic/tragic villain.
 
-The source plan defines Goal as **what a character is trying to achieve**. Because the plan does not yet provide a detailed Goal sub-curriculum, this implementation stays deliberately conservative and avoids teaching later concepts early.
+Round/flat are taught as purposeful complexity choices rather than good/bad writing. Character patterns are separate from complexity. Change/stability classifications are reserved for the later **Character Arc** concept and are not taught or tested as Character classifications here.
 
-Goal uses **8 guided teaching screens**, matching the current Character lesson length. It teaches the learner to:
+Real-World Proof varies the evidence being demonstrated instead of repeating the same label: narrative importance, complexity, story function, and moral framing are represented.
 
-- identify the intended achievement;
-- distinguish a goal from an action/step;
-- distinguish a goal from a situation/circumstance;
-- recognize goals that are stated directly;
-- infer goals from repeated behaviour;
-- recognize near-term and longer-running goals as descriptive patterns rather than formal classifications;
-- understand how a goal gives choices direction and makes progress legible;
-- recognize when a goal changes as the story develops;
-- connect Goal back to the already-completed Character concept;
-- see Motivation, Stakes, and Conflict as upcoming concepts without being tested on them.
+## Goal
 
-Replay/variation:
+Goal teaches:
 
-- **15** basic-practice variants, 3 selected per run;
-- **10** harder-practice variants, 2 selected per run;
-- **6** challenge-gate variants;
-- **20** quiz questions across five balanced assessment areas, 5 selected per attempt;
-- **11** interactive teaching terms, each with 3 examples where applicable;
-- shuffled answer order;
-- recent practice/quiz/example history stored locally to reduce immediate repetition.
+- the result a character is trying to achieve;
+- stated and inferred goals;
+- near-term and longer-running goals as descriptive patterns;
+- goal versus action/step;
+- goal versus situation/circumstance;
+- how goals give choices direction and make progress legible;
+- how an active goal can continue, be achieved, be abandoned, or change.
 
-### Goal quiz areas
+Motivation, Stakes, and Conflict are signposted as later concepts but are not tested in Goal.
 
-Each Goal quiz draws one question from each area:
+## Presentation
 
-1. identifying the goal;
-2. separating goal from action/circumstance;
-3. how a goal is presented;
-4. how a goal gives direction/progress;
-5. how a goal can continue, be achieved, or change.
+The game uses the KCW palette, responsive/touch-friendly controls, keyboard focus states, and reduced-motion support. It remains text-focused and uses flat surfaces with **no gradients** and no learner-facing WriteCraft branding.
 
-## Cross-level rules now implemented
+Progress is stored in browser localStorage. Existing progress keys are retained for compatibility.
 
-- A practice slot is a learning objective, not one fixed question.
-- Later questions test the idea rather than matching answer words copied from the prompt.
-- Important teaching terms are available at the point of use.
-- Important terms use multiple examples so one example does not become the definition.
-- Conceptual boundaries are stated explicitly and revisited in practice.
-- Replay changes surface wording while preserving the learning objective and approximate difficulty.
-- Every answered question produces an explanation and a clear Continue/Next action.
-- Harder questions increase inference, differentiation, or application rather than simply adding text.
-- Learner-facing wording uses **classification system** for the broad organizing framework and **term** for an individual concept such as protagonist, mentor, static, or antihero.
-- Difficulty must come from meaningful conceptual discrimination, not vague evidence, overloaded clues, or guessing what the question writer intended.
-- When a harder question intentionally combines several classification systems, each clue should clearly support the corresponding term so the learner is separating concepts rather than resolving ambiguity.
-- Future concepts can be named as signposts but are not tested before their own lessons.
-
-## Prototype choices still unresolved by the curriculum
-
-Both levels currently use reversible prototype choices:
-
-- quiz length: **5** questions;
-- passing standard: **4 correct**;
-- a second failed quiz attempt returns the learner to the lesson;
-- after game over, hearts reset to 3 and the learner returns to that concept's lesson;
-- streaks are local to the concept playthrough.
-
-These are implementation choices, not permanent curriculum decisions.
-
-## File structure
-
-- `index.html` — shared semantic game shell and dialogs.
-- `styles.css` — shared responsive/mobile-first presentation.
-- `app.js` — tiny level router using the URL hash (`#character` / `#goal`).
-- `character.js` — Level 1 curriculum data, variation banks, progress, quiz, and replay logic.
-- `goal.js` — Level 2 curriculum data, variation banks, progress, quiz, and replay logic.
-
-Progress is stored in browser `localStorage`; the game does not set cookies.
-
-## Real-world proof
-
-Character and Goal use brief analytical proof cards linking to public-domain Project Gutenberg editions rather than reproducing long excerpts. Goal currently uses:
-
-- *The Wonderful Wizard of Oz* — Project Gutenberg #55
-- *Around the World in Eighty Days* — Project Gutenberg #103
-
-Version: **2.0.0**
-
-
-### Character Dimensions terminology
-
-Character Dimensions is intentionally treated as a looser grouping with three overlapping dimensions: **Complexity** (Round / Flat), **Change** (Dynamic / Static), and **Pattern** (Stock / Archetypal). Questions identify the specific dimension being tested whenever possible.
-
-## KCW colour theme
-
-This build uses the Kemptville Creative Writers website palette from `kemptvillecw/mainsite/styles/styles.css`: forest `#0b5a46`, forest-dark `#063d31`, cream `#f4eee2`, paper `#fffdf8`, mint `#e4eee3`, line `#cbd4c8`, ink `#17352e`, muted `#50655e`, strip background `#dce8d8`, plus the site's success and error surface colours.
+Version: **2.1.0-plan-aligned**
