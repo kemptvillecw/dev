@@ -1228,7 +1228,7 @@ function renderWelcome() {
       body: `<p class="lede">The agreed teaching sequence completes one concept before introducing the next. Finish Level 1 · Character to unlock Goal.</p><div class="callout"><strong>Prerequisite</strong><p>Character must be completed before Goal begins.</p></div>`,
       actions: `<button class="primary-button" id="characterBtn" type="button">Go to Level 1 · Character</button>`
     });
-    document.getElementById('characterBtn').addEventListener('click', () => window.writecraftNavigate('character'));
+    document.getElementById('characterBtn').addEventListener('click', () => window.storyConstructionNavigate('character'));
     return;
   }
 
@@ -1246,7 +1246,7 @@ function renderWelcome() {
       </div>`,
     actions: `<button class="secondary-button" id="characterBtn" type="button">Review Character</button><button class="secondary-button" id="resetBtn" type="button">Reset Goal progress</button><button class="primary-button" id="startBtn" type="button">Start level 2</button>`
   });
-  document.getElementById('characterBtn').addEventListener('click', () => window.writecraftNavigate('character'));
+  document.getElementById('characterBtn').addEventListener('click', () => window.storyConstructionNavigate('character'));
   document.getElementById('startBtn').addEventListener('click', () => {
     if (!state.startedAt) state.startedAt = new Date().toISOString();
     state.view = 'lesson';
@@ -1583,6 +1583,7 @@ function advanceQuiz() {
   state.quizIndex++;
   if (state.quizIndex >= QUIZ_LENGTH) {
     state.quizPassed = state.quizCorrect >= QUIZ_PASS;
+    if (state.quizPassed) state.completed = true;
     state.view = 'quizResult';
   }
   saveState(); render();
@@ -1649,7 +1650,7 @@ function renderComplete() {
     state.startedAt = new Date().toISOString();
     saveState(); render();
   });
-  document.getElementById('reviewCharacter').addEventListener('click', () => window.writecraftNavigate('character'));
+  document.getElementById('reviewCharacter').addEventListener('click', () => window.storyConstructionNavigate('character'));
   document.getElementById('viewMapDone').addEventListener('click', () => mapDialog.showModal());
 }
 
