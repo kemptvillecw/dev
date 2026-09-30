@@ -161,4 +161,141 @@ const conceptGlossary = {
   'dimensions.stock': {
     category: 'Character Dimensions · Pattern', label: 'Stock',
     definition: 'A Pattern term for a character built from a familiar, quickly recognizable type that lets the audience understand the role with little explanation.',
-    example: 'A suspicious old innkeeper 
+    example: 'A suspicious old innkeeper warns travellers not to enter the forest and distrusts every stranger. The story uses a familiar type so the audience can understand him almost immediately.'
+  },
+  'dimensions.archetypal': {
+    category: 'Character Dimensions · Pattern', label: 'Archetypal',
+    definition: 'A Pattern term for a character shaped around a broad, recurring human or storytelling pattern that appears across many different stories.',
+    example: 'An inexperienced heir is forced out of safety, tested by loss, and eventually must decide what kind of leader to become. The character draws on a recurring heir-and-leader archetypal pattern.'
+  },
+
+  'moral.hero': {
+    category: 'Moral / heroic framing', label: 'Hero',
+    definition: 'A character framed around admirable or courageous action, especially action taken to protect, help, or serve beyond narrow self-interest.',
+    example: 'An exhausted medic refuses evacuation until the trapped passengers have been treated and moved to safety. The story frames that choice as heroic.'
+  },
+  'moral.antihero': {
+    category: 'Moral / heroic framing', label: 'Antihero',
+    definition: 'A central or heroic-position character who lacks some conventional heroic qualities or relies on morally questionable methods.',
+    example: 'Rook exposes a corrupt company, but he lies, steals evidence, and blackmails an executive to do it. The story can frame him as an antihero rather than a conventional hero.'
+  },
+  'moral.villain': {
+    category: 'Moral / heroic framing', label: 'Villain',
+    definition: 'A character framed as seriously harmful, cruel, exploitative, or morally destructive.',
+    example: 'Director Voss knowingly poisons a town’s water supply to protect company profits and threatens anyone who discovers it. The story frames those choices as villainous.'
+  },
+  'moral.anti-villain': {
+    category: 'Moral / heroic framing', label: 'Anti-villain',
+    definition: 'A character in a villainous or opposing position who also has sympathetic motives, admirable qualities, or a goal that is understandable even when the chosen methods are harmful.',
+    example: 'A rebel leader wants medicine for an abandoned district, but takes hostages to force the government to supply it. The motive may be sympathetic while the methods keep the character in an anti-villain framing.'
+  },
+  'moral.tragic-hero': {
+    category: 'Moral / heroic framing', label: 'Tragic hero',
+    definition: 'A substantially admirable central character whose choices, limitations, or flaws contribute to a serious downfall.',
+    example: 'A respected commander cannot admit that his strategy is failing. His pride keeps him from retreating until the army is destroyed, turning an admirable leader into a tragic hero.'
+  },
+  'moral.tragic-villain': {
+    category: 'Moral / heroic framing', label: 'Sympathetic / tragic villain',
+    definition: 'A villainous character whose suffering, history, motives, or downfall invites understanding or sympathy without erasing the harm they cause.',
+    example: 'After losing her family in a preventable disaster, Selene becomes obsessed with punishing everyone connected to it, including people who were not responsible. Her grief makes her understandable, while her choices remain destructive.'
+  },
+
+  'force.choice': {
+    category: 'Character as story force', label: 'Choice',
+    definition: 'A decision the character makes that reveals priorities and can change what happens next.',
+    example: 'Mara finds evidence that could clear her brother, but revealing it would expose a frightened witness. She chooses to protect the witness for now, and that decision forces her investigation onto a harder path.'
+  },
+  'force.struggle': {
+    category: 'Character as story force', label: 'Struggle',
+    definition: 'The pressure, resistance, or difficulty that pushes against a character and makes easy success impossible.',
+    example: 'Jo needs to land the rescue plane before the storm closes the valley, but violent crosswinds keep forcing her away from the runway. The weather creates the struggle she must overcome.'
+  },
+  'force.relationship': {
+    category: 'Character as story force', label: 'Relationship',
+    definition: 'A connection between characters that changes their pressure, options, feelings, or decisions.',
+    example: 'Nia wants to leave town, but her younger brother depends on her. Their relationship changes what Nia is willing to risk and makes leaving a much harder choice.'
+  },
+  'force.consequence': {
+    category: 'Character as story force', label: 'Consequence',
+    definition: "What follows from a character's choice or action and changes the situation that comes next.",
+    example: "Mara lies to the inspector to protect a witness. When the lie is discovered, the inspector stops sharing information with her. Losing that trust is a consequence of Mara's earlier choice."
+  }
+};
+
+
+const glossaryExampleVariants = {
+  'narrative.protagonist': [
+    `Tess is the one trying to keep her family farm from being sold. The major decisions, setbacks, and consequences follow her efforts, so she carries the story as protagonist.`,
+    `A mystery follows Omar as he searches for the person who framed him. Other characters matter, but Omar's choices keep redirecting the investigation, making him the protagonist.`
+  ],
+  'narrative.deuteragonist': [
+    `The novel centers on Priya, but her brother Nalin receives the next greatest narrative weight, makes consequential choices, and carries an important strand of the story. Nalin is the deuteragonist.`,
+    `June remains the primary character, while Mateo repeatedly shares major scenes, decisions, and consequences without quite carrying equal weight. Mateo functions as the deuteragonist.`
+  ],
+  'narrative.tritagonist': [
+    `The story gives its greatest weight to Ana, then Malik, while Dr. Sato has the third-largest recurring role and meaningfully affects the outcome. Dr. Sato is the tritagonist.`,
+    `Three investigators dominate the book, but one clearly leads and another receives the second-most focus. The third still matters greatly, making that character the tritagonist.`
+  ],
+  'narrative.supporting': [
+    `A neighbour appears throughout the story, provides key information, and influences the protagonist's decisions, but the narrative never centers on her. She is a supporting character.`,
+    `The protagonist's coach matters in several turning moments and shapes important choices, yet the story's main weight belongs elsewhere. The coach is supporting rather than primary.`
+  ],
+  'narrative.minor': [
+    `A nurse appears briefly to deliver test results that change the protagonist's next decision. The role matters, but its narrative space is small, making the nurse a minor character.`,
+    `A taxi driver appears in one scene, gives the protagonist a useful observation, and never returns. The driver has a minor narrative role.`
+  ],
+  'narrative.ensemble': [
+    `A workplace drama follows six employees, regularly shifting focus so that no single person owns most of the narrative. The cast functions as an ensemble.`,
+    `Four siblings each carry major goals, conflicts, and viewpoint time, with the story depending on all of them rather than one clear lead. That distribution creates an ensemble.`
+  ],
+  'narrative.antagonist': [
+    `A park ranger keeps blocking the protagonist from entering a closed wilderness zone because lives are at risk. The ranger opposes the central goal and can therefore function as an antagonist without being villainous.`,
+    `The protagonist wants to publish a dangerous secret, while an editor repeatedly stops her because innocent people could be harmed. The editor is an antagonistic force even though the motive is protective.`
+  ],
+
+  'function.ally': [
+    `When Dara decides to expose the fraud, her coworker gathers records and agrees to testify. The coworker functions as an ally because she actively supports Dara's goal.`,
+    `A scout guides the rescue team through an unsafe pass and shares supplies when they run short. His story function is that of an ally.`
+  ],
+  'function.sidekick': [
+    `A young mechanic accompanies the bounty hunter on nearly every job, handles equipment, and helps solve practical problems while the hunter remains central. The mechanic functions as a sidekick.`,
+    `The reporter's longtime partner joins most investigations, supports the legwork, and provides another set of eyes without becoming the main character. That recurring companion role is sidekick-like.`
+  ],
+  'function.confidant': [
+    `Mina tells only her aunt that she is terrified of failing the rescue. Because the aunt receives thoughts Mina hides from everyone else, she functions as a confidant.`,
+    `After each public victory, Devon admits his private doubts to one old friend. That trusted listener serves as his confidant.`
+  ],
+  'function.mentor': [
+    `An experienced climber teaches Ren how to read ice, corrects dangerous habits, and prepares him for a solo ascent. She functions as a mentor.`,
+    `The retired detective does not solve the case for Imani; instead, he teaches her how to question assumptions and notice inconsistencies. His story function is mentor.`
+  ],
+  'function.foil': [
+    `Luca forgives easily while his sister remembers every insult. Their contrast makes each character's attitude toward resentment more visible, so they function as foils.`,
+    `One doctor follows procedure no matter the delay; another improvises whenever a life is at risk. Their opposing habits highlight each other's values, creating a foil relationship.`
+  ],
+  'function.rival': [
+    `Two students are competing for the same scholarship and repeatedly measure themselves against one another. Their shared objective makes them rivals.`,
+    `Both explorers want to be first to reach the lost observatory. Neither must be evil; the competition itself creates the rival function.`
+  ],
+  'function.love-interest': [
+    `A developing romance with the ship's navigator complicates Arin's plan to abandon the voyage. The navigator functions as a love interest because the romantic bond meaningfully affects Arin's choices.`,
+    `Sofia's feelings for a political opponent repeatedly complicate what she is willing to reveal. The romantic possibility gives that character a love-interest function.`
+  ],
+  'function.comic-relief': [
+    `After the group barely escapes a collapsing tunnel, Ezra looks at his ruined lunch and says, "I was saving that." The humour briefly releases tension, giving him a comic-relief function.`,
+    `A nervous guard keeps making dry observations during a frightening siege. Those moments create temporary relief from pressure without removing the danger.`
+  ],
+  'function.herald': [
+    `A messenger arrives with news that the border has closed, forcing the travellers to abandon their planned route. The messenger functions as a herald because the information changes what comes next.`,
+    `A doctor calls to say the transplant window has opened. That news forces an immediate decision and gives the doctor a herald or messenger function in the scene.`
+  ],
+  'function.gatekeeper': [
+    `The museum curator will not let the researcher inspect the private collection until she proves her credentials. The curator functions as a gatekeeper to the needed resource.`,
+    `A union representative controls who may enter the closed worksite. The protagonist must persuade her before gaining access, so she serves as a gatekeeper.`
+  ],
+  'function.catalyst': [
+    `A stranger returns the protagonist's lost diary with one page missing. That small act triggers suspicion and sends the protagonist searching for answers, giving the stranger a catalyst function.`,
+    `Milo publicly resigns rather than support the cover-up. His decision inspires three others to act, making him a catalyst for change.`
+  ],
+  'function.sacrificial': [
+    `A pilot gives up the last escape seat so an injured passenger can leave th
