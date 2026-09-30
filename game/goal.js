@@ -373,4 +373,445 @@ const practicePools = {
       "explanation": "The goal concerns something Ana is trying to accomplish in the immediate situation."
     },
     {
-  
+      "id": "gb10",
+      "type": "single",
+      "prompt": "Across many chapters, Malik keeps collecting evidence so he can clear his father's name. What gives those repeated actions a shared direction?",
+      "options": [
+        "The aim of clearing his father's name",
+        "The fact that the story has chapters",
+        "Malik's narrative-importance term",
+        "The number of clues"
+      ],
+      "answer": 0,
+      "explanation": "The continuing goal makes the separate actions part of one recognizable pursuit."
+    },
+    {
+      "id": "gb11",
+      "type": "single",
+      "prompt": "Iris first tries to win the scholarship. After learning her friend was falsely accused of cheating, she stops preparing her application and works to prove the accusation false. What happened to her goal?",
+      "options": [
+        "It changed",
+        "It became an action",
+        "It disappeared from the story entirely",
+        "It became a narrative-importance term"
+      ],
+      "answer": 0,
+      "explanation": "New information caused Iris to replace one intended achievement with another."
+    },
+    {
+      "id": "gb12",
+      "type": "single",
+      "prompt": "Which sentence most clearly names an intended achievement rather than a method?",
+      "options": [
+        "Reach the island before sunset",
+        "Row harder",
+        "Check the compass",
+        "Untie the spare sail"
+      ],
+      "answer": 0,
+      "explanation": "Reaching the island is what the character is trying to accomplish. The other choices are possible methods or actions."
+    },
+    {
+      "id": "gb13",
+      "type": "single",
+      "prompt": "A character keeps calling hospitals, checking emergency-room lists, and contacting police stations. Which goal is most strongly suggested?",
+      "options": [
+        "Find where someone injured has been taken",
+        "Make several phone calls",
+        "Learn how hospitals work",
+        "Spend the evening indoors"
+      ],
+      "answer": 0,
+      "explanation": "The repeated actions support an inferred goal of locating the person."
+    },
+    {
+      "id": "gb14",
+      "type": "single",
+      "prompt": "What question most directly identifies a character's goal?",
+      "options": [
+        "What is the character trying to achieve?",
+        "How morally good is the character?",
+        "How important is the character to the narrative?",
+        "Which Character Dimensions term best describes the character?"
+      ],
+      "answer": 0,
+      "explanation": "A goal answers what the character is trying to achieve."
+    },
+    {
+      "id": "gb15",
+      "type": "truefalse",
+      "prompt": "True or false: A goal can guide several different actions across a story.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 0,
+      "explanation": "True. Different actions can all be selected because they serve the same intended achievement."
+    }
+  ],
+  "hard": [
+    {
+      "id": "gh1",
+      "type": "single",
+      "prompt": "Leena is the protagonist. She studies old maps, borrows climbing equipment, and persuades a ranger to show her a closed trail. Which statement identifies her goal rather than her narrative importance or her actions?",
+      "options": [
+        "Reach the abandoned observatory",
+        "She is the protagonist",
+        "Study old maps",
+        "Borrow climbing equipment"
+      ],
+      "answer": 0,
+      "explanation": "Reaching the observatory is the intended achievement. Protagonist is a narrative-importance term, while studying and borrowing are actions."
+    },
+    {
+      "id": "gh2",
+      "type": "multi",
+      "prompt": "A character never states a goal directly. Which details could reasonably help a reader infer the goal?",
+      "options": [
+        "Repeated choices that point toward the same result",
+        "Actions the character keeps taking despite difficulty",
+        "What the character repeatedly tries to make happen",
+        "The font used for the chapter heading"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "A goal can be inferred when choices and actions consistently point toward an intended result. Formatting does not establish the character's goal."
+    },
+    {
+      "id": "gh3",
+      "type": "single",
+      "prompt": "Mara wants to stop a package from leaving the depot. She checks the departure board, runs to loading bay four, and asks a driver to delay the truck. Which choice best states the goal at the right level?",
+      "options": [
+        "Prevent the package from leaving the depot",
+        "Check the departure board",
+        "Run to loading bay four",
+        "Ask a driver a question"
+      ],
+      "answer": 0,
+      "explanation": "The goal is the intended result shared by the smaller actions."
+    },
+    {
+      "id": "gh4",
+      "type": "single",
+      "prompt": "Which version most clearly establishes what the character is trying to achieve?",
+      "options": [
+        "Rafi needs the missing key before the vault closes at noon, so he begins searching the hotel rooms.",
+        "Rafi walks quickly through a hallway and opens several doors.",
+        "The hotel has many rooms, and noon is approaching.",
+        "Rafi is an important character who appears in most scenes."
+      ],
+      "answer": 0,
+      "explanation": "The first version identifies the intended achievement and connects the ensuing action to it."
+    },
+    {
+      "id": "gh5",
+      "type": "multi",
+      "prompt": "Select every statement that is consistent with the Goal concept as taught so far.",
+      "options": [
+        "A goal may be stated directly or inferred from behaviour.",
+        "A goal may guide several different actions.",
+        "A character's goal can change when circumstances change.",
+        "An action and a goal always mean exactly the same thing."
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Goals can be explicit or inferred, can guide multiple actions, and can change. Actions are steps taken in pursuit of an intended achievement."
+    },
+    {
+      "id": "gh6",
+      "type": "single",
+      "prompt": "Nico enters the archive because he wants to prove the photograph was altered. Halfway through, he discovers the original photograph and realizes the alteration hid a second person. He stops examining the edit and starts trying to identify that person. Which description is most accurate?",
+      "options": [
+        "His current goal has shifted.",
+        "His narrative importance has changed.",
+        "He no longer has any goal.",
+        "Entering the archive was the goal all along."
+      ],
+      "answer": 0,
+      "explanation": "New information changed what Nico is trying to achieve. Entering the archive was an action serving the earlier goal."
+    },
+    {
+      "id": "gh7",
+      "type": "single",
+      "prompt": "Two characters both climb the radio tower. One is trying to repair the transmitter; the other is trying to remove evidence hidden at the top. What does this show about goals?",
+      "options": [
+        "The same action can serve different intended achievements.",
+        "The action itself determines the goal.",
+        "Characters performing the same action must share a goal.",
+        "Goal is another Character classification system."
+      ],
+      "answer": 0,
+      "explanation": "An action does not tell us the goal by itself. Context shows what each character is trying to achieve."
+    },
+    {
+      "id": "gh8",
+      "type": "single",
+      "prompt": "A passage shows a character checking every train, comparing passenger lists, and refusing to leave the platform. What additional information would most directly clarify the character's goal?",
+      "options": [
+        "Who or what the character is trying to find or prevent",
+        "The colour of the station walls",
+        "Whether the character is a hero",
+        "How many pages the chapter contains"
+      ],
+      "answer": 0,
+      "explanation": "The missing piece is the intended achievement toward which the actions are directed."
+    },
+    {
+      "id": "gh9",
+      "type": "multi",
+      "prompt": "Tara is trying to get a stranded climber off a mountain before nightfall. Which items are actions that could serve that goal rather than restatements of the goal itself?",
+      "options": [
+        "Call the rescue team",
+        "Secure a rope line",
+        "Carry the climber toward the descent route",
+        "Get the climber safely off the mountain"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Calling, securing, and carrying are actions. Getting the climber safely off the mountain states the intended achievement."
+    },
+    {
+      "id": "gh10",
+      "type": "single",
+      "prompt": "Why does a clear goal often make a sequence of character choices easier for a reader to follow?",
+      "options": [
+        "The reader can understand what result the choices are meant to move toward.",
+        "It guarantees the character will succeed.",
+        "It tells the reader whether the character is morally good.",
+        "It replaces the need for character choices."
+      ],
+      "answer": 0,
+      "explanation": "A goal gives choices direction by showing what the character is trying to make happen."
+    }
+  ],
+  "gate": [
+    {
+      "id": "gg1",
+      "type": "single",
+      "prompt": "Gate: Sela is the protagonist. She enters three abandoned houses, questions a retired postmaster, and searches old delivery records. The story never states her aim directly, but all of these choices are meant to locate a letter her mother sent years ago. Which statement identifies Sela's goal?",
+      "options": [
+        "Locate the old letter",
+        "Enter abandoned houses",
+        "Question the postmaster",
+        "Be the protagonist"
+      ],
+      "answer": 0,
+      "explanation": "Locating the letter is the intended achievement. The other choices are actions or a narrative-importance term."
+    },
+    {
+      "id": "gg2",
+      "type": "single",
+      "prompt": "Gate: Tomas is stranded after the ferry leaves. He borrows a bicycle and rides toward the next harbour because another ferry departs there at midnight. Which choice is the goal rather than the situation or the method?",
+      "options": [
+        "Catch the midnight ferry",
+        "Be stranded",
+        "Borrow a bicycle",
+        "Ride along the coast road"
+      ],
+      "answer": 0,
+      "explanation": "Catching the ferry is what Tomas is trying to achieve. Being stranded is the situation; borrowing and riding are actions."
+    },
+    {
+      "id": "gg3",
+      "type": "single",
+      "prompt": "Gate: Priya spends months trying to win a research grant. When her lab partner disappears during a field trip, she abandons the application and starts organizing a search. What has changed?",
+      "options": [
+        "What Priya is trying to achieve",
+        "Priya's narrative importance",
+        "The meaning of the word character",
+        "Whether actions can serve goals"
+      ],
+      "answer": 0,
+      "explanation": "Her goal shifts from winning the grant to finding her missing partner."
+    },
+    {
+      "id": "gg4",
+      "type": "multi",
+      "prompt": "Gate: Which statements correctly describe how a goal can appear in a story?",
+      "options": [
+        "It can be stated directly.",
+        "It can be inferred from repeated behaviour.",
+        "It can guide actions across more than one scene.",
+        "It must always be spoken aloud by the character."
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "A goal can be explicit or inferred and may persist across multiple actions or scenes. It does not have to be spoken aloud."
+    },
+    {
+      "id": "gg5",
+      "type": "single",
+      "prompt": "Gate: A character keeps deleting messages, changing hotel rooms, and checking whether anyone is following. Which answer identifies an intended achievement rather than merely repeating an action?",
+      "options": [
+        "Avoid being found",
+        "Delete messages",
+        "Change hotel rooms",
+        "Check the street"
+      ],
+      "answer": 0,
+      "explanation": "Avoiding discovery is the result the repeated actions appear designed to achieve."
+    },
+    {
+      "id": "gg6",
+      "type": "single",
+      "prompt": "Gate: Two characters both break into the same warehouse. One wants to rescue a captive witness; the other wants to destroy the witness's evidence. What is the best conclusion?",
+      "options": [
+        "The same action can be driven toward different goals.",
+        "Breaking into the warehouse is automatically the goal for both.",
+        "Characters who share an action must share a goal.",
+        "Their goals can be known from their narrative-importance terms alone."
+      ],
+      "answer": 0,
+      "explanation": "The action is the same, but each character is trying to achieve a different result."
+    }
+  ]
+};
+
+const quizPools = {
+  "identify": [
+    {
+      "id": "gqi1",
+      "type": "single",
+      "prompt": "A character keeps following a trail of receipts, checking security footage, and comparing licence plates. Which answer most plausibly states the goal?",
+      "options": [
+        "Identify where the missing car went",
+        "Compare licence plates",
+        "Watch security footage",
+        "Carry receipts"
+      ],
+      "answer": 0,
+      "explanation": "The repeated actions point toward locating or identifying where the car went."
+    },
+    {
+      "id": "gqi2",
+      "type": "single",
+      "prompt": "Mina repeatedly visits pawn shops and shows owners a photograph of a stolen violin. What is she most clearly trying to achieve?",
+      "options": [
+        "Find the stolen violin",
+        "Visit pawn shops",
+        "Show people a photograph",
+        "Become a shop owner"
+      ],
+      "answer": 0,
+      "explanation": "Finding the violin is the intended achievement shared by the actions."
+    },
+    {
+      "id": "gqi3",
+      "type": "single",
+      "prompt": "A character stays after closing, searches old ledgers, and copies one account number. Which statement best describes a likely goal?",
+      "options": [
+        "Find information hidden in the records",
+        "Stay after closing",
+        "Copy numbers in general",
+        "Become an accountant"
+      ],
+      "answer": 0,
+      "explanation": "The behaviour supports an inferred goal of finding specific information in the records."
+    },
+    {
+      "id": "gqi4",
+      "type": "single",
+      "prompt": "Which question most directly asks for a character's goal?",
+      "options": [
+        "What is the character trying to make happen?",
+        "What role does the character play in the cast?",
+        "Is the character heroic?",
+        "Does the character change over time?"
+      ],
+      "answer": 0,
+      "explanation": "Goal concerns the result the character is trying to achieve."
+    }
+  ],
+  "boundary": [
+    {
+      "id": "gqb1",
+      "type": "single",
+      "prompt": "Kira wants to reach the hospital before visiting hours end. Which choice is an action rather than the goal?",
+      "options": [
+        "Take a taxi across town",
+        "Reach the hospital before visiting hours end",
+        "Arrive in time to visit",
+        "Get to the hospital in time"
+      ],
+      "answer": 0,
+      "explanation": "Taking a taxi is a method or action serving the intended achievement."
+    },
+    {
+      "id": "gqb2",
+      "type": "single",
+      "prompt": "A storm knocks out every road into town. Which statement is a situation rather than a goal?",
+      "options": [
+        "Every road is blocked",
+        "Restore a route for the ambulance",
+        "Reach the neighbouring town",
+        "Get medicine through"
+      ],
+      "answer": 0,
+      "explanation": "Blocked roads describe the circumstance. The other choices describe possible intended achievements."
+    },
+    {
+      "id": "gqb3",
+      "type": "multi",
+      "prompt": "Which choices are actions rather than goals?",
+      "options": [
+        "Question the witness",
+        "Search the attic",
+        "Follow the courier",
+        "Discover who forged the signature"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Questioning, searching, and following are actions. Discovering the forger states an intended achievement."
+    },
+    {
+      "id": "gqb4",
+      "type": "single",
+      "prompt": "Which statement best separates goal from action?",
+      "options": [
+        "A goal is the intended achievement; an action is something done in pursuit of it.",
+        "A goal and an action are always identical.",
+        "A goal describes narrative importance.",
+        "An action must always be spoken aloud."
+      ],
+      "answer": 0,
+      "explanation": "The goal names what the character is trying to achieve; actions are steps used to pursue it."
+    }
+  ],
+  "appearance": [
+    {
+      "id": "gqa1",
+      "type": "single",
+      "prompt": "A narrator says that Ellis intends to get the farm back before winter. How is the goal presented?",
+      "options": [
+        "Stated directly",
+        "Only inferred",
+        "Absent",
+        "Presented as a Character term"
+      ],
+      "answer": 0,
+      "explanation": "The intended achievement is explicitly given to the reader."
+    },
+    {
+      "id": "gqa2",
+      "type": "single",
+      "prompt": "The story never says what Ren wants, but Ren repeatedly studies the museum's closing routine, tests a service door, and hides inside before the lights go out. How is the goal primarily communicated?",
+      "options": [
+        "Through behaviour the reader can infer from",
+        "Through a direct statement of the intended achievement",
+        "Through narrative-importance terms",
+        "Through mo
