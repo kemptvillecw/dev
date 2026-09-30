@@ -5,7 +5,7 @@
     return window.location.hash.replace(/^#/, '').toLowerCase() === 'goal' ? 'goal' : 'character';
   }
 
-  window.storyConstructionNavigate = function storyConstructionNavigate(level) {
+  window.writecraftNavigate = function writecraftNavigate(level) {
     const target = level === 'goal' ? 'goal' : 'character';
     const nextHash = `#${target}`;
     if (window.location.hash === nextHash) {
