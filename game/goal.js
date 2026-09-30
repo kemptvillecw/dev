@@ -1,6 +1,6 @@
 'use strict';
 
-const APP_VERSION = '2.0.0-goal';
+const APP_VERSION = '2.1.0-goal-plan-aligned';
 const STORAGE_KEY = 'writecraft-level2-goal-state-v1';
 const VARIATION_HISTORY_KEY = 'writecraft-level2-goal-variation-history-v1';
 const CHARACTER_STORAGE_KEY = 'writecraft-level1-state-v1';
@@ -8,6 +8,7 @@ const QUIZ_LENGTH = 5;
 const QUIZ_PASS = 4;
 const MAX_HEARTS = 3;
 const STREAK_TARGET = 5;
+const RECENT_ANSWER_WINDOW = 3; // Prototype value; final window remains a testing decision.
 
 const concepts = [
   "Character",
@@ -432,7 +433,7 @@ const practicePools = {
         "What is the character trying to achieve?",
         "How morally good is the character?",
         "How important is the character to the narrative?",
-        "Which Character Dimensions term best describes the character?"
+        "Which character-pattern term best describes the character?"
       ],
       "answer": 0,
       "explanation": "A goal answers what the character is trying to achieve."
@@ -836,7 +837,7 @@ const quizPools = {
       "prompt": "A character says, 'Before the doors close, I need to get this medicine onto the train.' Which description best fits the goal's scale in that moment?",
       "options": [
         "A near-term intended achievement",
-        "A Character Dimensions term",
+        "A character-pattern term",
         "A situation only",
         "A moral judgment"
       ],
@@ -958,18 +959,25 @@ const quizPools = {
 
 const realWorldProof = [
   {
-    "title": "Dorothy — getting home",
-    "work": "The Wonderful Wizard of Oz · L. Frank Baum",
-    "body": "Dorothy's repeated decisions are organized around returning home to Kansas. The goal gives direction to the journey even as the specific actions required to pursue it change.",
-    "url": "https://www.gutenberg.org/ebooks/55",
-    "source": "Project Gutenberg #55"
+    title: 'Dorothy — a continuing goal',
+    work: 'The Wonderful Wizard of Oz · L. Frank Baum',
+    body: 'Evidence: after arriving in Oz, Dorothy repeatedly seeks a way to return home and many of her choices point toward reaching the Wizard because she believes he can help. How and why it fits: returning home is the intended result that organizes many different actions. Writer takeaway: one continuing goal can give direction to a long sequence of changing steps.',
+    url: 'https://www.gutenberg.org/ebooks/55',
+    source: 'Project Gutenberg #55'
   },
   {
-    "title": "Phileas Fogg — around the world in eighty days",
-    "work": "Around the World in Eighty Days · Jules Verne",
-    "body": "Fogg's wager gives him a concrete intended achievement: complete a journey around the world within eighty days. The deadline makes progress toward the goal especially visible.",
-    "url": "https://www.gutenberg.org/ebooks/103",
-    "source": "Project Gutenberg #103"
+    title: 'Phileas Fogg — a stated long-running goal',
+    work: 'Around the World in Eighty Days · Jules Verne',
+    body: 'Evidence: Fogg accepts the wager that he can travel around the world within eighty days and repeatedly makes choices in service of completing that journey in time. How and why it fits: the intended achievement remains legible across many scenes even as the immediate actions change. Writer takeaway: a clear goal lets readers measure progress and setbacks.',
+    url: 'https://www.gutenberg.org/ebooks/103',
+    source: 'Project Gutenberg #103'
+  },
+  {
+    title: 'Jim Hawkins — immediate goals can change',
+    work: 'Treasure Island · Robert Louis Stevenson',
+    body: 'Evidence: as danger changes, Jim faces new immediate aims such as reaching safety, warning allies, or securing an advantage. How and why it fits: the active intended result can change with the situation while larger aims continue around it. Writer takeaway: ask what result the character is trying to achieve at this moment rather than assuming one goal controls every scene.',
+    url: 'https://www.gutenberg.org/ebooks/120',
+    source: 'Project Gutenberg #120'
   }
 ];
 
@@ -1022,10 +1030,10 @@ const anotherTermExample = document.getElementById('anotherTermExample');
 
 
 function loadVariationHistory() {
-  const fallback = { practice: { basic: [], hard: [], gate: [] }, quiz: [], examples: {} };
+  const fallback = { practice: { basic: [], hard: [], gate: [] }, quiz: [], answerKeys: [], examples: {} };
   try {
     const parsed = JSON.parse(localStorage.getItem(VARIATION_HISTORY_KEY));
-    return parsed ? { ...fallback, ...parsed, practice: { ...fallback.practice, ...(parsed.practice || {}) }, examples: parsed.examples || {} } : fallback;
+    return parsed ? { ...fallback, ...parsed, practice: { ...fallback.practice, ...(parsed.practice || {}) }, answerKeys: Array.isArray(parsed.answerKeys) ? parsed.answerKeys : [], examples: parsed.examples || {} } : fallback;
   } catch {
     return fallback;
   }
@@ -1067,34 +1075,52 @@ function prepareQuestion(source) {
   return q;
 }
 
-function chooseWithHistory(pool, recentIds = [], usedIds = []) {
+function questionAnswerKey(q) {
+  if (q.answerKey) return String(q.answerKey).toLowerCase();
+  if ((q.type === 'single' || q.type === 'truefalse') && Number.isInteger(q.answer)) return String(q.options[q.answer]).trim().toLowerCase();
+  if (q.type === 'multi' && Array.isArray(q.answer)) return q.answer.map(i => q.options[i]).sort().join('|').toLowerCase();
+  if (q.type === 'order' && Array.isArray(q.answer)) return q.answer.join('|').toLowerCase();
+  return q.id;
+}
+
+function chooseWithHistory(pool, recentIds = [], usedIds = [], additionalAnswerKeys = []) {
   const unused = pool.filter(q => !usedIds.includes(q.id));
-  const fresh = unused.filter(q => !recentIds.includes(q.id));
-  const candidates = fresh.length ? fresh : unused.length ? unused : pool;
+  const recentAnswers = new Set([...(variationHistory.answerKeys || []), ...additionalAnswerKeys]);
+  const tiers = [
+    unused.filter(q => !recentIds.includes(q.id) && !recentAnswers.has(questionAnswerKey(q))),
+    unused.filter(q => !recentAnswers.has(questionAnswerKey(q))),
+    unused.filter(q => !recentIds.includes(q.id)),
+    unused,
+    pool.filter(q => !recentAnswers.has(questionAnswerKey(q))),
+    pool
+  ];
+  const candidates = tiers.find(list => list.length) || pool;
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
-function rememberQuestion(kind, id, limit) {
-  if (kind === 'quiz') {
-    variationHistory.quiz = [...variationHistory.quiz.filter(value => value !== id), id].slice(-limit);
-  } else {
+function rememberQuestion(kind, question, limit) {
+  const id = typeof question === 'string' ? question : question.id;
+  if (kind === 'quiz') variationHistory.quiz = [...variationHistory.quiz.filter(value => value !== id), id].slice(-limit);
+  else {
     const current = variationHistory.practice[kind] || [];
     variationHistory.practice[kind] = [...current.filter(value => value !== id), id].slice(-limit);
   }
+  if (typeof question !== 'string') variationHistory.answerKeys = [...(variationHistory.answerKeys || []), questionAnswerKey(question)].slice(-RECENT_ANSWER_WINDOW);
   saveVariationHistory();
 }
 
 function buildQuizSet() {
   const previous = new Set(state.previousQuizIds || []);
   const selected = [];
+  const selectedAnswerKeys = [];
   for (const pool of Object.values(quizPools)) {
     const recent = variationHistory.quiz || [];
-    const strongest = pool.filter(q => !previous.has(q.id) && !recent.includes(q.id));
-    const alternate = pool.filter(q => !previous.has(q.id));
-    const candidates = strongest.length ? strongest : alternate.length ? alternate : pool;
-    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+    const noPrevious = pool.filter(q => !previous.has(q.id));
+    const sourcePool = noPrevious.length ? noPrevious : pool;
+    const chosen = chooseWithHistory(sourcePool, recent, [], selectedAnswerKeys);
     selected.push(prepareQuestion(chosen));
-    rememberQuestion('quiz', chosen.id, 12);
+    selectedAnswerKeys.push(questionAnswerKey(chosen));
+    rememberQuestion('quiz', chosen, 12);
   }
   state.quizSet = shuffle(selected);
   state.previousQuizIds = state.quizSet.map(q => q.sourceId);
@@ -1289,7 +1315,7 @@ function getQuestionForPhase() {
   const chosen = chooseWithHistory(pool, recent, used);
   state.currentQuestion = prepareQuestion(chosen);
   state.selectedQuestionIds[phase] = [...used, chosen.id];
-  rememberQuestion(phase, chosen.id, phase === 'basic' ? 9 : phase === 'hard' ? 7 : 4);
+  rememberQuestion(phase, chosen, phase === 'basic' ? 9 : phase === 'hard' ? 7 : 4);
   saveState();
   return state.currentQuestion;
 }
