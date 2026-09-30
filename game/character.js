@@ -1069,3 +1069,401 @@ function updateStatus() {
     gameOver: ['Level 1 · Character', 'Game over', 74]
   };
   const [eye, label, pct] = map[state.view] || map.welcome;
+  eyebrow.textContent = eye;
+  progressLabel.textContent = label;
+  progressBar.style.width = `${pct}%`;
+}
+
+function render() {
+  feedbackLock = false;
+  updateStatus();
+  renderConceptMap();
+
+  if (state.view === 'welcome') renderWelcome();
+  else if (state.view === 'lesson') renderLesson();
+  else if (state.view === 'practiceIntro') renderPracticeIntro();
+  else if (state.view === 'practice') renderPractice();
+  else if (state.view === 'gateSuccess') renderGateSuccess();
+  else if (state.view === 'quizIntro') renderQuizIntro();
+  else if (state.view === 'quiz') renderQuiz();
+  else if (state.view === 'quizResult') renderQuizResult();
+  else if (state.view === 'proof') renderProof();
+  else if (state.view === 'complete') renderComplete();
+  else if (state.view === 'gameOver') renderGameOver();
+}
+
+function shell({ kicker = '', title = '', body = '', actions = '' }) {
+  screen.innerHTML = `
+    <div class="screen-stack">
+      <div class="content-grow">
+        ${kicker ? `<span class="stage-kicker">${kicker}</span>` : ''}
+        ${title ? `<h2>${title}</h2>` : ''}
+        ${body}
+      </div>
+      <div class="screen-actions">${actions}</div>
+    </div>`;
+}
+
+function renderWelcome() {
+  shell({
+    kicker: 'Story Construction · Level 1',
+    title: 'Learn what a character is — and what the different character terms actually describe.',
+    body: `
+      <p class="lede">This level teaches <strong>Character</strong> before it tests you. You’ll learn four overlapping ways of describing characters, then work through a short difficulty ladder.</p>
+      <div class="gate-banner"><strong>Game rules</strong><p>Practice mistakes teach; they do not cost hearts. Only a failed challenge gate costs one. Five correct challenges in a row restore one heart, up to three.</p></div>
+      <div class="connection-grid">
+        <div><strong>Learn</strong><span>Short guided screens</span></div>
+        <div><strong>Practice</strong><span>3 basic + 2 harder</span></div>
+        <div><strong>Gate</strong><span>Required checkpoint</span></div>
+        <div><strong>Quiz</strong><span>Character only</span></div>
+      </div>`,
+    actions: `<button class="secondary-button" id="resetBtn" type="button">Reset progress</button><button class="primary-button" id="startBtn" type="button">Start level</button>`
+  });
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if (!state.startedAt) state.startedAt = new Date().toISOString();
+    state.view = 'lesson';
+    state.lessonIndex = 0;
+    saveState(); render();
+  });
+  document.getElementById('resetBtn').addEventListener('click', resetState);
+}
+
+function renderLesson() {
+  const item = lessonScreens[state.lessonIndex];
+  const last = state.lessonIndex === lessonScreens.length - 1;
+  shell({
+    kicker: item.stage,
+    title: item.title,
+    body: item.html,
+    actions: `${state.lessonIndex > 0 ? '<button class="secondary-button" id="backBtn" type="button">Back</button>' : ''}<button class="primary-button" id="nextBtn" type="button">${last ? 'Start practice' : 'Continue'}</button>`
+  });
+  if (state.lessonIndex > 0) document.getElementById('backBtn').addEventListener('click', () => { state.lessonIndex--; saveState(); render(); });
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (last) {
+      state.view = 'practiceIntro';
+    } else {
+      state.lessonIndex++;
+    }
+    saveState(); render();
+  });
+}
+
+function renderPracticeIntro() {
+  shell({
+    kicker: 'Stage 7 · Progressive practice',
+    title: 'Recognize it. Separate it. Apply it.',
+    body: `
+      <p class="lede">The ladder starts with direct recognition, then moves into overlapping classifications. Questions are drawn from larger banks so replays vary, and you will get an explanation after every answer.</p>
+      <div class="category-list">
+        <div class="category-card"><strong>3 basic challenges</strong><span>Direct recognition with strong support.</span></div>
+        <div class="category-card"><strong>2 harder challenges</strong><span>Distinguish overlapping terms by the aspect of character each one describes.</span></div>
+        <div class="category-card"><strong>1 challenge gate</strong><span>Required checkpoint. This is the only practice mistake that costs a heart.</span></div>
+      </div>`,
+    actions: `<button class="secondary-button" id="lessonBtn" type="button">Review lesson</button><button class="primary-button" id="practiceBtn" type="button">Begin challenges</button>`
+  });
+  document.getElementById('lessonBtn').addEventListener('click', () => { state.view = 'lesson'; state.lessonIndex = 0; saveState(); render(); });
+  document.getElementById('practiceBtn').addEventListener('click', () => {
+    state.practicePhase = 'basic';
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    state.currentQuestion = null;
+    setView('practice');
+  });
+}
+
+function getPhaseCount() {
+  return state.practicePhase === 'basic' ? 3 : state.practicePhase === 'hard' ? 2 : 1;
+}
+
+function getQuestionForPhase() {
+  if (state.currentQuestion) return state.currentQuestion;
+  const phase = state.practicePhase;
+  const pool = practicePools[phase];
+  const used = state.selectedQuestionIds[phase] || [];
+  const recent = variationHistory.practice[phase] || [];
+  const chosen = chooseWithHistory(pool, recent, used);
+  state.currentQuestion = prepareQuestion(chosen);
+  state.selectedQuestionIds[phase] = [...used, chosen.id];
+  rememberQuestion(phase, chosen.id, phase === 'basic' ? 9 : phase === 'hard' ? 7 : 4);
+  saveState();
+  return state.currentQuestion;
+}
+
+function renderPractice() {
+  if (state.hearts <= 0) { state.view = 'gameOver'; saveState(); render(); return; }
+  const q = getQuestionForPhase();
+  const count = getPhaseCount();
+  const label = state.practicePhase === 'basic' ? `Basic ${state.practiceIndex + 1} of ${count}` : state.practicePhase === 'hard' ? `Harder ${state.practiceIndex + 1} of ${count}` : 'Challenge gate';
+  const intro = state.practicePhase === 'gate' ? '<div class="gate-banner"><strong>Challenge gate</strong><p>Pass this checkpoint to reach the Character quiz. A wrong answer costs one heart.</p></div>' : '';
+  renderQuestionScreen(q, label, intro, handlePracticeAnswer);
+}
+
+function renderQuestionScreen(q, kicker, preface, onAnswer) {
+  const body = `
+    ${preface || ''}
+    <p class="question-prompt">${q.prompt}</p>
+    ${renderQuestionInput(q)}
+    <div id="feedbackSlot"></div>`;
+  const needsSubmit = q.type === 'multi' || q.type === 'order';
+  shell({
+    kicker,
+    title: '',
+    body,
+    actions: needsSubmit ? `<button class="primary-button" id="submitAnswer" type="button">Check answer</button>` : ''
+  });
+
+  if (q.type === 'single' || q.type === 'truefalse') {
+    screen.querySelectorAll('.answer-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (feedbackLock) return;
+        onAnswer(q, Number(btn.dataset.index));
+      });
+    });
+  } else if (q.type === 'multi') {
+    document.getElementById('submitAnswer').addEventListener('click', () => {
+      if (feedbackLock) return;
+      const selected = [...screen.querySelectorAll('input[type="checkbox"]:checked')].map(el => Number(el.value));
+      onAnswer(q, selected);
+    });
+  } else if (q.type === 'order') {
+    setupDragAndDrop();
+    document.getElementById('submitAnswer').addEventListener('click', () => {
+      if (feedbackLock) return;
+      const order = [...screen.querySelectorAll('.drag-item')].map(el => el.dataset.value);
+      onAnswer(q, order);
+    });
+  }
+}
+
+function renderQuestionInput(q) {
+  if (q.type === 'single' || q.type === 'truefalse') {
+    return `<div class="answers">${q.options.map((opt, i) => `<button class="answer-option" type="button" data-index="${i}">${opt}</button>`).join('')}</div>`;
+  }
+  if (q.type === 'multi') {
+    return `<div class="check-list">${q.options.map((opt, i) => `<label class="check-row"><input type="checkbox" value="${i}"><span>${opt}</span></label>`).join('')}</div>`;
+  }
+  if (q.type === 'order') {
+    return `<div class="drag-list" id="dragList">${q.items.map(item => dragItem(item)).join('')}</div><p class="question-context">Drag the rows, or use the arrow buttons.</p>`;
+  }
+  return '';
+}
+
+function dragItem(item) {
+  return `<div class="drag-item" draggable="true" tabindex="0" data-value="${item}"><span class="drag-handle" aria-hidden="true">⋮⋮</span><strong>${item}</strong><span class="drag-actions"><button type="button" data-move="up" aria-label="Move ${item} up">↑</button><button type="button" data-move="down" aria-label="Move ${item} down">↓</button></span></div>`;
+}
+
+function setupDragAndDrop() {
+  const list = document.getElementById('dragList');
+  let dragged = null;
+  list.querySelectorAll('.drag-item').forEach(item => {
+    item.addEventListener('dragstart', () => { dragged = item; item.classList.add('dragging'); });
+    item.addEventListener('dragend', () => { item.classList.remove('dragging'); dragged = null; });
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (!dragged || dragged === item) return;
+      const box = item.getBoundingClientRect();
+      const after = e.clientY > box.top + box.height / 2;
+      list.insertBefore(dragged, after ? item.nextSibling : item);
+    });
+  });
+  list.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-move]');
+    if (!btn || feedbackLock) return;
+    const item = btn.closest('.drag-item');
+    if (btn.dataset.move === 'up' && item.previousElementSibling) list.insertBefore(item, item.previousElementSibling);
+    if (btn.dataset.move === 'down' && item.nextElementSibling) list.insertBefore(item.nextElementSibling, item);
+  });
+}
+
+function isCorrect(q, answer) {
+  if (Array.isArray(q.answer)) {
+    if (!Array.isArray(answer) || answer.length !== q.answer.length) return false;
+    if (q.type === 'order') return q.answer.every((v, i) => answer[i] === v);
+    const a = [...answer].sort((x,y) => x-y);
+    const b = [...q.answer].sort((x,y) => x-y);
+    return a.every((v, i) => v === b[i]);
+  }
+  return answer === q.answer;
+}
+
+function markAnswerVisuals(q, answer) {
+  if (q.type === 'single' || q.type === 'truefalse') {
+    screen.querySelectorAll('.answer-option').forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === q.answer) btn.classList.add('correct');
+      else if (i === answer) btn.classList.add('incorrect');
+    });
+  } else if (q.type === 'multi') {
+    screen.querySelectorAll('.check-row').forEach((row, i) => {
+      const input = row.querySelector('input');
+      input.disabled = true;
+      const should = q.answer.includes(i);
+      const chosen = answer.includes(i);
+      if (should) row.classList.add('is-correct');
+      if (chosen && !should) row.classList.add('is-incorrect');
+    });
+  } else if (q.type === 'order') {
+    screen.querySelectorAll('.drag-item').forEach(item => { item.draggable = false; });
+    screen.querySelectorAll('.drag-actions button').forEach(btn => btn.disabled = true);
+  }
+  const submit = document.getElementById('submitAnswer');
+  if (submit) submit.disabled = true;
+}
+
+function showFeedback(correct, explanation, buttonText, callback, heartLost = false) {
+  feedbackLock = true;
+  const slot = document.getElementById('feedbackSlot');
+  slot.innerHTML = `<div class="feedback ${correct ? 'good' : 'bad'}"><div class="feedback-title"><span aria-hidden="true">${correct ? '✓' : '×'}</span>${correct ? 'Correct' : 'Not quite'}</div><p>${explanation}</p>${heartLost ? '<span class="heart-note">A challenge-gate miss costs 1 heart.</span>' : ''}</div>`;
+  let actions = screen.querySelector('.screen-actions');
+  if (!actions) {
+    actions = document.createElement('div');
+    actions.className = 'screen-actions';
+    screen.querySelector('.screen-stack').appendChild(actions);
+  }
+  actions.innerHTML = `<button class="primary-button" id="continueAfterFeedback" type="button">${buttonText}</button>`;
+  document.getElementById('continueAfterFeedback').addEventListener('click', callback, { once: true });
+}
+
+function adjustStreak(correct) {
+  if (!correct) { state.streak = 0; return; }
+  state.streak++;
+  if (state.streak >= STREAK_TARGET) {
+    if (state.hearts < MAX_HEARTS) state.hearts++;
+    state.streak = 0;
+  }
+}
+
+function handlePracticeAnswer(q, answer) {
+  const correct = isCorrect(q, answer);
+  markAnswerVisuals(q, answer);
+  adjustStreak(correct);
+
+  let heartLost = false;
+  if (!correct) {
+    state.mistakesInPhase++;
+    if (state.practicePhase === 'gate') {
+      state.hearts = Math.max(0, state.hearts - 1);
+      heartLost = true;
+    }
+  }
+  saveState();
+  updateStatus();
+
+  showFeedback(correct, q.explanation, 'Continue', () => advancePractice(correct), heartLost);
+}
+
+function advancePractice(correct) {
+  const phase = state.practicePhase;
+  const count = getPhaseCount();
+  state.currentQuestion = null;
+
+  if (state.hearts <= 0) {
+    state.view = 'gameOver';
+    saveState(); render(); return;
+  }
+
+  if (!correct && phase !== 'gate' && state.mistakesInPhase >= 2) {
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    state.selectedQuestionIds[phase] = [];
+    saveState();
+    renderPhaseReset(phase);
+    return;
+  }
+
+  if (phase === 'gate') {
+    if (correct) {
+      state.gatePassed = true;
+      state.view = 'gateSuccess';
+    } else {
+      state.practiceIndex = 0;
+    }
+    saveState(); render(); return;
+  }
+
+  state.practiceIndex++;
+  if (state.practiceIndex >= count) {
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    if (phase === 'basic') state.practicePhase = 'hard';
+    else if (phase === 'hard') state.practicePhase = 'gate';
+  }
+  saveState(); render();
+}
+
+function renderPhaseReset(phase) {
+  const name = phase === 'basic' ? 'basic' : 'harder';
+  shell({
+    kicker: 'Learning loop',
+    title: `Two misses — replay the ${name} rung.`,
+    body: `<p class="lede">You stay at the same difficulty, but the rung restarts with different examples. Practice mistakes do not cost hearts.</p><div class="callout"><strong>Why restart?</strong><p>The aim is to stabilize the idea before moving to the gate, not punish a single mistake.</p></div>`,
+    actions: `<button class="primary-button" id="retryRung" type="button">Try new examples</button>`
+  });
+  document.getElementById('retryRung').addEventListener('click', () => { state.view = 'practice'; saveState(); render(); });
+}
+
+function renderGateSuccess() {
+  shell({
+    kicker: 'Challenge gate cleared',
+    title: 'You separated the different character descriptions instead of memorizing terms.',
+    body: `<div class="gate-success"><div class="gate-burst" aria-hidden="true">✦</div><p class="lede">The Character quiz is now unlocked. It tests only Character material you have already learned.</p></div>`,
+    actions: `<button class="primary-button" id="quizReady" type="button">Go to Character quiz</button>`
+  });
+  document.getElementById('quizReady').addEventListener('click', () => {
+    state.view = 'quizIntro'; state.quizIndex = 0; state.quizCorrect = 0; state.quizAnswered = false; saveState(); render();
+  });
+}
+
+function renderQuizIntro() {
+  shell({
+    kicker: 'Stage 8 · Concept quiz',
+    title: 'Completion check: Character',
+    body: `
+      <p class="lede">Each attempt draws five questions from a larger Character quiz bank and requires four correct answers to pass. The exact length and pass standard remain prototype choices because the curriculum leaves them open.</p>
+      <div class="gate-banner"><strong>Retry rule</strong><p>If the first attempt does not pass, you may retry once immediately. A second unsuccessful attempt returns you to the lesson.</p></div>`,
+    actions: `<button class="secondary-button" id="reviewBeforeQuiz" type="button">Review lesson</button><button class="primary-button" id="beginQuiz" type="button">Begin attempt ${state.quizAttempt}</button>`
+  });
+  document.getElementById('reviewBeforeQuiz').addEventListener('click', () => { state.view = 'lesson'; state.lessonIndex = 0; saveState(); render(); });
+  document.getElementById('beginQuiz').addEventListener('click', () => { state.view = 'quiz'; state.quizIndex = 0; state.quizCorrect = 0; buildQuizSet(); saveState(); render(); });
+}
+
+function renderQuiz() {
+  if (!state.quizSet || state.quizSet.length !== QUIZ_LENGTH) {
+    buildQuizSet();
+    saveState();
+  }
+  const q = state.quizSet[state.quizIndex];
+  const dots = `<div class="quiz-status"><span>Attempt ${state.quizAttempt}</span><span class="dot-row">${state.quizSet.map((_, i) => `<span class="dot ${i < state.quizIndex ? 'done' : ''}"></span>`).join('')}</span></div>`;
+  renderQuestionScreen(q, `Character quiz · ${state.quizIndex + 1}/${QUIZ_LENGTH}`, dots, handleQuizAnswer);
+}
+
+function handleQuizAnswer(q, answer) {
+  const correct = isCorrect(q, answer);
+  markAnswerVisuals(q, answer);
+  if (correct) state.quizCorrect++;
+  saveState();
+  showFeedback(correct, q.explanation, state.quizIndex === QUIZ_LENGTH - 1 ? 'Finish quiz' : 'Next question', advanceQuiz);
+}
+
+function advanceQuiz() {
+  state.quizIndex++;
+  if (state.quizIndex >= QUIZ_LENGTH) {
+    state.quizPassed = state.quizCorrect >= QUIZ_PASS;
+    state.view = 'quizResult';
+  }
+  saveState(); render();
+}
+
+function renderQuizResult() {
+  if (state.quizPassed) {
+    shell({
+      kicker: 'Concept completion',
+      title: 'Character completed.',
+      body: `<p class="lede">Completion means you successfully finished the initial Character sequence. It does <strong>not</strong> mean every depth of Character is permanently mastered.</p><div class="callout"><strong>Next:</strong><p>Real-world proof reinforces the concept with identifiable published works. It is not another scored challenge.</p></div>`,
+      actions: `<button class="primary-button" id="proofBtn" type="button">See real-world proof</button>`
+    });
+    document.getElementById('proofBtn').addEventListener('click', () => setView('proof'));
+    return;
+  }
+
+  const secondFailure = state.quizAttem
