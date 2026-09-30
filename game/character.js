@@ -793,4 +793,279 @@ const quizPools = {
     },
     {
       id: 'qc4', type: 'single',
-      prompt: 'A briefly used character is built from a familiar,
+      prompt: 'A briefly used character is built from a familiar, instantly recognizable type with little extra complexity. Which Pattern term best fits?',
+      options: ['Stock', 'Dynamic', 'Deuteragonist', 'Foil'], answer: 0,
+      explanation: 'Stock is a Pattern term for a familiar, quickly recognizable character type.'
+    }
+  ],
+  separation: [
+    {
+      id: 'qs1', type: 'single',
+      prompt: 'Which statement correctly separates narrative importance from moral framing?',
+      options: [
+        'A protagonist can be heroic, villainous, or morally mixed.',
+        'Every protagonist is a hero.',
+        'Every antagonist is a villain.',
+        'Hero is another word for protagonist.'
+      ], answer: 0,
+      explanation: 'Narrative importance and moral/heroic framing are separate classification systems.'
+    },
+    {
+      id: 'qs2', type: 'single',
+      prompt: 'Which statement is correct?',
+      options: [
+        'Mentor describes story function, while dynamic describes the Change dimension.',
+        'Mentor and dynamic are both narrative-importance terms.',
+        'Dynamic describes moral goodness.',
+        'Story function tells you whether a character is primary or minor.'
+      ], answer: 0,
+      explanation: 'Mentor tells us what a character does; dynamic tells us whether the character changes.'
+    },
+    {
+      id: 'qs3', type: 'single',
+      prompt: 'A character blocks the protagonist’s goal for understandable reasons. What can you conclude with confidence?',
+      options: [
+        'The character may be an antagonist without being a villain.',
+        'The character must be evil.',
+        'The character must be the deuteragonist.',
+        'The character must be static.'
+      ], answer: 0,
+      explanation: 'Opposition and moral framing are separate. Antagonist does not automatically mean villain.'
+    },
+    {
+      id: 'qs4', type: 'single',
+      prompt: 'Which question is a narrative-importance question?',
+      options: [
+        'How much story weight does this character carry?',
+        'What does this character do for another character?',
+        'Does this character change?',
+        'Is this character framed as heroic or villainous?'
+      ], answer: 0,
+      explanation: 'Narrative importance asks how central a character is to the narrative.'
+    }
+  ],
+  overlap: [
+    {
+      id: 'qo1', type: 'multi',
+      prompt: 'A character is second-most important, teaches the protagonist, changes significantly in outlook, and is framed as heroic despite using morally questionable methods. Which terms could all apply?',
+      options: ['Deuteragonist', 'Mentor', 'Dynamic', 'Antihero'], answer: [0,1,2,3],
+      explanation: 'All four are supported by separate evidence and can overlap because they describe different aspects of the same character.'
+    },
+    {
+      id: 'qo2', type: 'multi',
+      prompt: 'Select every statement that can be true without contradiction.',
+      options: [
+        'A protagonist can also be a villain.',
+        'A minor character can function as a herald.',
+        'A mentor can be static.',
+        'An antagonist must be a villain.'
+      ], answer: [0,1,2],
+      explanation: 'Narrative importance, story function, Character Dimensions, and moral/heroic framing can overlap. Antagonist does not require villain framing.'
+    },
+    {
+      id: 'qo3', type: 'single',
+      prompt: 'Mina is the primary character, mentors her younger brother, remains fundamentally unchanged in outlook and behaviour, and is framed as morally admirable. Which term answers only the question of narrative importance?',
+      options: ['Protagonist', 'Mentor', 'Static', 'Hero'], answer: 0,
+      explanation: 'Protagonist describes narrative importance. Mentor describes story function, static describes the Change dimension, and hero describes moral/heroic framing.'
+    },
+    {
+      id: 'qo4', type: 'multi',
+      prompt: 'A character appears briefly, delivers information that changes the protagonist’s plan, and is portrayed as heroic. Which terms could apply at the same time?',
+      options: ['Minor character', 'Herald / messenger', 'Hero', 'Deuteragonist'], answer: [0,1,2],
+      explanation: 'Minor describes narrative importance, herald/messenger describes function, and hero describes framing. Deuteragonist would require second-most narrative importance.'
+    }
+  ]
+};
+
+const realWorldProof = [
+  {
+    title: 'Alice — protagonist',
+    work: 'Alice’s Adventures in Wonderland · Lewis Carroll',
+    body: 'Alice carries the primary narrative focus: the story follows her experiences, choices, questions, and movement through Wonderland.',
+    url: 'https://www.gutenberg.org/ebooks/11',
+    source: 'Project Gutenberg #11'
+  },
+  {
+    title: 'Jim Hawkins — protagonist',
+    work: 'Treasure Island · Robert Louis Stevenson',
+    body: 'Jim is the central character through whose actions and experiences the adventure unfolds, making him a clear example of narrative importance.',
+    url: 'https://www.gutenberg.org/ebooks/120',
+    source: 'Project Gutenberg #120'
+  }
+];
+
+const defaultState = () => ({
+  view: 'welcome',
+  lessonIndex: 0,
+  practicePhase: 'basic',
+  practiceIndex: 0,
+  selectedQuestionIds: { basic: [], hard: [], gate: [] },
+  currentQuestion: null,
+  mistakesInPhase: 0,
+  hearts: MAX_HEARTS,
+  streak: 0,
+  gatePassed: false,
+  quizAttempt: 1,
+  quizIndex: 0,
+  quizCorrect: 0,
+  quizAnswered: false,
+  quizSet: [],
+  previousQuizIds: [],
+  quizPassed: false,
+  completed: false,
+  startedAt: null
+});
+
+let state = loadState();
+let variationHistory = loadVariationHistory();
+let feedbackLock = false;
+let currentTermKey = null;
+let currentTermExampleIndex = 0;
+
+const screen = document.getElementById('screen');
+const progressBar = document.getElementById('progressBar');
+const progressLabel = document.getElementById('progressLabel');
+const eyebrow = document.getElementById('eyebrow');
+const heartDisplay = document.getElementById('heartDisplay');
+const streakDisplay = document.getElementById('streakDisplay');
+const mapDialog = document.getElementById('mapDialog');
+const mapButton = document.getElementById('mapButton');
+const closeMap = document.getElementById('closeMap');
+const conceptMap = document.getElementById('conceptMap');
+const termDialog = document.getElementById('termDialog');
+const closeTerm = document.getElementById('closeTerm');
+const termDialogCategory = document.getElementById('termDialogCategory');
+const termDialogTitle = document.getElementById('termDialogTitle');
+const termDialogDefinition = document.getElementById('termDialogDefinition');
+const termDialogExample = document.getElementById('termDialogExample');
+const termExampleLabel = document.getElementById('termExampleLabel');
+const anotherTermExample = document.getElementById('anotherTermExample');
+
+
+function loadVariationHistory() {
+  const fallback = { practice: { basic: [], hard: [], gate: [] }, quiz: [], examples: {} };
+  try {
+    const parsed = JSON.parse(localStorage.getItem(VARIATION_HISTORY_KEY));
+    return parsed ? { ...fallback, ...parsed, practice: { ...fallback.practice, ...(parsed.practice || {}) }, examples: parsed.examples || {} } : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveVariationHistory() {
+  localStorage.setItem(VARIATION_HISTORY_KEY, JSON.stringify(variationHistory));
+}
+
+function shuffle(values) {
+  const copy = [...values];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function prepareQuestion(source) {
+  const q = JSON.parse(JSON.stringify(source));
+  q.sourceId = source.id;
+
+  if (q.type === 'single' || q.type === 'multi') {
+    const correctIndexes = Array.isArray(q.answer) ? q.answer : [q.answer];
+    const shuffledOptions = shuffle(q.options.map((text, originalIndex) => ({
+      text,
+      correct: correctIndexes.includes(originalIndex)
+    })));
+    q.options = shuffledOptions.map(item => item.text);
+    const remapped = shuffledOptions.map((item, index) => item.correct ? index : -1).filter(index => index >= 0);
+    q.answer = Array.isArray(source.answer) ? remapped : remapped[0];
+  } else if (q.type === 'order') {
+    let items = shuffle(q.items);
+    if (items.every((item, index) => item === q.answer[index]) && items.length > 1) {
+      [items[0], items[1]] = [items[1], items[0]];
+    }
+    q.items = items;
+  }
+  return q;
+}
+
+function chooseWithHistory(pool, recentIds = [], usedIds = []) {
+  const unused = pool.filter(q => !usedIds.includes(q.id));
+  const fresh = unused.filter(q => !recentIds.includes(q.id));
+  const candidates = fresh.length ? fresh : unused.length ? unused : pool;
+  return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+function rememberQuestion(kind, id, limit) {
+  if (kind === 'quiz') {
+    variationHistory.quiz = [...variationHistory.quiz.filter(value => value !== id), id].slice(-limit);
+  } else {
+    const current = variationHistory.practice[kind] || [];
+    variationHistory.practice[kind] = [...current.filter(value => value !== id), id].slice(-limit);
+  }
+  saveVariationHistory();
+}
+
+function buildQuizSet() {
+  const previous = new Set(state.previousQuizIds || []);
+  const selected = [];
+  for (const pool of Object.values(quizPools)) {
+    const recent = variationHistory.quiz || [];
+    const strongest = pool.filter(q => !previous.has(q.id) && !recent.includes(q.id));
+    const alternate = pool.filter(q => !previous.has(q.id));
+    const candidates = strongest.length ? strongest : alternate.length ? alternate : pool;
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+    selected.push(prepareQuestion(chosen));
+    rememberQuestion('quiz', chosen.id, 12);
+  }
+  state.quizSet = shuffle(selected);
+  state.previousQuizIds = state.quizSet.map(q => q.sourceId);
+}
+
+function loadState() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    return parsed ? { ...defaultState(), ...parsed } : defaultState();
+  } catch {
+    return defaultState();
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function resetState() {
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(VARIATION_HISTORY_KEY);
+  state = defaultState();
+  variationHistory = loadVariationHistory();
+  render();
+}
+
+function setView(view) {
+  state.view = view;
+  saveState();
+  render();
+}
+
+function updateStatus() {
+  heartDisplay.innerHTML = Array.from({ length: MAX_HEARTS }, (_, i) =>
+    `<span class="heart ${i < state.hearts ? '' : 'empty'}" aria-hidden="true">♥</span>`
+  ).join('');
+  heartDisplay.setAttribute('aria-label', `${state.hearts} ${state.hearts === 1 ? 'heart' : 'hearts'} remaining`);
+  streakDisplay.textContent = `${state.streak} / ${STREAK_TARGET}`;
+
+  const map = {
+    welcome: ['Level 1 · Character', 'Welcome', 0],
+    lesson: ['Learn · Character', `Lesson ${state.lessonIndex + 1} of ${lessonScreens.length}`, 8 + (state.lessonIndex / lessonScreens.length) * 32],
+    practiceIntro: ['Practice · Character', 'Difficulty ladder', 42],
+    practice: ['Practice · Character', state.practicePhase === 'basic' ? 'Basic challenges' : state.practicePhase === 'hard' ? 'Harder challenges' : 'Challenge gate', state.practicePhase === 'basic' ? 48 + state.practiceIndex * 4 : state.practicePhase === 'hard' ? 62 + state.practiceIndex * 5 : 74],
+    gateSuccess: ['Checkpoint · Character', 'Gate cleared', 78],
+    quizIntro: ['Quiz · Character', 'Completion checkpoint', 80],
+    quiz: ['Quiz · Character', `Question ${state.quizIndex + 1} of ${QUIZ_LENGTH}`, 82 + (state.quizIndex / QUIZ_LENGTH) * 10],
+    quizResult: ['Quiz · Character', state.quizPassed ? 'Concept completed' : 'Review needed', state.quizPassed ? 94 : 86],
+    proof: ['Real-world proof', 'Character in published work', 97],
+    complete: ['Level 1 · Character', 'Completed', 100],
+    gameOver: ['Level 1 · Character', 'Game over', 74]
+  };
+  const [eye, label, pct] = map[state.view] || map.welcome;
