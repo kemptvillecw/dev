@@ -623,15 +623,15 @@ const practicePools = {
     {
       "id": "gg3",
       "type": "single",
-      "prompt": "Gate: Priya spends months trying to win a research grant. When her lab partner disappears during a field trip, she abandons the application and starts organizing a search. What has changed?",
+      "prompt": "Gate: Priya has been preparing an application because she wants to win a research grant. When her lab partner disappears, she stops working on the application and begins contacting search teams and checking the places her partner was last seen. Which statement best describes Priya's goal?",
       "options": [
-        "What Priya is trying to achieve",
-        "Priya's narrative importance",
-        "The meaning of the word character",
-        "Whether actions can serve goals"
+        "Her goal changed from winning the grant to finding her missing partner.",
+        "Her goal is still winning the grant; only the actions she takes have changed.",
+        "Organizing the search is the goal, while finding her partner is an action.",
+        "Her partner's disappearance is the new goal."
       ],
       "answer": 0,
-      "explanation": "Her goal shifts from winning the grant to finding her missing partner."
+      "explanation": "Priya's intended achievement changes from winning the grant to finding her missing partner. Organizing the search is an action she takes toward that new goal, while the disappearance is the situation that creates the need for it."
     },
     {
       "id": "gg4",
@@ -1299,7 +1299,7 @@ function renderPractice() {
   const q = getQuestionForPhase();
   const count = getPhaseCount();
   const label = state.practicePhase === 'basic' ? `Basic ${state.practiceIndex + 1} of ${count}` : state.practicePhase === 'hard' ? `Harder ${state.practiceIndex + 1} of ${count}` : 'Challenge gate';
-  const intro = state.practicePhase === 'gate' ? '<div class="gate-banner"><strong>Challenge gate</strong><p>Pass this checkpoint to reach the Character quiz. A wrong answer costs one heart.</p></div>' : '';
+  const intro = state.practicePhase === 'gate' ? '<div class="gate-banner"><strong>Challenge gate</strong><p>Pass this checkpoint to reach the Goal quiz. A wrong answer costs one heart.</p></div>' : '';
   renderQuestionScreen(q, label, intro, handlePracticeAnswer);
 }
 
