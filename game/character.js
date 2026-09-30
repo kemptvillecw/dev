@@ -298,4 +298,161 @@ const glossaryExampleVariants = {
     `Milo publicly resigns rather than support the cover-up. His decision inspires three others to act, making him a catalyst for change.`
   ],
   'function.sacrificial': [
-    `A pilot gives up the last escape seat so an injured passenger can leave th
+    `A pilot gives up the last escape seat so an injured passenger can leave the station. The sacrifice allows another character to survive and continue.`,
+    `To protect the group, a witness destroys evidence that would have cleared her own name. Giving up her future for others gives her a sacrificial function.`
+  ],
+  'function.false-antagonist': [
+    `For half the story, a suspicious neighbour appears to be sabotaging the protagonist, but later the sabotage is revealed to come from someone else and the neighbour was actually hiding a separate secret. The neighbour functions as a false antagonist.`,
+    `A prosecutor seems to be the central enemy until the protagonist learns she has been quietly resisting a more powerful conspirator. The early appearance of opposition makes her a false antagonist.`
+  ],
+  'function.henchman': [
+    `A wealthy smuggler rarely uses violence personally; his security chief intimidates witnesses and carries out threats for him. The chief functions as an enforcer.`,
+    `The governor gives the orders, while a captain raids homes and punishes dissenters on the governor's behalf. The captain fills the henchman or enforcer role.`
+  ],
+  'function.minion': [
+    `Several guards obey the sorcerer's routine orders and protect his tower without shaping the larger plan. They function as followers or minions.`,
+    `The gang leader's lowest-ranking members deliver packages and watch doors but have little independent authority. Their function is that of followers or minions.`
+  ],
+  'function.authority': [
+    `A judge can decide whether the protagonist receives bail and can impose legal consequences. That formal power gives the judge an authority-figure function.`,
+    `The expedition leader decides who may leave camp and when the team must turn back. Her position gives her authority over the others' options.`
+  ],
+  'function.innocent': [
+    `An elderly passenger cannot escape the wreck alone, forcing the protagonist to choose between speed and responsibility. The passenger functions as a dependent character.`,
+    `A frightened child knows nothing about the conflict but becomes someone the group must protect. That vulnerability gives the child an innocent/dependent function.`
+  ],
+
+  'dimensions.round': [
+    `A detective is compassionate with victims, jealous of a successful sibling, patient at work, and reckless when family is threatened. The combination of tensions and traits makes the character round.`,
+    `A queen can be politically ruthless, privately funny, deeply loyal to one friend, and terrified of appearing weak. Those multiple sides create roundness.`
+  ],
+  'dimensions.flat': [
+    `A cheerful mail carrier appears in several scenes to deliver news and always behaves in the same straightforward way. The character is useful without extensive layering, making the character relatively flat in complexity.`,
+    `A stern receptionist exists mainly to enforce office rules and is characterized almost entirely by that function. The limited complexity makes the character flat.`
+  ],
+  'dimensions.dynamic': [
+    `At first, Arun refuses to trust anyone. After depending on others and seeing the cost of isolation, he begins asking for help and sharing responsibility. That meaningful change makes him dynamic.`,
+    `Keira begins by avoiding conflict but ends willing to confront her family openly. The change in how she acts and understands herself makes her dynamic.`
+  ],
+  'dimensions.static': [
+    `Pressure repeatedly tempts Sal to betray his principles, but he begins and ends the story committed to the same core code. In that respect, he is static.`,
+    `A grandmother remains patient, practical, and deeply skeptical of the town's rumours from beginning to end. Events reveal those traits but do not fundamentally change them.`
+  ],
+  'dimensions.stock': [
+    `A boastful travelling salesman appears briefly, talks fast, exaggerates every product, and immediately fits a familiar type. The story is using a stock character.`,
+    `A gruff tavern keeper who distrusts outsiders and knows every local rumour can be understood almost instantly because the role draws on a familiar stock type.`
+  ],
+  'dimensions.archetypal': [
+    `A reluctant young leader must leave safety, face trials, and decide whether to accept responsibility for a community. The pattern draws on a recurring reluctant-leader archetype.`,
+    `An old wanderer appears at moments of crisis to offer difficult wisdom and then sends younger characters forward on their own. The character draws on a broad mentor archetype.`
+  ],
+
+  'moral.hero': [
+    `A firefighter re-enters a dangerous building to guide trapped residents out even after being ordered to evacuate. The story frames the self-risking action as heroic.`,
+    `A lawyer gives up a lucrative case to protect a vulnerable client from exploitation. The narrative treats the sacrifice and courage as heroic.`
+  ],
+  'moral.antihero': [
+    `A smuggler becomes the central figure fighting a dictatorship, but cheats allies and uses intimidation whenever it helps. The character can be framed as an antihero.`,
+    `The lead investigator wants justice but routinely lies, trespasses, and manipulates people to get it. That mix of centrality and compromised methods supports antihero framing.`
+  ],
+  'moral.villain': [
+    `A landlord deliberately traps tenants in unsafe contracts and threatens anyone who reports the conditions. The story frames the exploitation as villainous.`,
+    `A commander orders civilians harmed simply to frighten a rival city into surrender. The deliberate cruelty supports villain framing.`
+  ],
+  'moral.anti-villain': [
+    `A scientist wants to stop a deadly outbreak but imprisons healthy people without consent to test a cure. The understandable goal combined with harmful methods can support anti-villain framing.`,
+    `A rebel protects an oppressed village yet terrorizes unrelated civilians to force political change. Sympathetic motives and destructive methods create anti-villain complexity.`
+  ],
+  'moral.tragic-hero': [
+    `A beloved mayor refuses to admit that her own policy caused the crisis. Her pride drives increasingly damaging choices until she loses the city she tried to protect, creating a tragic-hero pattern.`,
+    `A gifted surgeon's need to prove himself keeps him operating when he should stop. His admirable dedication and destructive flaw combine in a tragic downfall.`
+  ],
+  'moral.tragic-villain': [
+    `After years of abuse, Corin becomes determined to make everyone from his old institution suffer, including people who never harmed him. His history invites sympathy, but his choices remain villainous.`,
+    `A grieving ruler begins by trying to prevent another war, then becomes increasingly cruel and controlling. The loss behind her actions makes the villainy tragic without excusing it.`
+  ],
+
+  'force.choice': [
+    `Eli can expose his friend's lie or stay silent to protect the friendship. He chooses to speak, and that decision changes both the relationship and the investigation.`,
+    `A captain must choose between pursuing the enemy and turning back for stranded civilians. The decision reveals priorities and redirects the story.`
+  ],
+  'force.struggle': [
+    `Nora needs to confess before the hearing, but fear of losing her family keeps stopping her. The pressure between what she needs to do and what she fears creates struggle.`,
+    `A climber can see the summit, but injury, weather, and dwindling daylight make success difficult. Those pressures create the struggle.`
+  ],
+  'force.relationship': [
+    `Jon would normally report the theft immediately, but the thief is his younger sister. Their relationship changes the pressure around the decision.`,
+    `A commander trusts one lieutenant and distrusts another, so identical advice from each produces very different choices. The relationships alter how pressure is felt.`
+  ],
+  'force.consequence': [
+    `Tara skips an important meeting to follow a suspicious stranger. She learns something useful, but her absence costs her a promotion. That lost opportunity is a consequence of the choice.`,
+    `A student publicly accuses the wrong person. Even after apologizing, classmates stop trusting his judgment. The damaged trust is a consequence that shapes later scenes.`
+  ]
+};
+
+const glossaryGroups = {
+  narrative: [
+    'narrative.protagonist', 'narrative.deuteragonist', 'narrative.tritagonist',
+    'narrative.supporting', 'narrative.minor', 'narrative.ensemble', 'narrative.antagonist'
+  ],
+  function: [
+    'function.ally', 'function.sidekick', 'function.confidant', 'function.mentor',
+    'function.foil', 'function.rival', 'function.love-interest', 'function.comic-relief',
+    'function.herald', 'function.gatekeeper', 'function.catalyst', 'function.sacrificial',
+    'function.false-antagonist', 'function.henchman', 'function.minion',
+    'function.authority', 'function.innocent'
+  ],
+  dimensions: [
+    'dimensions.round', 'dimensions.flat', 'dimensions.dynamic',
+    'dimensions.static', 'dimensions.stock', 'dimensions.archetypal'
+  ],
+  complexity: ['dimensions.round', 'dimensions.flat'],
+  change: ['dimensions.dynamic', 'dimensions.static'],
+  pattern: ['dimensions.stock', 'dimensions.archetypal'],
+  moral: [
+    'moral.hero', 'moral.antihero', 'moral.villain', 'moral.anti-villain',
+    'moral.tragic-hero', 'moral.tragic-villain'
+  ]
+};
+
+function glossaryLink(key) {
+  const entry = conceptGlossary[key];
+  return `<button class="term-link" type="button" data-term="${key}" aria-haspopup="dialog">${entry.label}</button>`;
+}
+
+function glossaryList(groupName) {
+  return `<span class="term-list">${glossaryGroups[groupName].map(glossaryLink).join('<span class="term-separator" aria-hidden="true">,</span> ')}</span>`;
+}
+
+function glossaryGrid(groupName) {
+  return `<div class="term-grid">${glossaryGroups[groupName].map(key => {
+    const entry = conceptGlossary[key];
+    return `<button class="term-tile" type="button" data-term="${key}" aria-haspopup="dialog"><strong>${entry.label}</strong><span>Definition + example</span></button>`;
+  }).join('')}</div>`;
+}
+
+const lessonScreens = [
+  {
+    stage: 'Stage 1 · What is it?',
+    title: 'A story moves through people who matter.',
+    html: `
+      <div class="hero-word" aria-hidden="true">character</div>
+      <p class="lede">A <strong>character</strong> is who the story is about or who participates meaningfully in the narrative.</p>
+      <div class="callout"><strong>Key idea:</strong><p>Character is more than a category name. A character becomes meaningful through choices, struggle, relationships, consequences, and story movement.</p></div>`
+  },
+  {
+    stage: 'Stage 2 · Forms',
+    title: 'One character can be described in several ways.',
+    html: `
+      <p class="lede">Characters can be described through several systems and dimensions. The same person can fit several terms at once. <strong>Select any term</strong> for its description and an illustrative example.</p>
+      <div class="category-list">
+        <div class="category-card"><strong>Narrative importance</strong><span>How central the character is to the narrative.</span><div class="inline-terms">${glossaryList('narrative')}</div></div>
+        <div class="category-card"><strong>Story function</strong><span>What the character does in the story.</span><div class="inline-terms">${glossaryList('function')}</div></div>
+        <div class="category-card"><strong>Character Dimensions</strong><span>Different ways a character is shaped.</span><div class="inline-terms"><b>Complexity:</b> ${glossaryList('complexity')}<br><b>Change:</b> ${glossaryList('change')}<br><b>Pattern:</b> ${glossaryList('pattern')}</div></div>
+        <div class="category-card"><strong>Moral / heroic framing</strong><span>How the character is morally or heroically framed.</span><div class="inline-terms">${glossaryList('moral')}</div></div>
+      </div>`
+  },
+  {
+    stage: 'Stage 2 · Narrative importance',
+    title: 'Who carries the narrative weight?',
+    html: `
