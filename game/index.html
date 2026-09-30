@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#063d31">
+  <title>WriteCraft — Story Construction</title>
+  <meta name="description" content="A mobile-first writing craft learning game. Levels 1 and 2 teach Character and Goal in Story Construction.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#game">Skip to game</a>
+
+  <header class="app-header">
+    <div class="brand-block" aria-label="WriteCraft">
+      <span class="brand-mark" aria-hidden="true">W</span>
+      <div>
+        <strong>WriteCraft</strong>
+        <span>Story Construction</span>
+      </div>
+    </div>
+
+    <div class="status-cluster">
+      <div id="heartDisplay" class="hearts" aria-label="3 hearts remaining"></div>
+      <div class="streak-chip" title="Five correct challenges restore one heart">
+        <span aria-hidden="true">✦</span>
+        <span id="streakDisplay">0 / 5</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="game" class="game-shell" tabindex="-1">
+    <section class="progress-panel" aria-label="Level progress">
+      <div class="progress-copy">
+        <span id="eyebrow">Story Construction</span>
+        <strong id="progressLabel">Welcome</strong>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <button id="mapButton" class="icon-button" type="button" aria-label="Open level map" title="Level map">
+        <span aria-hidden="true">☷</span>
+      </button>
+    </section>
+
+    <section id="screen" class="screen-card" aria-live="polite"></section>
+  </main>
+
+  <dialog id="mapDialog" class="map-dialog">
+    <div class="dialog-head">
+      <div>
+        <span class="mini-label">Story Construction</span>
+        <h2>Concept path</h2>
+      </div>
+      <button id="closeMap" class="icon-button" type="button" aria-label="Close concept map">×</button>
+    </div>
+    <ol id="conceptMap" class="concept-map"></ol>
+  </dialog>
+
+  <dialog id="termDialog" class="term-dialog" aria-labelledby="termDialogTitle">
+    <div class="dialog-head">
+      <div>
+        <span id="termDialogCategory" class="mini-label"></span>
+        <h2 id="termDialogTitle">Concept term</h2>
+      </div>
+      <button id="closeTerm" class="icon-button" type="button" aria-label="Close term description">×</button>
+    </div>
+    <p id="termDialogDefinition" class="term-definition"></p>
+    <div class="term-example">
+      <span id="termExampleLabel" class="mini-label">Illustrative example</span>
+      <p id="termDialogExample"></p>
+      <button id="anotherTermExample" class="example-button" type="button">Another example</button>
+    </div>
+  </dialog>
+
+  <template id="answerButtonTemplate">
+    <button class="answer-option" type="button"></button>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
