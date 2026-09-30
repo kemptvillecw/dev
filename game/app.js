@@ -19,8 +19,8 @@
   const level = currentLevel();
   document.documentElement.dataset.level = level;
   document.title = level === 'goal'
-    ? 'WriteCraft — Level 2: Goal'
-    : 'WriteCraft — Level 1: Character';
+    ? 'Story Construction — Level 2: Goal'
+    : 'Story Construction — Level 1: Character';
 
   const script = document.createElement('script');
   script.src = level === 'goal' ? 'goal.js' : 'character.js';
