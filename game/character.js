@@ -550,7 +550,7 @@ const practicePools = {
     {
       id: 'b14', type: 'single',
       prompt: 'A character is built around one or two clear traits and a limited role rather than extensive complexity. Which Complexity term best fits?',
-      options: ['Flat', 'Round', 'Round', 'Rival'], answer: 0,
+      options: ['Flat', 'Round', 'Stock', 'Rival'], answer: 0,
       explanation: 'Flat is a Complexity term for a character presented with a limited set of clear traits or functions.'
     },
     {
@@ -654,7 +654,7 @@ const practicePools = {
     {
       id: 'g4', type: 'single',
       prompt: 'Gate: The expedition leader is the third-most important character. She repeatedly controls who is allowed into dangerous areas, is developed with several competing values, and is portrayed as admirable. Which story-function term describes her role?',
-      options: ['Gatekeeper', 'Tritagonist', 'Flat', 'Hero'], answer: 0,
+      options: ['Gatekeeper', 'Tritagonist', 'Round', 'Hero'], answer: 0,
       explanation: 'Gatekeeper describes what she does in the story: controlling access. Tritagonist is narrative importance, round describes complexity, and hero is framing.'
     },
     {
@@ -823,7 +823,7 @@ const quizPools = {
     {
       id: 'qo3', type: 'single',
       prompt: 'Mina is the primary character, mentors her younger brother, is developed with several conflicting motives, values, and fears, and is framed as morally admirable. Which term answers only the question of narrative importance?',
-      options: ['Protagonist', 'Mentor', 'Flat', 'Hero'], answer: 0,
+      options: ['Protagonist', 'Mentor', 'Round', 'Hero'], answer: 0,
       explanation: 'Protagonist describes narrative importance. Mentor describes story function, round describes complexity, and hero describes moral/heroic framing.'
     },
     {
