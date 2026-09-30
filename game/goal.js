@@ -1423,4 +1423,184 @@ function showFeedback(correct, explanation, buttonText, callback, heartLost = fa
   if (!actions) {
     actions = document.createElement('div');
     actions.className = 'screen-actions';
-    screen.
+    screen.querySelector('.screen-stack').appendChild(actions);
+  }
+  actions.innerHTML = `<button class="primary-button" id="continueAfterFeedback" type="button">${buttonText}</button>`;
+  document.getElementById('continueAfterFeedback').addEventListener('click', callback, { once: true });
+}
+
+function adjustStreak(correct) {
+  if (!correct) { state.streak = 0; return; }
+  state.streak++;
+  if (state.streak >= STREAK_TARGET) {
+    if (state.hearts < MAX_HEARTS) state.hearts++;
+    state.streak = 0;
+  }
+}
+
+function handlePracticeAnswer(q, answer) {
+  const correct = isCorrect(q, answer);
+  markAnswerVisuals(q, answer);
+  adjustStreak(correct);
+
+  let heartLost = false;
+  if (!correct) {
+    state.mistakesInPhase++;
+    if (state.practicePhase === 'gate') {
+      state.hearts = Math.max(0, state.hearts - 1);
+      heartLost = true;
+    }
+  }
+  saveState();
+  updateStatus();
+
+  showFeedback(correct, q.explanation, 'Continue', () => advancePractice(correct), heartLost);
+}
+
+function advancePractice(correct) {
+  const phase = state.practicePhase;
+  const count = getPhaseCount();
+  state.currentQuestion = null;
+
+  if (state.hearts <= 0) {
+    state.view = 'gameOver';
+    saveState(); render(); return;
+  }
+
+  if (!correct && phase !== 'gate' && state.mistakesInPhase >= 2) {
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    state.selectedQuestionIds[phase] = [];
+    saveState();
+    renderPhaseReset(phase);
+    return;
+  }
+
+  if (phase === 'gate') {
+    if (correct) {
+      state.gatePassed = true;
+      state.view = 'gateSuccess';
+    } else {
+      state.practiceIndex = 0;
+    }
+    saveState(); render(); return;
+  }
+
+  state.practiceIndex++;
+  if (state.practiceIndex >= count) {
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    if (phase === 'basic') state.practicePhase = 'hard';
+    else if (phase === 'hard') state.practicePhase = 'gate';
+  }
+  saveState(); render();
+}
+
+function renderPhaseReset(phase) {
+  const name = phase === 'basic' ? 'basic' : 'harder';
+  shell({
+    kicker: 'Learning loop',
+    title: `Two misses — replay the ${name} rung.`,
+    body: `<p class="lede">You stay at the same difficulty, but the rung restarts with different examples. Practice mistakes do not cost hearts.</p><div class="callout"><strong>Why restart?</strong><p>The aim is to stabilize the idea before moving to the gate, not punish a single mistake.</p></div>`,
+    actions: `<button class="primary-button" id="retryRung" type="button">Try new examples</button>`
+  });
+  document.getElementById('retryRung').addEventListener('click', () => { state.view = 'practice'; saveState(); render(); });
+}
+
+
+function renderGateSuccess() {
+  shell({
+    kicker: 'Challenge gate cleared',
+    title: 'You identified the intended achievement, not just the visible action.',
+    body: `<div class="gate-success"><div class="gate-burst" aria-hidden="true">✦</div><p class="lede">The Goal quiz is now unlocked. It tests only Goal material you have already learned, using a different mix from the larger question bank where possible.</p></div>`,
+    actions: `<button class="primary-button" id="quizReady" type="button">Go to Goal quiz</button>`
+  });
+  document.getElementById('quizReady').addEventListener('click', () => {
+    state.view = 'quizIntro'; state.quizIndex = 0; state.quizCorrect = 0; state.quizAnswered = false; saveState(); render();
+  });
+}
+
+
+function renderQuizIntro() {
+  shell({
+    kicker: 'Stage 8 · Concept quiz',
+    title: 'Completion check: Goal',
+    body: `
+      <p class="lede">Each attempt draws five questions from five Goal assessment areas and requires four correct answers to pass. The exact length and pass standard remain prototype choices because the curriculum leaves them open.</p>
+      <div class="gate-banner"><strong>Retry rule</strong><p>If the first attempt does not pass, you may retry once immediately. The retry uses a different question mix where possible. A second unsuccessful attempt returns you to the lesson.</p></div>`,
+    actions: `<button class="secondary-button" id="reviewBeforeQuiz" type="button">Review lesson</button><button class="primary-button" id="beginQuiz" type="button">Begin attempt ${state.quizAttempt}</button>`
+  });
+  document.getElementById('reviewBeforeQuiz').addEventListener('click', () => { state.view = 'lesson'; state.lessonIndex = 0; saveState(); render(); });
+  document.getElementById('beginQuiz').addEventListener('click', () => { state.view = 'quiz'; state.quizIndex = 0; state.quizCorrect = 0; buildQuizSet(); saveState(); render(); });
+}
+
+
+function renderQuiz() {
+  if (!state.quizSet || state.quizSet.length !== QUIZ_LENGTH) {
+    buildQuizSet();
+    saveState();
+  }
+  const q = state.quizSet[state.quizIndex];
+  const dots = `<div class="quiz-status"><span>Attempt ${state.quizAttempt}</span><span class="dot-row">${state.quizSet.map((_, i) => `<span class="dot ${i < state.quizIndex ? 'done' : ''}"></span>`).join('')}</span></div>`;
+  renderQuestionScreen(q, `Goal quiz · ${state.quizIndex + 1}/${QUIZ_LENGTH}`, dots, handleQuizAnswer);
+}
+
+function handleQuizAnswer(q, answer) {
+  const correct = isCorrect(q, answer);
+  markAnswerVisuals(q, answer);
+  if (correct) state.quizCorrect++;
+  saveState();
+  showFeedback(correct, q.explanation, state.quizIndex === QUIZ_LENGTH - 1 ? 'Finish quiz' : 'Next question', advanceQuiz);
+}
+
+function advanceQuiz() {
+  state.quizIndex++;
+  if (state.quizIndex >= QUIZ_LENGTH) {
+    state.quizPassed = state.quizCorrect >= QUIZ_PASS;
+    state.view = 'quizResult';
+  }
+  saveState(); render();
+}
+
+
+function renderQuizResult() {
+  if (state.quizPassed) {
+    shell({
+      kicker: 'Concept completion',
+      title: 'Goal completed.',
+      body: `<p class="lede">Completion means you successfully finished the initial Goal sequence. It does <strong>not</strong> mean every depth of Goal is permanently mastered.</p><div class="callout"><strong>Next:</strong><p>Real-world proof reinforces the concept with identifiable published works. It is not another scored challenge.</p></div>`,
+      actions: `<button class="primary-button" id="proofBtn" type="button">See real-world proof</button>`
+    });
+    document.getElementById('proofBtn').addEventListener('click', () => setView('proof'));
+    return;
+  }
+
+  const secondFailure = state.quizAttempt >= 2;
+  shell({
+    kicker: 'Completion checkpoint',
+    title: secondFailure ? 'Return to the lesson before another attempt.' : 'One immediate retry is available.',
+    body: `<p class="lede">The quiz is a completion checkpoint, not a punishment. ${secondFailure ? 'The second attempt did not pass, so the learning sequence resets to the Goal lesson.' : 'Review the explanations you just saw, then make one immediate retry.'}</p>`,
+    actions: secondFailure
+      ? `<button class="primary-button" id="returnLesson" type="button">Return to Goal lesson</button>`
+      : `<button class="secondary-button" id="reviewQuizLesson" type="button">Review first</button><button class="primary-button" id="retryQuiz" type="button">Retry quiz</button>`
+  });
+
+  if (secondFailure) {
+    document.getElementById('returnLesson').addEventListener('click', () => {
+      state.quizAttempt = 1; state.quizIndex = 0; state.quizCorrect = 0; state.quizPassed = false; state.quizSet = []; state.previousQuizIds = [];
+      state.lessonIndex = 0; state.view = 'lesson'; saveState(); render();
+    });
+  } else {
+    document.getElementById('reviewQuizLesson').addEventListener('click', () => { state.view = 'lesson'; state.lessonIndex = 0; saveState(); render(); });
+    document.getElementById('retryQuiz').addEventListener('click', () => {
+      state.quizAttempt = 2; state.quizIndex = 0; state.quizCorrect = 0; state.quizPassed = false; buildQuizSet(); state.view = 'quiz'; saveState(); render();
+    });
+  }
+}
+
+
+function renderProof() {
+  shell({
+    kicker: 'Stage 9 · Real-world proof',
+    title: 'Goal is visible in published stories.',
+    body: `<p class="lede">These examples reinforce Goal using public-domai
