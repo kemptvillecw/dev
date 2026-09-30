@@ -456,3 +456,172 @@ const lessonScreens = [
     stage: 'Stage 2 · Narrative importance',
     title: 'Who carries the narrative weight?',
     html: `
+      <p class="lede">Narrative importance describes <strong>how much narrative weight a character carries</strong>. Select a term to open its description and example.</p>
+      ${glossaryGrid('narrative')}
+      <p class="lede">Co-protagonists or co-deuteragonists can share a level of narrative importance. An ensemble distributes importance across a group.</p>`
+  },
+  {
+    stage: 'Stage 2 · Story function',
+    title: 'What job does the character perform in the story?',
+    html: `
+      <p class="lede">A story-function term describes <strong>what a character does in the story</strong>. It does not describe the character's <strong>narrative importance</strong> or whether they are morally good or bad. Select any term for an example.</p>
+      ${glossaryGrid('function')}`
+  },
+  {
+    stage: 'Stage 2 · Character Dimensions',
+    title: 'Character Dimensions look at complexity, change, and pattern.',
+    html: `
+      <p class="lede"><strong>Character Dimensions</strong> is harder to categorize neatly than narrative importance, story function, or moral/heroic framing. It is a looser umbrella that brings together three different descriptive dimensions, and those dimensions can overlap.</p>
+      <div class="category-list">
+        <div class="category-card"><strong>Complexity</strong><span>How multidimensional or simply drawn the character is.</span><div class="inline-terms">${glossaryList('complexity')}</div></div>
+        <div class="category-card"><strong>Change</strong><span>Whether the character changes meaningfully.</span><div class="inline-terms">${glossaryList('change')}</div></div>
+        <div class="category-card"><strong>Pattern</strong><span>Whether the character draws on a recognizable type or broader recurring pattern.</span><div class="inline-terms">${glossaryList('pattern')}</div></div>
+      </div>
+      <p class="lede">These are not one set of mutually exclusive choices. A character can be round, static, and archetypal at the same time.</p>`
+  },
+  {
+    stage: 'Stage 2 · Moral / heroic framing',
+    title: 'How does the story frame the character morally or heroically?',
+    html: `
+      <p class="lede">Moral and heroic framing is separate from narrative importance. A protagonist is not automatically a hero, and an antagonist is not automatically a villain.</p>
+      ${glossaryGrid('moral')}`
+  },
+  {
+    stage: 'Stage 3 · What is it not?',
+    title: 'Do not collapse the categories.',
+    html: `
+      <div class="callout"><strong>Protagonist ≠ hero</strong><p>The protagonist is defined by narrative importance, not moral goodness.</p></div>
+      <div class="callout"><strong>Antagonist ≠ villain</strong><p>The antagonist is defined by opposition to the protagonist or central goal, not automatic moral evil.</p></div>
+      <div class="callout"><strong>Function ≠ Character Dimensions</strong><p>A mentor describes story function. Dynamic describes the <strong>Change</strong> dimension. Antihero describes moral or heroic framing. These terms can overlap because they describe different aspects of the same character.</p></div>`
+  },
+  {
+    stage: 'Stages 4–6 · How it works',
+    title: 'Character is an active story force.',
+    html: `
+      <p class="lede">A character matters through what they want, do, choose, resist, and change. Relationships can alter choices, create struggle, and move the story.</p>
+      <div class="connection-grid">
+        <button class="connection-term" type="button" data-term="force.choice" aria-haspopup="dialog"><strong>Choice</strong><span>What the character decides.</span><em>Definition + example</em></button>
+        <button class="connection-term" type="button" data-term="force.struggle" aria-haspopup="dialog"><strong>Struggle</strong><span>What pushes against them.</span><em>Definition + example</em></button>
+        <button class="connection-term" type="button" data-term="force.relationship" aria-haspopup="dialog"><strong>Relationship</strong><span>Who changes the pressure around them.</span><em>Definition + example</em></button>
+        <button class="connection-term" type="button" data-term="force.consequence" aria-haspopup="dialog"><strong>Consequence</strong><span>What follows from action.</span><em>Definition + example</em></button>
+      </div>
+      <p class="lede">Character connects next to <strong>Goal → Motivation → Stakes → Conflict</strong>. Character change over time is introduced here, but the later Character Arc concept will treat it in depth.</p>`
+  }
+];
+
+const practicePools = {
+  basic: [
+    {
+      id: 'b1', type: 'single',
+      prompt: 'Which narrative-importance term means the primary character whose goals, choices, and struggles carry the story?',
+      options: ['Protagonist', 'Mentor', 'Dynamic character', 'Villain'], answer: 0,
+      explanation: 'Protagonist is the narrative-importance term for the primary character carrying the story.'
+    },
+    {
+      id: 'b2', type: 'single',
+      prompt: 'A veteran sailor teaches the inexperienced lead how to navigate dangerous waters and prepares her for the final crossing. Which story-function term describes that role?',
+      options: ['Mentor', 'Tritagonist', 'Antihero', 'Static character'], answer: 0,
+      explanation: 'Mentor describes what the sailor does in the story: teaching, guiding, and preparing another character.'
+    },
+    {
+      id: 'b3', type: 'truefalse',
+      prompt: 'True or false: A character who opposes the protagonist is automatically a villain.',
+      options: ['True', 'False'], answer: 1,
+      explanation: 'False. Antagonist describes opposition to the protagonist or central goal. Moral framing is a separate classification system.'
+    },
+    {
+      id: 'b4', type: 'single',
+      prompt: 'Which narrative-importance term describes the second-most important character in the narrative?',
+      options: ['Deuteragonist', 'Foil', 'Supporting character', 'Co-protagonist'], answer: 0,
+      explanation: 'Deuteragonist is the second-most important character in the narrative.'
+    },
+    {
+      id: 'b5', type: 'single',
+      prompt: 'A character begins afraid to speak up but gradually learns to confront people openly. Which Change term fits?',
+      options: ['Dynamic', 'Static', 'Minor', 'Hero'], answer: 0,
+      explanation: 'Dynamic is a Change term for a character who changes in a meaningful way over the story.'
+    },
+    {
+      id: 'b6', type: 'truefalse',
+      prompt: 'True or false: The primary character in a story can also be morally compromised enough to be an antihero.',
+      options: ['True', 'False'], answer: 0,
+      explanation: 'True. Protagonist describes narrative importance; antihero describes moral or heroic framing.'
+    },
+    {
+      id: 'b7', type: 'single',
+      prompt: 'One character is patient and methodical while another rushes into every decision. Their contrast makes both personalities clearer. Which story-function term best fits?',
+      options: ['Foil', 'Mentor', 'Catalyst', 'Minor character'], answer: 0,
+      explanation: 'A foil highlights another character through contrast.'
+    },
+    {
+      id: 'b8', type: 'single',
+      prompt: 'The protagonist shares fears and secrets with one trusted friend that she tells no one else. Which story-function term best fits the friend?',
+      options: ['Confidant', 'Rival', 'Gatekeeper', 'Tritagonist'], answer: 0,
+      explanation: 'A confidant is trusted with private thoughts, fears, plans, or feelings.'
+    },
+    {
+      id: 'b9', type: 'single',
+      prompt: 'A character faces pressure throughout the story but keeps the same core beliefs and behaviour. Which Change term fits?',
+      options: ['Static', 'Dynamic', 'Round', 'Antagonist'], answer: 0,
+      explanation: 'Static is a Change term for a character who remains fundamentally unchanged in the relevant part of the story.'
+    },
+    {
+      id: 'b10', type: 'single',
+      prompt: 'A novel distributes major goals, choices, and viewpoint time across five characters without one clear primary lead. Which narrative-importance term fits?',
+      options: ['Ensemble', 'Protagonist', 'Minor', 'Sidekick'], answer: 0,
+      explanation: 'An ensemble distributes narrative importance across a group.'
+    },
+    {
+      id: 'b11', type: 'single',
+      prompt: 'A museum director controls whether the protagonist may enter a restricted archive. The protagonist must persuade her before moving forward. Which story function fits?',
+      options: ['Gatekeeper', 'Comic relief', 'Foil', 'Love interest'], answer: 0,
+      explanation: 'A gatekeeper controls access to a place, resource, stage, or opportunity.'
+    },
+    {
+      id: 'b12', type: 'single',
+      prompt: 'A character appears in several important scenes and affects the protagonist’s decisions, but the story never gives that character primary narrative weight. Which narrative-importance term best fits?',
+      options: ['Supporting character', 'Protagonist', 'Ensemble', 'Hero'], answer: 0,
+      explanation: 'A supporting character matters to the story without carrying primary narrative importance.'
+    },
+    {
+      id: 'b13', type: 'single',
+      prompt: 'A character risks their own safety to protect strangers, and the story presents the act as admirable and courageous. Which moral/heroic framing term best fits?',
+      options: ['Hero', 'Protagonist', 'Deuteragonist', 'Mentor'], answer: 0,
+      explanation: 'Hero is a moral/heroic framing term. It does not tell us the character’s narrative importance.'
+    },
+    {
+      id: 'b14', type: 'single',
+      prompt: 'A character is built around one or two clear traits and a limited role rather than extensive complexity. Which Complexity term best fits?',
+      options: ['Flat', 'Round', 'Dynamic', 'Rival'], answer: 0,
+      explanation: 'Flat is a Complexity term for a character presented with a limited set of clear traits or functions.'
+    },
+    {
+      id: 'b15', type: 'single',
+      prompt: 'A courier arrives with news that forces the protagonist to abandon the original plan immediately. Which story-function term best fits the courier?',
+      options: ['Herald / messenger', 'Confidant', 'Foil', 'Minor character'], answer: 0,
+      explanation: 'A herald or messenger brings information, a warning, an invitation, or a demand that changes what others must deal with.'
+    }
+  ],
+  hard: [
+    {
+      id: 'h1', type: 'single',
+      prompt: 'Rina is the second-most important character. She trains the protagonist, changes from distrusting everyone to relying on a team, and the story frames her as heroic despite the morally questionable methods she sometimes uses. Which narrative-importance term describes her?',
+      options: ['Deuteragonist', 'Mentor', 'Dynamic', 'Antihero'], answer: 0,
+      explanation: 'Deuteragonist describes Rina’s narrative importance. Mentor describes her story function, dynamic describes the Change dimension, and antihero describes her moral/heroic framing.'
+    },
+    {
+      id: 'h2', type: 'multi',
+      prompt: 'Select every statement that can be true at the same time for one character.',
+      options: [
+        'A character can be a deuteragonist and a mentor.',
+        'A character can be a protagonist and an antihero.',
+        'A character can be dynamic and also function as a foil.',
+        'A character can only fit one descriptive system or dimension.'
+      ], answer: [0,1,2],
+      explanation: 'These descriptive systems and dimensions can overlap. One character can simultaneously have narrative importance, a story function, one or more Character Dimensions terms, and a moral/heroic framing.'
+    },
+    {
+      id: 'h3', type: 'order',
+      prompt: 'Put these narrative-importance terms in order from primary to third-most important.',
+      items: ['Tritagonist', 'Protagonist', 'Deuteragonist'], answer: ['Protagonist', 'Deuteragonist', 'Tritagonist'],
+      explanation: 'Protagonist is primary, deuteragonist is second-most important, and tritagonist is thir
