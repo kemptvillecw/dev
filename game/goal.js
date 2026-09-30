@@ -1257,4 +1257,170 @@ function renderPracticeIntro() {
     title: 'Identify it. Separate it. Infer it.',
     body: `
       <p class="lede">The first rung asks you to recognize goals and separate them from actions or situations. Harder questions make you infer goals from behaviour, track changes, and apply the distinction in context. Replays draw different variants where possible.</p>
-      <div class="category-li
+      <div class="category-list">
+        <div class="category-card"><strong>3 basic challenges</strong><span>Recognize the intended achievement.</span></div>
+        <div class="category-card"><strong>2 harder challenges</strong><span>Infer and analyze the goal in context.</span></div>
+        <div class="category-card"><strong>1 challenge gate</strong><span>Required checkpoint. This is the only practice mistake that costs a heart.</span></div>
+      </div>`,
+    actions: `<button class="secondary-button" id="lessonBtn" type="button">Review lesson</button><button class="primary-button" id="practiceBtn" type="button">Begin challenges</button>`
+  });
+  document.getElementById('lessonBtn').addEventListener('click', () => { state.view = 'lesson'; state.lessonIndex = 0; saveState(); render(); });
+  document.getElementById('practiceBtn').addEventListener('click', () => {
+    state.practicePhase = 'basic';
+    state.practiceIndex = 0;
+    state.mistakesInPhase = 0;
+    state.currentQuestion = null;
+    state.selectedQuestionIds = { basic: [], hard: [], gate: [] };
+    state.view = 'practice';
+    saveState(); render();
+  });
+}
+
+function getPhaseCount() {
+  return state.practicePhase === 'basic' ? 3 : state.practicePhase === 'hard' ? 2 : 1;
+}
+
+function getQuestionForPhase() {
+  if (state.currentQuestion) return state.currentQuestion;
+  const phase = state.practicePhase;
+  const pool = practicePools[phase];
+  const used = state.selectedQuestionIds[phase] || [];
+  const recent = variationHistory.practice[phase] || [];
+  const chosen = chooseWithHistory(pool, recent, used);
+  state.currentQuestion = prepareQuestion(chosen);
+  state.selectedQuestionIds[phase] = [...used, chosen.id];
+  rememberQuestion(phase, chosen.id, phase === 'basic' ? 9 : phase === 'hard' ? 7 : 4);
+  saveState();
+  return state.currentQuestion;
+}
+
+function renderPractice() {
+  if (state.hearts <= 0) { state.view = 'gameOver'; saveState(); render(); return; }
+  const q = getQuestionForPhase();
+  const count = getPhaseCount();
+  const label = state.practicePhase === 'basic' ? `Basic ${state.practiceIndex + 1} of ${count}` : state.practicePhase === 'hard' ? `Harder ${state.practiceIndex + 1} of ${count}` : 'Challenge gate';
+  const intro = state.practicePhase === 'gate' ? '<div class="gate-banner"><strong>Challenge gate</strong><p>Pass this checkpoint to reach the Character quiz. A wrong answer costs one heart.</p></div>' : '';
+  renderQuestionScreen(q, label, intro, handlePracticeAnswer);
+}
+
+function renderQuestionScreen(q, kicker, preface, onAnswer) {
+  const body = `
+    ${preface || ''}
+    <p class="question-prompt">${q.prompt}</p>
+    ${renderQuestionInput(q)}
+    <div id="feedbackSlot"></div>`;
+  const needsSubmit = q.type === 'multi' || q.type === 'order';
+  shell({
+    kicker,
+    title: '',
+    body,
+    actions: needsSubmit ? `<button class="primary-button" id="submitAnswer" type="button">Check answer</button>` : ''
+  });
+
+  if (q.type === 'single' || q.type === 'truefalse') {
+    screen.querySelectorAll('.answer-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (feedbackLock) return;
+        onAnswer(q, Number(btn.dataset.index));
+      });
+    });
+  } else if (q.type === 'multi') {
+    document.getElementById('submitAnswer').addEventListener('click', () => {
+      if (feedbackLock) return;
+      const selected = [...screen.querySelectorAll('input[type="checkbox"]:checked')].map(el => Number(el.value));
+      onAnswer(q, selected);
+    });
+  } else if (q.type === 'order') {
+    setupDragAndDrop();
+    document.getElementById('submitAnswer').addEventListener('click', () => {
+      if (feedbackLock) return;
+      const order = [...screen.querySelectorAll('.drag-item')].map(el => el.dataset.value);
+      onAnswer(q, order);
+    });
+  }
+}
+
+function renderQuestionInput(q) {
+  if (q.type === 'single' || q.type === 'truefalse') {
+    return `<div class="answers">${q.options.map((opt, i) => `<button class="answer-option" type="button" data-index="${i}">${opt}</button>`).join('')}</div>`;
+  }
+  if (q.type === 'multi') {
+    return `<div class="check-list">${q.options.map((opt, i) => `<label class="check-row"><input type="checkbox" value="${i}"><span>${opt}</span></label>`).join('')}</div>`;
+  }
+  if (q.type === 'order') {
+    return `<div class="drag-list" id="dragList">${q.items.map(item => dragItem(item)).join('')}</div><p class="question-context">Drag the rows, or use the arrow buttons.</p>`;
+  }
+  return '';
+}
+
+function dragItem(item) {
+  return `<div class="drag-item" draggable="true" tabindex="0" data-value="${item}"><span class="drag-handle" aria-hidden="true">⋮⋮</span><strong>${item}</strong><span class="drag-actions"><button type="button" data-move="up" aria-label="Move ${item} up">↑</button><button type="button" data-move="down" aria-label="Move ${item} down">↓</button></span></div>`;
+}
+
+function setupDragAndDrop() {
+  const list = document.getElementById('dragList');
+  let dragged = null;
+  list.querySelectorAll('.drag-item').forEach(item => {
+    item.addEventListener('dragstart', () => { dragged = item; item.classList.add('dragging'); });
+    item.addEventListener('dragend', () => { item.classList.remove('dragging'); dragged = null; });
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (!dragged || dragged === item) return;
+      const box = item.getBoundingClientRect();
+      const after = e.clientY > box.top + box.height / 2;
+      list.insertBefore(dragged, after ? item.nextSibling : item);
+    });
+  });
+  list.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-move]');
+    if (!btn || feedbackLock) return;
+    const item = btn.closest('.drag-item');
+    if (btn.dataset.move === 'up' && item.previousElementSibling) list.insertBefore(item, item.previousElementSibling);
+    if (btn.dataset.move === 'down' && item.nextElementSibling) list.insertBefore(item.nextElementSibling, item);
+  });
+}
+
+function isCorrect(q, answer) {
+  if (Array.isArray(q.answer)) {
+    if (!Array.isArray(answer) || answer.length !== q.answer.length) return false;
+    if (q.type === 'order') return q.answer.every((v, i) => answer[i] === v);
+    const a = [...answer].sort((x,y) => x-y);
+    const b = [...q.answer].sort((x,y) => x-y);
+    return a.every((v, i) => v === b[i]);
+  }
+  return answer === q.answer;
+}
+
+function markAnswerVisuals(q, answer) {
+  if (q.type === 'single' || q.type === 'truefalse') {
+    screen.querySelectorAll('.answer-option').forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === q.answer) btn.classList.add('correct');
+      else if (i === answer) btn.classList.add('incorrect');
+    });
+  } else if (q.type === 'multi') {
+    screen.querySelectorAll('.check-row').forEach((row, i) => {
+      const input = row.querySelector('input');
+      input.disabled = true;
+      const should = q.answer.includes(i);
+      const chosen = answer.includes(i);
+      if (should) row.classList.add('is-correct');
+      if (chosen && !should) row.classList.add('is-incorrect');
+    });
+  } else if (q.type === 'order') {
+    screen.querySelectorAll('.drag-item').forEach(item => { item.draggable = false; });
+    screen.querySelectorAll('.drag-actions button').forEach(btn => btn.disabled = true);
+  }
+  const submit = document.getElementById('submitAnswer');
+  if (submit) submit.disabled = true;
+}
+
+function showFeedback(correct, explanation, buttonText, callback, heartLost = false) {
+  feedbackLock = true;
+  const slot = document.getElementById('feedbackSlot');
+  slot.innerHTML = `<div class="feedback ${correct ? 'good' : 'bad'}"><div class="feedback-title"><span aria-hidden="true">${correct ? '✓' : '×'}</span>${correct ? 'Correct' : 'Not quite'}</div><p>${explanation}</p>${heartLost ? '<span class="heart-note">A challenge-gate miss costs 1 heart.</span>' : ''}</div>`;
+  let actions = screen.querySelector('.screen-actions');
+  if (!actions) {
+    actions = document.createElement('div');
+    actions.className = 'screen-actions';
+    screen.
