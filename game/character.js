@@ -796,7 +796,7 @@ const quizPools = {
       options: [
         'How much story weight does this character carry?',
         'What does this character do for another character?',
-        'Does this character change?',
+        'How much character complexity is developed?',
         'Is this character framed as heroic or villainous?'
       ], answer: 0,
       explanation: 'Narrative importance asks how central a character is to the narrative.'
