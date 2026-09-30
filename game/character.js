@@ -1,12 +1,13 @@
 'use strict';
 
-const APP_VERSION = '2.0.0-character';
+const APP_VERSION = '2.1.0-character-plan-aligned';
 const STORAGE_KEY = 'writecraft-level1-state-v1';
 const VARIATION_HISTORY_KEY = 'writecraft-level1-variation-history-v1';
 const QUIZ_LENGTH = 5;
 const QUIZ_PASS = 4;
 const MAX_HEARTS = 3;
 const STREAK_TARGET = 5;
+const RECENT_ANSWER_WINDOW = 3; // Prototype value; final window remains a testing decision.
 
 const concepts = [
   'Character', 'Goal', 'Motivation', 'Stakes', 'Conflict', 'Obstacles',
@@ -21,10 +22,20 @@ const conceptGlossary = {
     definition: 'The primary character who drives the story through goals, choices, and struggle.',
     example: 'Mara is trying to find her missing brother. Her decisions determine where the investigation goes, which risks are taken, and what consequences follow, so Mara is the protagonist.'
   },
+  'narrative.co-protagonist': {
+    category: 'Narrative importance', label: 'Co-protagonist',
+    definition: 'A character who shares primary narrative importance with another protagonist.',
+    example: 'Two sisters receive comparable narrative focus, both drive major decisions, and neither clearly carries more story weight than the other. They function as co-protagonists.'
+  },
   'narrative.deuteragonist': {
     category: 'Narrative importance', label: 'Deuteragonist',
     definition: 'The second-most important character in the narrative.',
     example: 'Ivo travels with Mara, has important choices and conflicts of his own, and affects the main story repeatedly, but the narrative still gives Mara greater weight. Ivo is the deuteragonist.'
+  },
+  'narrative.co-deuteragonist': {
+    category: 'Narrative importance', label: 'Co-deuteragonist',
+    definition: 'One of two or more characters who share the second level of narrative importance.',
+    example: 'One protagonist remains clearly primary, while two partners receive comparable secondary focus and consequence. The partners can function as co-deuteragonists.'
   },
   'narrative.tritagonist': {
     category: 'Narrative importance', label: 'Tritagonist',
@@ -139,32 +150,22 @@ const conceptGlossary = {
   },
 
   'dimensions.round': {
-    category: 'Character Dimensions · Complexity', label: 'Round',
+    category: 'Character complexity', label: 'Round',
     definition: 'A Complexity term for a character presented with multiple traits, tensions, motives, or sides that create a sense of depth.',
     example: 'Nora is generous with strangers, resentful toward her sister, brave during emergencies, and deeply afraid of being abandoned. Those different sides make her feel more complex than a single defining trait.'
   },
   'dimensions.flat': {
-    category: 'Character Dimensions · Complexity', label: 'Flat',
+    category: 'Character complexity', label: 'Flat',
     definition: 'A Complexity term for a character presented around a limited set of clear traits or functions rather than extensive depth.',
     example: 'The cheerful ferry operator appears several times, always practical and upbeat, and exists mainly to get the team across the river and deliver local information. The character can work effectively without being deeply layered.'
   },
-  'dimensions.dynamic': {
-    category: 'Character Dimensions · Change', label: 'Dynamic',
-    definition: 'A Change term for a character who changes in a meaningful way over the course of the story.',
-    example: 'At first Lena avoids every difficult decision. After repeated consequences, she begins choosing openly and accepting responsibility. That meaningful change makes her dynamic.'
-  },
-  'dimensions.static': {
-    category: 'Character Dimensions · Change', label: 'Static',
-    definition: 'A Change term for a character who remains fundamentally unchanged in the relevant part of the story.',
-    example: 'Mr. Chen begins the story patient, principled, and unwilling to lie for convenience. Pressure tests those qualities, but he still holds the same core position at the end, making him static in that respect.'
-  },
   'dimensions.stock': {
-    category: 'Character Dimensions · Pattern', label: 'Stock',
+    category: 'Character pattern', label: 'Stock',
     definition: 'A Pattern term for a character built from a familiar, quickly recognizable type that lets the audience understand the role with little explanation.',
     example: 'A suspicious old innkeeper warns travellers not to enter the forest and distrusts every stranger. The story uses a familiar type so the audience can understand him almost immediately.'
   },
   'dimensions.archetypal': {
-    category: 'Character Dimensions · Pattern', label: 'Archetypal',
+    category: 'Character pattern', label: 'Archetypal',
     definition: 'A Pattern term for a character shaped around a broad, recurring human or storytelling pattern that appears across many different stories.',
     example: 'An inexperienced heir is forced out of safety, tested by loss, and eventually must decide what kind of leader to become. The character draws on a recurring heir-and-leader archetypal pattern.'
   },
@@ -330,14 +331,6 @@ const glossaryExampleVariants = {
     `A cheerful mail carrier appears in several scenes to deliver news and always behaves in the same straightforward way. The character is useful without extensive layering, making the character relatively flat in complexity.`,
     `A stern receptionist exists mainly to enforce office rules and is characterized almost entirely by that function. The limited complexity makes the character flat.`
   ],
-  'dimensions.dynamic': [
-    `At first, Arun refuses to trust anyone. After depending on others and seeing the cost of isolation, he begins asking for help and sharing responsibility. That meaningful change makes him dynamic.`,
-    `Keira begins by avoiding conflict but ends willing to confront her family openly. The change in how she acts and understands herself makes her dynamic.`
-  ],
-  'dimensions.static': [
-    `Pressure repeatedly tempts Sal to betray his principles, but he begins and ends the story committed to the same core code. In that respect, he is static.`,
-    `A grandmother remains patient, practical, and deeply skeptical of the town's rumours from beginning to end. Events reveal those traits but do not fundamentally change them.`
-  ],
   'dimensions.stock': [
     `A boastful travelling salesman appears briefly, talks fast, exaggerates every product, and immediately fits a familiar type. The story is using a stock character.`,
     `A gruff tavern keeper who distrusts outsiders and knows every local rumour can be understood almost instantly because the role draws on a familiar stock type.`
@@ -392,7 +385,8 @@ const glossaryExampleVariants = {
 
 const glossaryGroups = {
   narrative: [
-    'narrative.protagonist', 'narrative.deuteragonist', 'narrative.tritagonist',
+    'narrative.protagonist', 'narrative.co-protagonist',
+    'narrative.deuteragonist', 'narrative.co-deuteragonist', 'narrative.tritagonist',
     'narrative.supporting', 'narrative.minor', 'narrative.ensemble', 'narrative.antagonist'
   ],
   function: [
@@ -402,12 +396,7 @@ const glossaryGroups = {
     'function.false-antagonist', 'function.henchman', 'function.minion',
     'function.authority', 'function.innocent'
   ],
-  dimensions: [
-    'dimensions.round', 'dimensions.flat', 'dimensions.dynamic',
-    'dimensions.static', 'dimensions.stock', 'dimensions.archetypal'
-  ],
   complexity: ['dimensions.round', 'dimensions.flat'],
-  change: ['dimensions.dynamic', 'dimensions.static'],
   pattern: ['dimensions.stock', 'dimensions.archetypal'],
   moral: [
     'moral.hero', 'moral.antihero', 'moral.villain', 'moral.anti-villain',
@@ -432,81 +421,50 @@ function glossaryGrid(groupName) {
 }
 
 const lessonScreens = [
-  {
-    stage: 'Stage 1 · What is it?',
-    title: 'A story moves through people who matter.',
-    html: `
-      <div class="hero-word" aria-hidden="true">character</div>
-      <p class="lede">A <strong>character</strong> is who the story is about or who participates meaningfully in the narrative.</p>
-      <div class="callout"><strong>Key idea:</strong><p>Character is more than a category name. A character becomes meaningful through choices, struggle, relationships, consequences, and story movement.</p></div>`
-  },
-  {
-    stage: 'Stage 2 · Forms',
-    title: 'One character can be described in several ways.',
-    html: `
-      <p class="lede">Characters can be described through several systems and dimensions. The same person can fit several terms at once. <strong>Select any term</strong> for its description and an illustrative example.</p>
-      <div class="category-list">
-        <div class="category-card"><strong>Narrative importance</strong><span>How central the character is to the narrative.</span><div class="inline-terms">${glossaryList('narrative')}</div></div>
-        <div class="category-card"><strong>Story function</strong><span>What the character does in the story.</span><div class="inline-terms">${glossaryList('function')}</div></div>
-        <div class="category-card"><strong>Character Dimensions</strong><span>Different ways a character is shaped.</span><div class="inline-terms"><b>Complexity:</b> ${glossaryList('complexity')}<br><b>Change:</b> ${glossaryList('change')}<br><b>Pattern:</b> ${glossaryList('pattern')}</div></div>
-        <div class="category-card"><strong>Moral / heroic framing</strong><span>How the character is morally or heroically framed.</span><div class="inline-terms">${glossaryList('moral')}</div></div>
-      </div>`
-  },
-  {
-    stage: 'Stage 2 · Narrative importance',
-    title: 'Who carries the narrative weight?',
-    html: `
-      <p class="lede">Narrative importance describes <strong>how much narrative weight a character carries</strong>. Select a term to open its description and example.</p>
-      ${glossaryGrid('narrative')}
-      <p class="lede">Co-protagonists or co-deuteragonists can share a level of narrative importance. An ensemble distributes importance across a group.</p>`
-  },
-  {
-    stage: 'Stage 2 · Story function',
-    title: 'What job does the character perform in the story?',
-    html: `
-      <p class="lede">A story-function term describes <strong>what a character does in the story</strong>. It does not describe the character's <strong>narrative importance</strong> or whether they are morally good or bad. Select any term for an example.</p>
-      ${glossaryGrid('function')}`
-  },
-  {
-    stage: 'Stage 2 · Character Dimensions',
-    title: 'Character Dimensions look at complexity, change, and pattern.',
-    html: `
-      <p class="lede"><strong>Character Dimensions</strong> is harder to categorize neatly than narrative importance, story function, or moral/heroic framing. It is a looser umbrella that brings together three different descriptive dimensions, and those dimensions can overlap.</p>
-      <div class="category-list">
-        <div class="category-card"><strong>Complexity</strong><span>How multidimensional or simply drawn the character is.</span><div class="inline-terms">${glossaryList('complexity')}</div></div>
-        <div class="category-card"><strong>Change</strong><span>Whether the character changes meaningfully.</span><div class="inline-terms">${glossaryList('change')}</div></div>
-        <div class="category-card"><strong>Pattern</strong><span>Whether the character draws on a recognizable type or broader recurring pattern.</span><div class="inline-terms">${glossaryList('pattern')}</div></div>
-      </div>
-      <p class="lede">These are not one set of mutually exclusive choices. A character can be round, static, and archetypal at the same time.</p>`
-  },
-  {
-    stage: 'Stage 2 · Moral / heroic framing',
-    title: 'How does the story frame the character morally or heroically?',
-    html: `
-      <p class="lede">Moral and heroic framing is separate from narrative importance. A protagonist is not automatically a hero, and an antagonist is not automatically a villain.</p>
-      ${glossaryGrid('moral')}`
-  },
-  {
-    stage: 'Stage 3 · What is it not?',
-    title: 'Do not collapse the categories.',
-    html: `
-      <div class="callout"><strong>Protagonist ≠ hero</strong><p>The protagonist is defined by narrative importance, not moral goodness.</p></div>
-      <div class="callout"><strong>Antagonist ≠ villain</strong><p>The antagonist is defined by opposition to the protagonist or central goal, not automatic moral evil.</p></div>
-      <div class="callout"><strong>Function ≠ Character Dimensions</strong><p>A mentor describes story function. Dynamic describes the <strong>Change</strong> dimension. Antihero describes moral or heroic framing. These terms can overlap because they describe different aspects of the same character.</p></div>`
-  },
-  {
-    stage: 'Stages 4–6 · How it works',
-    title: 'Character is an active story force.',
-    html: `
-      <p class="lede">A character matters through what they want, do, choose, resist, and change. Relationships can alter choices, create struggle, and move the story.</p>
-      <div class="connection-grid">
-        <button class="connection-term" type="button" data-term="force.choice" aria-haspopup="dialog"><strong>Choice</strong><span>What the character decides.</span><em>Definition + example</em></button>
-        <button class="connection-term" type="button" data-term="force.struggle" aria-haspopup="dialog"><strong>Struggle</strong><span>What pushes against them.</span><em>Definition + example</em></button>
-        <button class="connection-term" type="button" data-term="force.relationship" aria-haspopup="dialog"><strong>Relationship</strong><span>Who changes the pressure around them.</span><em>Definition + example</em></button>
-        <button class="connection-term" type="button" data-term="force.consequence" aria-haspopup="dialog"><strong>Consequence</strong><span>What follows from action.</span><em>Definition + example</em></button>
-      </div>
-      <p class="lede">Character connects next to <strong>Goal → Motivation → Stakes → Conflict</strong>. Character change over time is introduced here, but the later Character Arc concept will treat it in depth.</p>`
-  }
+  { stage:'Stage 1 · What is it?', title:'A story moves through people who matter.', html:`
+    <div class="hero-word" aria-hidden="true">character</div>
+    <p class="lede">A <strong>character</strong> is who the story is about or who participates meaningfully in the narrative.</p>
+    <div class="callout"><strong>Key idea:</strong><p>Character becomes meaningful through choices, struggle, relationships, consequences, and story movement — not merely through a label.</p></div>` },
+  { stage:'Stage 2 · Forms', title:'One character can be described in several independent ways.', html:`
+    <p class="lede">The same character can fit several terms at once because the terms answer different questions. Select any term for a definition and example.</p>
+    <div class="category-list">
+      <div class="category-card"><strong>Narrative importance</strong><span>How much narrative weight does the character carry?</span><div class="inline-terms">${glossaryList('narrative')}</div></div>
+      <div class="category-card"><strong>Story function</strong><span>What job does the character perform?</span><div class="inline-terms">${glossaryList('function')}</div></div>
+      <div class="category-card"><strong>Character complexity</strong><span>How much meaningful depth does this role need?</span><div class="inline-terms">${glossaryList('complexity')}</div></div>
+      <div class="category-card"><strong>Character patterns</strong><span>Does the character draw on a recognizable type or broad recurring pattern?</span><div class="inline-terms">${glossaryList('pattern')}</div></div>
+      <div class="category-card"><strong>Moral / heroic framing</strong><span>How is the character framed morally or heroically?</span><div class="inline-terms">${glossaryList('moral')}</div></div>
+    </div>` },
+  { stage:'Stage 2 · Narrative importance', title:'Who carries the narrative weight?', html:`
+    <p class="lede">Narrative importance describes <strong>how central a character is to the narrative</strong>. It does not tell you whether the character is good, evil, helpful, or harmful.</p>
+    ${glossaryGrid('narrative')}
+    <p class="lede">Primary or secondary narrative weight can be shared, which is why co-protagonists and co-deuteragonists are possible.</p>` },
+  { stage:'Stage 2 · Story function', title:'What job does the character perform in the story?', html:`
+    <p class="lede">A story-function term describes <strong>what a character does</strong>. It is separate from narrative importance, complexity, pattern, and moral framing.</p>
+    ${glossaryGrid('function')}` },
+  { stage:'Stage 2 · Complexity and pattern', title:'Depth and recognizable pattern are different questions.', html:`
+    <p class="lede"><strong>Character complexity</strong> asks how much meaningful depth the role needs. Round and flat are not good-versus-bad writing labels.</p>
+    <div class="category-list">
+      <div class="category-card"><strong>Complexity</strong><span>A round character may show multiple facets, tensions, values, fears, contradictions, or different behaviour in different relationships. A flat character can be deliberately simpler when extra depth would not serve the story.</span><div class="inline-terms">${glossaryList('complexity')}</div></div>
+      <div class="category-card"><strong>Pattern</strong><span>Stock and archetypal describe recognizable patterns. A pattern can be developed with either more or less complexity.</span><div class="inline-terms">${glossaryList('pattern')}</div></div>
+    </div>
+    <div class="callout"><strong>Useful question:</strong><p>How much complexity does this character need for the job they perform in this story?</p></div>` },
+  { stage:'Stage 2 · Moral / heroic framing', title:'Moral framing is separate from story position.', html:`
+    <p class="lede">A protagonist is not automatically a hero, and an antagonist is not automatically a villain.</p>
+    ${glossaryGrid('moral')}` },
+  { stage:'Stage 3 · What is it not?', title:'Keep the classification systems separate.', html:`
+    <div class="callout"><strong>Protagonist ≠ hero</strong><p>Narrative importance does not determine moral goodness.</p></div>
+    <div class="callout"><strong>Antagonist ≠ villain</strong><p>Opposition does not automatically make a character morally villainous.</p></div>
+    <div class="callout"><strong>Function ≠ complexity ≠ pattern</strong><p>Mentor describes function. Round describes complexity. Archetypal describes a recurring pattern. Those labels can overlap without competing.</p></div>
+    <div class="callout"><strong>Complexity ≠ change</strong><p>Round and flat describe depth. Character change and stability are taught later in the dedicated <strong>Character Arc</strong> concept, not classified here.</p></div>` },
+  { stage:'Stages 4–6 · How it works', title:'Character is an active story force.', html:`
+    <p class="lede">A character matters through what they want, do, choose, resist, and cause. Relationships alter pressure and options, while consequences make choices matter.</p>
+    <div class="connection-grid">
+      <button class="connection-term" type="button" data-term="force.choice" aria-haspopup="dialog"><strong>Choice</strong><span>What the character decides.</span><em>Definition + example</em></button>
+      <button class="connection-term" type="button" data-term="force.struggle" aria-haspopup="dialog"><strong>Struggle</strong><span>What pushes against them.</span><em>Definition + example</em></button>
+      <button class="connection-term" type="button" data-term="force.relationship" aria-haspopup="dialog"><strong>Relationship</strong><span>Who changes the pressure around them.</span><em>Definition + example</em></button>
+      <button class="connection-term" type="button" data-term="force.consequence" aria-haspopup="dialog"><strong>Consequence</strong><span>What follows from action.</span><em>Definition + example</em></button>
+    </div>
+    <p class="lede">Character connects next to <strong>Goal → Motivation → Stakes → Conflict</strong>. Later, Character Arc will examine change and stability in depth.</p>` }
 ];
 
 const practicePools = {
@@ -943,10 +901,10 @@ const anotherTermExample = document.getElementById('anotherTermExample');
 
 
 function loadVariationHistory() {
-  const fallback = { practice: { basic: [], hard: [], gate: [] }, quiz: [], examples: {} };
+  const fallback = { practice: { basic: [], hard: [], gate: [] }, quiz: [], answerKeys: [], examples: {} };
   try {
     const parsed = JSON.parse(localStorage.getItem(VARIATION_HISTORY_KEY));
-    return parsed ? { ...fallback, ...parsed, practice: { ...fallback.practice, ...(parsed.practice || {}) }, examples: parsed.examples || {} } : fallback;
+    return parsed ? { ...fallback, ...parsed, practice: { ...fallback.practice, ...(parsed.practice || {}) }, answerKeys: Array.isArray(parsed.answerKeys) ? parsed.answerKeys : [], examples: parsed.examples || {} } : fallback;
   } catch {
     return fallback;
   }
@@ -988,34 +946,52 @@ function prepareQuestion(source) {
   return q;
 }
 
-function chooseWithHistory(pool, recentIds = [], usedIds = []) {
+function questionAnswerKey(q) {
+  if (q.answerKey) return String(q.answerKey).toLowerCase();
+  if ((q.type === 'single' || q.type === 'truefalse') && Number.isInteger(q.answer)) return String(q.options[q.answer]).trim().toLowerCase();
+  if (q.type === 'multi' && Array.isArray(q.answer)) return q.answer.map(i => q.options[i]).sort().join('|').toLowerCase();
+  if (q.type === 'order' && Array.isArray(q.answer)) return q.answer.join('|').toLowerCase();
+  return q.id;
+}
+
+function chooseWithHistory(pool, recentIds = [], usedIds = [], additionalAnswerKeys = []) {
   const unused = pool.filter(q => !usedIds.includes(q.id));
-  const fresh = unused.filter(q => !recentIds.includes(q.id));
-  const candidates = fresh.length ? fresh : unused.length ? unused : pool;
+  const recentAnswers = new Set([...(variationHistory.answerKeys || []), ...additionalAnswerKeys]);
+  const tiers = [
+    unused.filter(q => !recentIds.includes(q.id) && !recentAnswers.has(questionAnswerKey(q))),
+    unused.filter(q => !recentAnswers.has(questionAnswerKey(q))),
+    unused.filter(q => !recentIds.includes(q.id)),
+    unused,
+    pool.filter(q => !recentAnswers.has(questionAnswerKey(q))),
+    pool
+  ];
+  const candidates = tiers.find(list => list.length) || pool;
   return candidates[Math.floor(Math.random() * candidates.length)];
 }
 
-function rememberQuestion(kind, id, limit) {
-  if (kind === 'quiz') {
-    variationHistory.quiz = [...variationHistory.quiz.filter(value => value !== id), id].slice(-limit);
-  } else {
+function rememberQuestion(kind, question, limit) {
+  const id = typeof question === 'string' ? question : question.id;
+  if (kind === 'quiz') variationHistory.quiz = [...variationHistory.quiz.filter(value => value !== id), id].slice(-limit);
+  else {
     const current = variationHistory.practice[kind] || [];
     variationHistory.practice[kind] = [...current.filter(value => value !== id), id].slice(-limit);
   }
+  if (typeof question !== 'string') variationHistory.answerKeys = [...(variationHistory.answerKeys || []), questionAnswerKey(question)].slice(-RECENT_ANSWER_WINDOW);
   saveVariationHistory();
 }
 
 function buildQuizSet() {
   const previous = new Set(state.previousQuizIds || []);
   const selected = [];
+  const selectedAnswerKeys = [];
   for (const pool of Object.values(quizPools)) {
     const recent = variationHistory.quiz || [];
-    const strongest = pool.filter(q => !previous.has(q.id) && !recent.includes(q.id));
-    const alternate = pool.filter(q => !previous.has(q.id));
-    const candidates = strongest.length ? strongest : alternate.length ? alternate : pool;
-    const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+    const noPrevious = pool.filter(q => !previous.has(q.id));
+    const sourcePool = noPrevious.length ? noPrevious : pool;
+    const chosen = chooseWithHistory(sourcePool, recent, [], selectedAnswerKeys);
     selected.push(prepareQuestion(chosen));
-    rememberQuestion('quiz', chosen.id, 12);
+    selectedAnswerKeys.push(questionAnswerKey(chosen));
+    rememberQuestion('quiz', chosen, 12);
   }
   state.quizSet = shuffle(selected);
   state.previousQuizIds = state.quizSet.map(q => q.sourceId);
@@ -1184,7 +1160,7 @@ function getQuestionForPhase() {
   const chosen = chooseWithHistory(pool, recent, used);
   state.currentQuestion = prepareQuestion(chosen);
   state.selectedQuestionIds[phase] = [...used, chosen.id];
-  rememberQuestion(phase, chosen.id, phase === 'basic' ? 9 : phase === 'hard' ? 7 : 4);
+  rememberQuestion(phase, chosen, phase === 'basic' ? 9 : phase === 'hard' ? 7 : 4);
   saveState();
   return state.currentQuestion;
 }
