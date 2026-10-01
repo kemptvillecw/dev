@@ -706,14 +706,24 @@
       } else if (q.type === 'multi') {
         screen.querySelectorAll('.check-row').forEach((row, index) => {
           const input = row.querySelector('input');
+          const chosen = Array.isArray(answer) && answer.includes(index);
+          input.checked = chosen;
           input.disabled = true;
           const should = q.answer.includes(index);
-          const chosen = answer.includes(index);
           if (should) row.classList.add('is-correct');
           if (chosen && !should) row.classList.add('is-incorrect');
         });
       } else if (q.type === 'order') {
-        screen.querySelectorAll('.drag-item').forEach(item => {
+        const list = document.getElementById('dragList');
+        const items = [...screen.querySelectorAll('.drag-item')];
+        if (list && Array.isArray(answer)) {
+          const itemsByValue = new Map(items.map(item => [item.dataset.value, item]));
+          answer.forEach(value => {
+            const item = itemsByValue.get(value);
+            if (item) list.appendChild(item);
+          });
+        }
+        items.forEach(item => {
           item.draggable = false;
         });
         screen.querySelectorAll('.drag-actions button').forEach(btn => {
