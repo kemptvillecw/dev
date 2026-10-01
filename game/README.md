@@ -75,4 +75,18 @@ The game uses the KCW palette, responsive/touch-friendly controls, keyboard focu
 
 Progress is stored in browser localStorage. Existing progress keys are retained for compatibility.
 
-Version: **2.1.0-plan-aligned**
+Version: **3.0.0-shared-engine**
+
+
+## Shared game engine
+
+Character and Goal now use `game-engine.js` for the common runtime. Level files retain their lesson content, glossary, question banks, proof examples, and level-specific copy.
+
+The shared engine now:
+
+- persists an answered-question state before showing feedback so refresh/reload cannot score the same answer twice;
+- restores the disabled answer and feedback screen after refresh until the learner presses Continue/Next;
+- tracks recent correct results as semantic tag sets, so multi-answer questions contribute each recognized concept term to the anti-repetition history;
+- migrates older `answerKeys` variation history into the semantic-tag history;
+- enforces prerequisites on every render, so saved Goal state cannot bypass Character completion;
+- centralizes question preparation, selection, practice progression, hearts, streaks, quizzes, drag ordering, dialogs, concept-map rendering, and persistence for future levels.
