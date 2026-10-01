@@ -308,20 +308,72 @@
 
     function buildQuizSet() {
       const previous = new Set(state.previousQuizIds || []);
-      const selected = [];
-      const selectedTagSets = [];
-
-      for (const pool of Object.values(quizPools)) {
-        const recent = variationHistory.quiz || [];
+      const recentIds = new Set(variationHistory.quiz || []);
+      const recentTags = recentSemanticTags([]);
+      const sourcePools = Object.values(quizPools).map(pool => {
         const noPrevious = pool.filter(question => !previous.has(question.id));
-        const sourcePool = noPrevious.length ? noPrevious : pool;
-        const chosen = chooseWithHistory(sourcePool, recent, [], selectedTagSets);
-        selected.push(prepareQuestion(chosen));
-        selectedTagSets.push(questionSemanticTags(chosen));
-        rememberQuestion('quiz', chosen, 12);
+        return noPrevious.length ? noPrevious : pool;
+      });
+
+      const bestCombinations = [];
+      let bestScore = null;
+
+      function scoreCombination(combination) {
+        const tagCounts = new Map();
+        let recentTagHits = 0;
+        let recentIdHits = 0;
+
+        combination.forEach(question => {
+          if (recentIds.has(question.id)) recentIdHits++;
+          questionSemanticTags(question).forEach(tag => {
+            tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+            if (recentTags.has(tag)) recentTagHits++;
+          });
+        });
+
+        let repeatedTags = 0;
+        tagCounts.forEach(count => {
+          if (count > 1) repeatedTags += count - 1;
+        });
+
+        return [repeatedTags, recentTagHits, recentIdHits];
       }
 
-      state.quizSet = shuffle(selected);
+      function compareScores(a, b) {
+        for (let index = 0; index < a.length; index++) {
+          if (a[index] !== b[index]) return a[index] - b[index];
+        }
+        return 0;
+      }
+
+      function visit(poolIndex, combination) {
+        if (poolIndex >= sourcePools.length) {
+          const score = scoreCombination(combination);
+          if (!bestScore || compareScores(score, bestScore) < 0) {
+            bestScore = score;
+            bestCombinations.length = 0;
+            bestCombinations.push([...combination]);
+          } else if (compareScores(score, bestScore) === 0) {
+            bestCombinations.push([...combination]);
+          }
+          return;
+        }
+
+        sourcePools[poolIndex].forEach(question => {
+          combination.push(question);
+          visit(poolIndex + 1, combination);
+          combination.pop();
+        });
+      }
+
+      visit(0, []);
+
+      const chosenSet = bestCombinations.length
+        ? bestCombinations[Math.floor(Math.random() * bestCombinations.length)]
+        : [];
+
+      chosenSet.forEach(question => rememberQuestion('quiz', question, 12));
+      state.quizSet = shuffle(chosenSet.map(prepareQuestion));
       state.previousQuizIds = state.quizSet.map(question => question.sourceId);
     }
 
