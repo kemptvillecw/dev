@@ -26,7 +26,9 @@
     return td;
   }
   function eventShareUrl(eventId) {
-    return new URL(`share/events/${encodeURIComponent(eventId)}.html`, document.baseURI);
+    const url = new URL(`share/events/${encodeURIComponent(eventId)}.html`, document.baseURI);
+    url.searchParams.set('v', '3');
+    return url;
   }
   function facebookShareUrl(shareUrl) {
     const url = new URL('https://www.facebook.com/sharer/sharer.php');
