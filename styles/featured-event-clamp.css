@@ -28,19 +28,22 @@
   }
 }
 
+/* Fade the text itself instead of painting a background-coloured overlay.
+   This keeps the event card's existing background perfectly uniform. */
 .featured-event-description.is-overflowing {
   position: relative;
-}
-
-.featured-event-description.is-overflowing::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 5.5rem;
-  pointer-events: none;
-  background: linear-gradient(to bottom, rgba(255, 253, 248, 0), var(--paper) 88%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0,
+    #000 calc(100% - 5.5rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0,
+    #000 calc(100% - 5.5rem),
+    transparent 100%
+  );
 }
 
 .featured-event-details-link {
