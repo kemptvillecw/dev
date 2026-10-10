@@ -28,14 +28,18 @@
     const title = target.querySelector('#featured-heading');
     if (!description || !title || description.hidden) return;
 
+    const existingLink = target.querySelector('.featured-event-details-link');
     description.classList.remove('is-overflowing');
-    target.querySelector('.featured-event-details-link')?.remove();
 
     requestAnimationFrame(() => {
       const overflowing = description.scrollHeight > description.clientHeight + 1;
-      if (!overflowing) return;
+      if (!overflowing) {
+        existingLink?.remove();
+        return;
+      }
 
       description.classList.add('is-overflowing');
+      if (existingLink) return;
 
       const link = document.createElement('button');
       link.type = 'button';
