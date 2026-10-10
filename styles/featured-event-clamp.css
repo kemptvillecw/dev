@@ -1,0 +1,116 @@
+/* Keep homepage featured event cards visually uniform while preserving full event text. */
+.featured-event-intro {
+  min-width: 0;
+}
+
+.featured-event-intro > div {
+  min-width: 0;
+}
+
+@media (min-width: 701px) {
+  .featured-event-intro {
+    height: 320px;
+  }
+
+  .featured-event-intro > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .featured-event-description {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+}
+
+.featured-event-description.is-overflowing {
+  position: relative;
+}
+
+.featured-event-description.is-overflowing::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5.5rem;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255, 253, 248, 0), var(--paper) 88%);
+}
+
+.featured-event-details-link {
+  display: inline-block;
+  align-self: flex-start;
+  flex: 0 0 auto;
+  margin-top: 10px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--forest-dark);
+  font: 700 .82rem Arial, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.featured-event-details-link:hover,
+.featured-event-details-link:focus-visible {
+  color: var(--forest);
+}
+
+.featured-event-dialog {
+  width: min(720px, calc(100vw - 32px));
+  max-height: min(78vh, 760px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.featured-event-dialog::backdrop {
+  background: rgba(6, 61, 49, .38);
+}
+
+.featured-event-dialog-inner {
+  padding: clamp(22px, 4vw, 34px);
+}
+
+.featured-event-dialog h2 {
+  margin: 0 0 14px;
+  color: var(--forest-dark);
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  line-height: 1.08;
+}
+
+.featured-event-dialog-description {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.featured-event-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 22px;
+}
+
+@media (max-width: 700px) {
+  .featured-event-intro > div {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .featured-event-description {
+    position: relative;
+    max-height: 13rem;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+}
