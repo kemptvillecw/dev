@@ -34,10 +34,8 @@
       return null;
     }
   }
-  function eventPublicUrl(eventId) {
-    const url = new URL('schedule.html', document.baseURI);
-    url.hash = eventId;
-    return url.href;
+  function eventPreviewUrl(eventId) {
+    return new URL(`share/events/${encodeURIComponent(eventId)}.html?v=4`, document.baseURI).href;
   }
   async function copyText(value) {
     if (navigator.clipboard && window.isSecureContext) {
@@ -68,7 +66,7 @@
       const originalText = 'Copy link';
       button.disabled = true;
       try {
-        await copyText(eventPublicUrl(event.id));
+        await copyText(eventPreviewUrl(event.id));
         button.textContent = 'Copied!';
       } catch (error) {
         console.error('Could not copy event link:', error);
