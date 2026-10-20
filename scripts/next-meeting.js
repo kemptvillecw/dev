@@ -19,9 +19,10 @@
   }
 
   function isLibraryClosure(item, metadata) {
-    const text = [item.summary, metadata.eventTitle, metadata.type, eventDescription.plainText(item.description)]
+    const text = [item.summary, metadata.eventTitle, metadata.type]
       .filter(Boolean).join(' ').toLowerCase();
-    return /\blibrary\s+(?:is\s+)?closed\b/.test(text) || /\blibrary\s+closure\b/.test(text);
+    return /\blibrary\b.{0,40}\bclos(?:ed|ure|ing)\b/.test(text) ||
+      /\bngpl\b.{0,30}\bclos(?:ed|ure|ing)\b/.test(text);
   }
 
   function addClosureDates(set, item) {
