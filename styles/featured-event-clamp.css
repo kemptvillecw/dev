@@ -46,6 +46,30 @@
   );
 }
 
+/* Match the lightweight disclosure-style Event details action used by the schedule table. */
+.featured-event-schedule-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--forest);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.featured-event-schedule-link::before {
+  content: '▸';
+  margin-right: .45em;
+}
+
+.featured-event-schedule-link:hover {
+  text-decoration: underline;
+}
+
+.featured-event-schedule-link:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 3px;
+}
+
 .featured-event-details-link {
   display: inline-block;
   align-self: flex-start;
