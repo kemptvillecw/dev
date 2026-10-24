@@ -48,8 +48,10 @@
 
 /* Match the lightweight disclosure-style Event details action used by the schedule table. */
 .featured-event-schedule-link {
-  display: inline-block;
+  display: block;
+  width: max-content;
   margin-top: 10px;
+  margin-left: auto;
   color: var(--forest);
   font: inherit;
   text-decoration: none;
