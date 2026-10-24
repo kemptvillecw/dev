@@ -55,10 +55,10 @@
     const title = target.querySelector('#featured-heading');
     if (!description || !title || description.hidden) return;
 
-    const existingLink = target.querySelector('.featured-event-details-link');
     description.classList.remove('is-overflowing');
 
     requestAnimationFrame(() => {
+      const existingLink = target.querySelector('.featured-event-details-link');
       const overflowing = description.scrollHeight > description.clientHeight + 1;
       if (!overflowing) {
         existingLink?.remove();
