@@ -23,7 +23,34 @@
     return dialog;
   }
 
+  function positionScheduleLink(target) {
+    const content = target.querySelector('.featured-event-content');
+    const meta = content?.querySelector('.event-meta');
+    if (!content || !meta) return;
+
+    let link = target.querySelector('.featured-event-schedule-link');
+    if (!link) {
+      link = Array.from(target.querySelectorAll('.event-actions a')).find((candidate) =>
+        candidate.textContent.trim().toLowerCase() === 'event details'
+      );
+    }
+    if (!link) return;
+
+    link.classList.remove('button', 'button-primary');
+    link.classList.add('featured-event-schedule-link');
+    link.textContent = 'Event details';
+
+    if (link.parentElement !== content || link.nextElementSibling !== meta) {
+      content.insertBefore(link, meta);
+    }
+
+    const actions = content.querySelector('.event-actions');
+    if (actions && !actions.children.length) actions.remove();
+  }
+
   function applyClamp(target) {
+    positionScheduleLink(target);
+
     const description = target.querySelector('.featured-event-description');
     const title = target.querySelector('#featured-heading');
     if (!description || !title || description.hidden) return;
