@@ -10,16 +10,20 @@
   <link rel="stylesheet" href="styles/styles.css">
 
   <style>
-    .location-details {
+    .location-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(145px, 1.15fr);
       gap: 12px;
       align-items: start;
-      margin-top: 4px;
+    }
+
+    .location-copy,
+    .location-address {
+      min-width: 0;
     }
 
     .location-address {
-      min-width: 0;
+      margin-top: 2px;
     }
 
     .location-map {
@@ -31,7 +35,7 @@
     }
 
     @media (max-width: 480px) {
-      .location-details {
+      .location-row {
         grid-template-columns: 1fr;
       }
 
@@ -136,24 +140,24 @@
             6:00–7:50 p.m.
           </div>
 
-          <div class="glance-row">
-            <strong>Location</strong>
-            <div class="location-details">
+          <div class="glance-row location-row">
+            <div class="location-copy">
+              <strong>Location</strong>
               <div class="location-address">
                 North Grenville Public Library<br>
                 Tallman Room<br>
                 1 Water St.<br>
                 Kemptville, ON
               </div>
-              <iframe
-                class="location-map"
-                title="Map of North Grenville Public Library"
-                src="https://www.google.com/maps?ll=45.016327,-75.645874&amp;z=11&amp;t=m&amp;hl=en-US&amp;gl=CA&amp;mapclient=embed&amp;cid=1564120297692818660&amp;output=embed"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen
-              ></iframe>
             </div>
+            <iframe
+              class="location-map"
+              title="Map of North Grenville Public Library"
+              src="https://www.google.com/maps?ll=45.016327,-75.645874&amp;z=11&amp;t=m&amp;hl=en-US&amp;gl=CA&amp;mapclient=embed&amp;cid=1564120297692818660&amp;output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
           </div>
 
           <div class="glance-row">
