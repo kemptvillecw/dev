@@ -26,11 +26,23 @@
       margin-top: 2px;
     }
 
-    .location-map {
+    .location-map-frame {
+      position: relative;
       width: 100%;
       aspect-ratio: 4 / 3;
       min-height: 130px;
+      overflow: hidden;
       border: 1px solid #cbd8c8;
+      background: #e5e5e5;
+    }
+
+    .location-map {
+      position: absolute;
+      top: -42px;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 42px);
+      border: 0;
       display: block;
     }
 
@@ -39,7 +51,7 @@
         grid-template-columns: 1fr;
       }
 
-      .location-map {
+      .location-map-frame {
         min-height: 180px;
       }
     }
@@ -150,14 +162,16 @@
                 Kemptville, ON
               </div>
             </div>
-            <iframe
-              class="location-map"
-              title="Map of North Grenville Public Library"
-              src="https://www.google.com/maps?ll=45.016327,-75.645874&amp;z=11&amp;t=m&amp;hl=en-US&amp;gl=CA&amp;mapclient=embed&amp;cid=1564120297692818660&amp;output=embed"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              allowfullscreen
-            ></iframe>
+            <div class="location-map-frame">
+              <iframe
+                class="location-map"
+                title="Map of North Grenville Public Library"
+                src="https://www.google.com/maps?ll=45.016327,-75.645874&amp;z=11&amp;t=m&amp;hl=en-US&amp;gl=CA&amp;mapclient=embed&amp;cid=1564120297692818660&amp;output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
           </div>
 
           <div class="glance-row">
