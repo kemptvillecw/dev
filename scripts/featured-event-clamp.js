@@ -38,7 +38,10 @@
 
     link.classList.remove('button', 'button-primary');
     link.classList.add('featured-event-schedule-link');
-    link.textContent = 'Event details';
+
+    if (link.textContent.trim() !== 'Event details') {
+      link.textContent = 'Event details';
+    }
 
     if (link.parentElement !== content || link.nextElementSibling !== meta) {
       content.insertBefore(link, meta);
