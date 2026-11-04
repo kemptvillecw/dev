@@ -328,6 +328,7 @@
           // Calendar Manager stores the event category in KCW_METADATA.type.
           // Match the category, not an incidental word in an unrelated event title.
           if (onlyContests && !/^(?:writing\s+)?contests?$/i.test(metadata.type || '')) return;
+          if (!onlyContests && /^(?:writing\s+)?contests?$/i.test(metadata.type || '')) return;
           const eventId = typeof item.id === 'string' ? item.id.trim() : '';
           if (!eventId) return;
           const start = Date.parse(item.start?.dateTime || item.start?.date);
