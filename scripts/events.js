@@ -86,6 +86,7 @@
               !Number.isFinite(Date.parse(item.end?.dateTime || item.end?.date))) continue;
           item.metadata = window.KCWEventDescription.metadata(item.description);
           if (!window.KCWEventDescription.isPublic(item.metadata)) continue;
+          if (/^(?:writing\s+)?contests?$/i.test(item.metadata.type || '')) continue;
           if (!next) next = item;
           if (window.KCWEventDescription.isFeatured(item.metadata, today)) return item;
         }
