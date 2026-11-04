@@ -163,7 +163,7 @@
     const chips = document.createElement('div');
     chips.className = 'contest-chips';
     for (const text of [
-      m.contestForm, ...splitTags(m.contestGenres), m.contestLengthLimit,
+      ...splitTags(m.contestForm), ...splitTags(m.contestGenres), m.contestLengthLimit,
       m.contestEntryFee && `Entry fee: ${m.contestEntryFee}`
     ].filter(Boolean)) addText(chips, 'span', 'contest-chip', text);
     if (chips.childElementCount) card.append(chips);
@@ -211,7 +211,7 @@
     const query = searchInput.value.trim().toLowerCase();
     return contests.filter(c => {
       const m = c.metadata;
-      if (formFilter.value && m.contestForm !== formFilter.value) return false;
+      if (formFilter.value && !splitTags(m.contestForm).includes(formFilter.value)) return false;
       if (genreFilter.value && !splitTags(m.contestGenres).includes(genreFilter.value)) return false;
       if (freeFilter.checked && !isFree(m.contestEntryFee)) return false;
       if (query && ![
@@ -244,7 +244,7 @@
         option.value = value; option.textContent = value; control.append(option);
       }
     };
-    addOptions(formFilter, contests.map(c => c.metadata.contestForm));
+    addOptions(formFilter, contests.flatMap(c => splitTags(c.metadata.contestForm)));
     addOptions(genreFilter, contests.flatMap(c => splitTags(c.metadata.contestGenres)));
   }
   async function load() {
