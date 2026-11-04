@@ -7,6 +7,7 @@
   <meta property="og:description" content="Browse upcoming writing contests listed in the KCW Calendar.">
   <title>Writing Contests | Kemptville Creative Writers</title>
   <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="styles/contests.css?v=20261104-1">
   <style>
     .schedule-calendar .schedule-calendar-table td:nth-child(3) > strong {
       display: block;
@@ -64,28 +65,41 @@
       <div class="hero-copy">
         <p class="eyebrow">Opportunities for writers</p>
         <h1>Writing Contests</h1>
-        <p>Explore upcoming writing contests listed on the KCW Calendar, with dates and descriptions in one convenient place.</p>
+        <p>Discover competitions, compare entry requirements, and find deadlines that fit your writing.</p>
       </div>
     </section>
     <section class="page-content">
-      <section class="schedule-calendar panel" aria-labelledby="contests-heading" data-public-calendar data-calendar-category="contest">
+      <section data-contests aria-labelledby="contests-heading">
         <div class="schedule-calendar-heading">
           <div>
-            <p class="eyebrow">Discover your next challenge</p>
+            <p class="eyebrow">Find your next challenge</p>
             <h2 class="section-title" id="contests-heading">Upcoming Contests</h2>
           </div>
-          <a class="button" href="https://calendar.google.com/calendar/ical/kemptvillecw%40gmail.com/public/basic.ics">Subscribe to calendar</a>
+          <a class="button" href="https://calendar.google.com/calendar/ical/kemptvillecw%40gmail.com/public/basic.ics">Subscribe to KCW Calendar</a>
         </div>
-        <p>These listings are drawn from published KCW Calendar entries marked as contests. Always confirm deadlines, eligibility, and submission requirements with the organizer.</p>
-        <p data-calendar-status role="status">Loading upcoming contests…</p>
-        <button class="button" type="button" data-calendar-retry hidden>Try again</button>
-        <div class="schedule-calendar-table-wrap" data-calendar-table-wrap role="region" aria-label="Upcoming writing contests" tabindex="0" hidden>
-          <table class="schedule-calendar-table" aria-labelledby="contests-heading">
-            <thead><tr><th scope="col">Date</th><th scope="col">Time (Eastern)</th><th scope="col">Contest</th></tr></thead>
-            <tbody data-calendar-rows></tbody>
-          </table>
-        </div>
-        <noscript><p>Enable JavaScript to view contests from the KCW Calendar.</p></noscript>
+        <p>KCW shares writing opportunities from the calendar. Confirm requirements, entry fees, deadlines and publication rights with the contest organizer before submitting.</p>
+        <form class="contest-controls" role="search" onsubmit="return false">
+          <label>Find a contest
+            <input data-contest-search type="search" maxlength="120" placeholder="Search titles, rules, eligibility…">
+          </label>
+          <label>Writing form
+            <select data-contest-form><option value="">All forms</option></select>
+          </label>
+          <label>Genre
+            <select data-contest-genre><option value="">All genres</option></select>
+          </label>
+          <label class="contest-free"><input data-contest-free type="checkbox"> Free entry only</label>
+        </form>
+        <p class="contest-info" data-contest-count aria-live="polite"></p>
+        <p data-contest-status role="status">Loading writing contests…</p>
+        <button type="button" class="button" data-contest-retry hidden>Try again</button>
+        <div class="contest-results" data-contest-results aria-live="polite"></div>
+        <nav class="contest-pager" data-contest-pagination aria-label="Contest pages" hidden>
+          <button class="button" type="button" data-contest-previous>Previous</button>
+          <strong data-contest-page-label>Page 1 of 1</strong>
+          <button class="button" type="button" data-contest-next>Next</button>
+        </nav>
+        <noscript><p>Enable JavaScript to view the live KCW contests list.</p></noscript>
       </section>
     </section>
   </main>
@@ -108,5 +122,5 @@
     </div>
   </footer>
   <script src="data/events.js"></script><script src="data/announcements.js"></script><script src="scripts/site.js"></script><script src="scripts/event-description.js"></script><script src="scripts/events.js?v=20261020-featured-schedule-link"></script>
-  <script src="data/calendar.js"></script><script>window.KCW_CALENDAR.daysAhead = 366;</script><script src="scripts/calendar.js?v=20261021-copy-link-fallback"></script>
+  <script src="data/calendar.js"></script><script src="scripts/contests.js?v=20261104-1"></script>
 </body></html>
