@@ -45,7 +45,15 @@
       }
       for (const key of ['type', 'eventTitle', 'learningTopic', 'learningOutcome', 'format',
         'speaker', 'speakerRole', 'speakerUrl', 'image', 'imageAlt', 'hoverText', 'address',
-        'directions', 'featureStart', 'featureEnd']) {
+        'directions', 'featureStart', 'featureEnd',
+        'contestOrganizer', 'contestEligibility', 'contestRegion',
+        'contestOpenDate', 'contestDeadline', 'contestDeadlineTime',
+        'contestDeadlineTimezone', 'contestAnnouncementDate',
+        'contestUrl', 'contestTermsUrl', 'contestEntryFee',
+        'contestPrize', 'contestForm', 'contestGenres',
+        'contestLengthLimit', 'contestPublicationPolicy',
+        'contestAiPolicy', 'contestRestrictions', 'contestVerifiedAt',
+        'contestLanguage']) {
         if (typeof parsed[key] === 'string') result[key] = parsed[key].trim();
       }
       return result;
