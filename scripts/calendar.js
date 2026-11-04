@@ -199,7 +199,7 @@
       const startDay = dateLabel(event.start, event.allDay);
       const endDay = dateLabel(event.allDay ? event.end - 86400000 : event.end, event.allDay);
       cell(row, startDay === endDay ? startDay : `${startDay} – ${endDay}`, 'Date');
-      cell(row, event.allDay ? 'All day' : `${timeLabel(event.start)} – ${timeLabel(event.end)}`, 'Time (EST)');
+      cell(row, event.allDay ? 'All day' : `${timeLabel(event.start)} – ${timeLabel(event.end)}`, onlyContests ? 'Time (Eastern)' : 'Time (EST)');
       const title = cell(row, '', onlyContests ? 'Contest' : 'Event');
 
       const imageUrl = safeUrl(event.image);
