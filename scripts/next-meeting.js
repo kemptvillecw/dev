@@ -109,6 +109,7 @@
 
       const meetings = prepared
         .filter(({ item, metadata }) => eventDescription.isPublic(metadata) &&
+          !/^(?:writing\s+)?contests?$/i.test(metadata.type || '') &&
           !isLibraryClosure(item, metadata) && !closedDates.has(eventDateKey(item)))
         .sort((a, b) => Date.parse(a.item.start.dateTime || a.item.start.date) -
           Date.parse(b.item.start.dateTime || b.item.start.date));
