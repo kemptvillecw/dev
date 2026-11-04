@@ -2018,3 +2018,10 @@ main {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Keep six primary navigation links comfortable on mid-width screens. */
+@media (min-width: 701px) and (max-width: 1080px) {
+  .header-inner { gap: 12px; }
+  .site-brand img { width: min(260px, 28vw); }
+  .site-nav { gap: 14px; font-size: .85rem; }
+}
