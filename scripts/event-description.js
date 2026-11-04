@@ -33,11 +33,49 @@
       .replace(/\n{3,}/g, '\n\n')
       .trim();
   }
+  // Rich-text calendar edits sometimes insert a real line break in the
+  // middle of a quoted JSON value. Undo only that wrapping damage.
+  function unfoldWrappedMetadataJson(text) {
+    let result = '';
+    let insideString = false;
+    let escaped = false;
+    let changed = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (insideString && !escaped && (ch === '\n' || ch === '\r')) {
+        if (ch === '\r' && text[i + 1] === '\n') i++;
+        const before = result[result.length - 1];
+        const after = text[i + 1];
+        if (before !== ' ' && before !== '\t' && after !== ' ' && after !== '\t') {
+          result += ' ';
+        }
+        changed = true;
+        continue;
+      }
+      result += ch;
+      if (insideString) {
+        if (escaped) escaped = false;
+        else if (ch === '\\') escaped = true;
+        else if (ch === '"') insideString = false;
+      } else if (ch === '"') {
+        insideString = true;
+      }
+    }
+    return changed ? result : null;
+  }
+
   function metadata(value) {
     const match = descriptionText(value).match(/\[KCW_METADATA\]([\s\S]*?)\[\/KCW_METADATA\]/i);
     if (!match) return {};
     try {
-      const parsed = JSON.parse(match[1]);
+      let parsed;
+      try {
+        parsed = JSON.parse(match[1]);
+      } catch (error) {
+        const unfolded = unfoldWrappedMetadataJson(match[1]);
+        if (unfolded === null) return {};
+        parsed = JSON.parse(unfolded);
+      }
       if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
       const result = { featured: parsed.featured === true };
       if (Object.prototype.hasOwnProperty.call(parsed, 'status')) {
