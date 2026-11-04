@@ -236,12 +236,6 @@
     status.textContent = items.length
       ? ''
       : (contests.length ? 'No contests match these filters.' : 'No upcoming published contests are listed. Please check back soon.');
-    if (location.hash) {
-      let eventId = '';
-      try { eventId = decodeURIComponent(location.hash.slice(1)); }
-      catch { eventId = location.hash.slice(1); }
-      if (eventId && !root.querySelector('[id]')?.id) { /* no-op */ }
-    }
   }
   function populateFilters() {
     const addOptions = (control, values) => {
@@ -303,7 +297,9 @@
       formFilter.replaceChildren(formFilter.firstElementChild);
       genreFilter.replaceChildren(genreFilter.firstElementChild);
       populateFilters();
-      const hashId = location.hash ? decodeURIComponent(location.hash.slice(1)) : '';
+      let hashId = '';
+      try { hashId = decodeURIComponent(location.hash.slice(1)); }
+      catch { hashId = location.hash.slice(1); }
       const target = contests.findIndex(c => c.id === hashId);
       page = target < 0 ? 0 : Math.floor(target / pageSize);
       render();
@@ -325,5 +321,18 @@
   previous.addEventListener('click', () => { page -= 1; render(); root.scrollIntoView({ block: 'start' }); });
   next.addEventListener('click', () => { page += 1; render(); root.scrollIntoView({ block: 'start' }); });
   retry.addEventListener('click', load);
+  root.querySelector('.contest-controls').addEventListener('submit', event => event.preventDefault());
+  window.addEventListener('hashchange', () => {
+    let targetId = '';
+    try { targetId = decodeURIComponent(location.hash.slice(1)); }
+    catch { targetId = location.hash.slice(1); }
+    const index = contests.findIndex(item => item.id === targetId);
+    if (index >= 0) {
+      formFilter.value = ''; genreFilter.value = ''; freeFilter.checked = false; searchInput.value = '';
+      page = Math.floor(index / pageSize);
+      render();
+      document.getElementById(targetId)?.scrollIntoView({ block: 'center' });
+    }
+  });
   load();
 })();
