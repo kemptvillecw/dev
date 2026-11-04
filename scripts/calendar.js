@@ -7,6 +7,8 @@
   const wrapper = section.querySelector('[data-calendar-table-wrap]');
   const rows = section.querySelector('[data-calendar-rows]');
   const PAGE_SIZE = 5;
+  // Only opt-in pages filter by contest type; Schedule continues showing every public event.
+  const onlyContests = section.dataset.calendarCategory === 'contest';
   let calendarEvents = [];
   let currentPage = 0;
   let pagination = null;
@@ -102,7 +104,7 @@
     return new URL(`share/events/${encodeURIComponent(eventId)}.html?v=4`, document.baseURI).href;
   }
   function eventScheduleUrl(eventId) {
-    const url = new URL('schedule.html', document.baseURI);
+    const url = new URL(onlyContests ? 'contests.html' : 'schedule.html', document.baseURI);
     url.hash = encodeURIComponent(eventId);
     return url.href;
   }
@@ -198,7 +200,7 @@
       const endDay = dateLabel(event.allDay ? event.end - 86400000 : event.end, event.allDay);
       cell(row, startDay === endDay ? startDay : `${startDay} – ${endDay}`, 'Date');
       cell(row, event.allDay ? 'All day' : `${timeLabel(event.start)} – ${timeLabel(event.end)}`, 'Time (EST)');
-      const title = cell(row, '', 'Event');
+      const title = cell(row, '', onlyContests ? 'Contest' : 'Event');
 
       const imageUrl = safeUrl(event.image);
       if (imageUrl) {
@@ -237,7 +239,7 @@
       if (publicDescription) {
         const details = document.createElement('details');
         const summary = document.createElement('summary');
-        summary.textContent = 'Event details';
+        summary.textContent = onlyContests ? 'Contest details' : 'Event details';
         const description = document.createElement('p');
         description.textContent = publicDescription;
         details.append(summary, description);
@@ -264,7 +266,9 @@
     status.hidden = calendarEvents.length > 0;
     status.textContent = calendarEvents.length
       ? ''
-      : 'No upcoming events are listed in the KCW Calendar. Please check the featured events above or visit again soon.';
+      : (onlyContests
+        ? 'No upcoming contests are listed in the KCW Calendar. Check back for new writing opportunities.'
+        : 'No upcoming events are listed in the KCW Calendar. Please check the featured events above or visit again soon.');
 
     if (scroll) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (targetId) {
@@ -286,7 +290,7 @@
     wrapper.hidden = true;
     status.hidden = false;
     section.setAttribute('aria-busy', 'true');
-    status.textContent = 'Loading upcoming events…';
+    status.textContent = onlyContests ? 'Loading upcoming contests…' : 'Loading upcoming events…';
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
     try {
@@ -321,6 +325,9 @@
         data.items.filter((item) => item.status !== 'cancelled').forEach((item) => {
           const metadata = window.KCWEventDescription.metadata(item.description);
           if (!window.KCWEventDescription.isPublic(metadata)) return;
+          // Calendar Manager stores the event category in KCW_METADATA.type.
+          // Match the category, not an incidental word in an unrelated event title.
+          if (onlyContests && !/^(?:writing\s+)?contests?$/i.test(metadata.type || '')) return;
           const eventId = typeof item.id === 'string' ? item.id.trim() : '';
           if (!eventId) return;
           const start = Date.parse(item.start?.dateTime || item.start?.date);
