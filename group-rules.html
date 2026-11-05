@@ -9,7 +9,42 @@
   <title>Group Rules | Kemptville Creative Writers</title>
   <link rel="stylesheet" href="styles/styles.css">
   <style>
-    .rules-page { max-width: 920px; margin: 0 auto; padding-bottom: 40px; }
+    .rules-page { max-width: var(--max); margin: 0 auto; padding-bottom: 40px; }
+    .feedback-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.8rem;
+      margin-top: 1.5rem;
+    }
+    .feedback-column { min-width: 0; }
+    .feedback-column > h2 {
+      margin: 0 0 1.1rem;
+      padding-bottom: .55rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .feedback-column--receiving {
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    @media (min-width: 860px) {
+      .feedback-layout {
+        grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr);
+        gap: clamp(20px, 3vw, 44px);
+        align-items: start;
+      }
+      .feedback-column--receiving {
+        grid-column: 1;
+        grid-row: 1;
+        padding-top: 0;
+        border-top: 0;
+      }
+      .feedback-column--providing {
+        grid-column: 2;
+        grid-row: 1;
+        padding-left: clamp(20px, 3vw, 44px);
+        border-left: 1px solid var(--line);
+      }
+    }
     .rules-page .panel { padding: clamp(20px, 4vw, 36px); }
     .rules-page h2 { color: var(--forest-dark); margin: 1.75rem 0 .6rem; }
     .rules-page h3 { color: var(--forest-dark); margin: 1.3rem 0 .45rem; }
@@ -62,15 +97,9 @@
         <h2 class="section-title" id="feedback-heading">Giving and Receiving Story Feedback</h2>
         <p>Our writing group is a supportive community of writers helping writers. The purpose of feedback is not to edit, judge, or rewrite someone else's work, but to help the writer better understand how their writing is experienced by readers.</p>
 
-        <h2>Before We Begin</h2>
-        <h3>When Receiving Feedback</h3>
-        <ul>
-          <li>Listen without interrupting, defending, or explaining the work.</li>
-          <li>Remember that feedback reflects a reader's experience of the piece.</li>
-          <li>Consider recurring comments carefully.</li>
-          <li>You are not required to use every suggestion.</li>
-          <li>Thank readers for their time and attention.</li>
-        </ul>
+        <div class="feedback-layout">
+          <section class="feedback-column feedback-column--providing" aria-labelledby="providing-feedback-heading">
+            <h2 id="providing-feedback-heading">Providing Feedback</h2>
         <h3>Respectful Communication</h3>
         <h4>Keep Feedback Within the Group</h4>
         <p>We recognize that our members are passionate about writing and genuinely want to help one another improve. We encourage thoughtful discussion while respecting each writer's personal boundaries.</p>
@@ -82,17 +111,7 @@
           <li><strong>Be mindful of how you present your feedback.</strong> Feedback should always be respectful, constructive, and something you would feel comfortable expressing openly in front of the group.</li>
         </ul>
         <p>Our intention is not to limit creative discussion, but to ensure every writer feels comfortable sharing their work without feeling pressured to continue the conversation.</p>
-
-        <h2>When Sharing Your Work</h2>
-        <ul>
-          <li>Let the writing speak for itself.</li>
-          <li>Provide only the title of your piece and begin reading.</li>
-          <li>Do not explain, justify, or provide background information before or after reading.</li>
-          <li>When finished, a simple “thank you” is enough.</li>
-          <li>Provide a content warning if your piece contains potentially distressing or sensitive subject matter.</li>
-        </ul>
-
-        <h2>When Giving Feedback</h2>
+        <h3>When Giving Feedback</h3>
         <p>Focus on the writing, not on editing. Grammar, spelling, punctuation, and formatting are concerns for later drafts unless they significantly affect meaning or understanding.</p>
         <h3>1. What did I like?</h3>
         <p>Respond as a reader. What moved you, interested you, surprised you, or stayed with you?</p>
@@ -101,8 +120,30 @@
         <h3>3. What questions do I have?</h3>
         <p>Frame suggestions as questions whenever possible. Writers do not need to answer these questions during the feedback session.</p>
 
-        <h2>Be Specific</h2>
+        <h3>Be Specific</h3>
         <p>General comments are less useful than specific observations. Identify the scene, image, line, or moment that created your response.</p>
+          </section>
+
+          <section class="feedback-column feedback-column--receiving" aria-labelledby="receiving-feedback-heading">
+            <h2 id="receiving-feedback-heading">Receiving Feedback</h2>
+        <h3>When Sharing Your Work</h3>
+        <ul>
+          <li>Let the writing speak for itself.</li>
+          <li>Provide only the title of your piece and begin reading.</li>
+          <li>Do not explain, justify, or provide background information before or after reading.</li>
+          <li>When finished, a simple “thank you” is enough.</li>
+          <li>Provide a content warning if your piece contains potentially distressing or sensitive subject matter.</li>
+        </ul>
+        <h3>When Receiving Feedback</h3>
+        <ul>
+          <li>Listen without interrupting, defending, or explaining the work.</li>
+          <li>Remember that feedback reflects a reader's experience of the piece.</li>
+          <li>Consider recurring comments carefully.</li>
+          <li>You are not required to use every suggestion.</li>
+          <li>Thank readers for their time and attention.</li>
+        </ul>
+          </section>
+        </div>
 
         <h2>Our Commitment</h2>
         <div class="rules-commitment">
