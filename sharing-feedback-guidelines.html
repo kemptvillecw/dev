@@ -28,7 +28,7 @@
     }
     @media (min-width: 860px) {
       .feedback-layout {
-        grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: clamp(20px, 3vw, 44px);
         align-items: start;
       }
@@ -70,6 +70,8 @@
       line-height: 1.7;
     }
     .rules-commitment p:last-child { margin-bottom: 0; }
+    .rules-conduct { margin: 0 0 2rem; }
+    .rules-conduct h2 { margin-top: 1.5rem; }
   </style>
 </head>
 <body>
@@ -109,11 +111,9 @@
           <p>We listen carefully, respond thoughtfully, and provide feedback that is specific, respectful, honest, and encouraging.</p>
         </div>
 
-        <div class="feedback-layout">
-          <section class="feedback-column feedback-column--providing" aria-labelledby="providing-feedback-heading">
-            <h2 id="providing-feedback-heading">Providing Feedback</h2>
-        <h3>Respectful Communication</h3>
-        <h4>Keep Feedback Within the Group</h4>
+        <section class="rules-conduct" aria-labelledby="respectful-communication-heading">
+        <h2 id="respectful-communication-heading">Respectful Communication</h2>
+        <h3>Keep Feedback Within the Group</h3>
         <p>We recognize that our members are passionate about writing and genuinely want to help one another improve. We encourage thoughtful discussion while respecting each writer's personal boundaries.</p>
         <ul>
           <li><strong>Keep feedback within scheduled group meeting times.</strong> Feedback and discussion about another member's writing should take place during scheduled group meetings unless the writer has explicitly invited further discussion outside of those times.</li>
@@ -123,6 +123,11 @@
           <li><strong>Be mindful of how you present your feedback.</strong> Feedback should always be respectful, constructive, and something you would feel comfortable expressing openly in front of the group.</li>
         </ul>
         <p>Our intention is not to limit creative discussion, but to ensure every writer feels comfortable sharing their work without feeling pressured to continue the conversation.</p>
+        </section>
+
+        <div class="feedback-layout">
+          <section class="feedback-column feedback-column--providing" aria-labelledby="providing-feedback-heading">
+            <h2 id="providing-feedback-heading">Providing Feedback</h2>
         <h3>When Giving Feedback</h3>
         <p>Focus on the writing, not on editing. Grammar, spelling, punctuation, and formatting are concerns for later drafts unless they significantly affect meaning or understanding.</p>
         <h3>1. What did I like?</h3>
