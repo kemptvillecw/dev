@@ -3,7 +3,7 @@
 **Repository:** `kemptvillecw/mainsite`  
 **Branches:** `dev`, `main` (and `uat`, reviewed separately)  
 **Snapshot date:** 2026-11-08  
-**Status:** Planning and review only. No application-code cleanup, merges, deletions, or deployment actions authorized by this document.
+**Status:** Phase A/B read-only review completed for accessible repository data on 2026-11-08. This file is the consolidated plan and audited findings. Application-code changes, deletions, and release actions remain unexecuted. Updating this plan on `mainsite:dev` itself triggers its configured cross-repository synchronization workflow.
 
 ## 1. Objective and agreed decisions
 
@@ -17,7 +17,7 @@ The owner has explicitly decided:
 
 1. **Preserve the entire Contests implementation on `dev`.** This includes the page, script, stylesheet, navigation entries, contest metadata, calendar filtering, and event/next-meeting exclusions. Do not inadvertently promote it to `main`.
 2. **`sharing-feedback-guidelines.html` is the authoritative replacement for the earlier rules pages.**
-3. **`code-of-conduct.html` and `group-rules.html` are obsolete and are not needed on `dev`.** They are candidates for removal after checking references. Do not remove or redirect them blindly.
+3. **`code-of-conduct.html` and `group-rules.html` were never published or distributed and are approved for deletion from `dev`.** Their current contents are short redirects to the consolidated guidelines, but the owner confirms no public compatibility requirement. Deletion belongs in Phase C, not the audit.
 4. **Do not rewrite or reset either branch to match the other.** Assess changes by file and purpose, and inspect Actions before any synchronization.
 
 ## 2. Evidence and limitations
@@ -74,19 +74,15 @@ The `scripts/event-description.js` contest-specific metadata additions are:
 
 **Important:** `main` and `dev` both include `unfoldWrappedMetadataJson()`, which attempts to repair newline-damaged JSON string values in the calendar metadata. This logic is **not** a reason to overwrite `dev`; `dev` already preserves it. `uat` lacks that repair in the inspected snapshot.
 
-### 3.2 Obsolete legacy rules pages — **REMOVE from dev after checks**
+### 3.2 Obsolete legacy rules pages — **APPROVED FOR DELETION IN PHASE C**
 
 | Path | Dev | Main | Decision |
 |---|---|---|---|
-| `code-of-conduct.html` | Exists | Not found | Obsolete: remove from dev after reference and inbound-link review |
-| `group-rules.html` | Exists | Not found | Obsolete: remove from dev after reference and inbound-link review |
+| `code-of-conduct.html` | Exists | Not found | Approved: delete from dev in Phase C |
+| `group-rules.html` | Exists | Not found | Approved: delete from dev in Phase C |
 | `sharing-feedback-guidelines.html` | Exists | Exists | Keep; same guidelines/content across branches, aside from Contests navigation on dev |
 
-Before deleting obsolete files:
-- Search internal links, sitemap entries, scripts, newsletter templates, and external references.
-- Redirect old addresses to `sharing-feedback-guidelines.html` if important inbound links exist and hosting allows it. Otherwise remove their links and pages.
-- Confirm the consolidated guidelines contain all rules still intended to be public.
-- Verify live page and dev page render properly after the change.
+Before deleting, check for internal references and verify the consolidated page remains authoritative. The owner confirms these two old URLs were not made public: no redirect-retention requirement. The redirect stubs may be deleted in Phase C.
 
 ### 3.3 Four generated event-sharing pages — **REVIEW before removal or promotion**
 
@@ -137,7 +133,7 @@ Thus, **"everything except Contests matches" is not yet certified**. For the ins
 
 ## 5. GitHub Actions and deployment audit — required before changing branch relationships
 
-The workflow definitions and protection settings were **not successfully inspected during the earlier read-only comparison**. Do not assume they are safe or inactive.
+**Update:** The subsequent Phase A/B audit did successfully inspect the two workflow files, active repository ruleset, and relevant recent Actions runs. Findings are recorded in Section 9 below. Some GitHub Pages settings and classic protection endpoints remain inaccessible.
 
 For each file under `.github/workflows/`, document:
 
@@ -156,7 +152,7 @@ Produce a workflow matrix: `workflow | trigger | reads from | writes to | destin
 
 ## 6. Proposed safe execution sequence
 
-### Phase A — freeze the baseline and inventory (read-only)
+### Phase A — freeze the baseline and inventory (read-only; audited findings in Section 9)
 
 - [ ] Record exact `main`, `dev`, and `uat` commit SHAs before starting.
 - [ ] Export complete recursive tree listings for `main` and `dev`: path, file type, blob SHA; compare sets and contents.
@@ -165,9 +161,9 @@ Produce a workflow matrix: `workflow | trigger | reads from | writes to | destin
 - [ ] Check links to obsolete pages and sharing-page content.
 - [ ] Audit GitHub Actions and branch protections and record observed behavior; do not trigger deployments.
 
-### Phase B — resolve questions and make a change plan
+### Phase B — resolve questions and make a change plan (decision log in Section 9)
 
-- [ ] Confirm removal strategy for two obsolete rules pages and redirects, if required.
+- [x] Owner explicitly approved deleting both obsolete rules redirect pages; no public legacy-link requirement.
 - [ ] Decide fate/owner of four generated event-sharing pages.
 - [ ] Confirm that Dev Contests changes remain isolated from public production.
 - [ ] Identify any legitimate non-Contests change on main missing from dev in the full-tree comparison.
@@ -218,4 +214,95 @@ The cleanup can be considered complete only when:
 
 ## 8. Immediate next action
 
-**Complete the full recursive snapshot comparison and GitHub Actions audit before editing branch history or merging.** Based on the shared files already inspected, Dev's substantive differences are mostly Contests-related, with the two obsolete pages and four generated event pages as known exceptions. This observation is encouraging, but it is not a substitute for the remaining checks.
+**Completed for tracked snapshots:** recursive tree comparison and review of the two workflow YAML files, active ruleset, and recent runs. See Section 9 for confirmed results and remaining external checks. **Next:** compare `kemptvillecw/mainsite:dev` against `kemptvillecw/dev:main`, normalize only the known CNAME/share URL transforms, and investigate any other differences before altering synchronization.
+
+## 9. Phase A/B completed audit findings and updated decisions (2026-11-08)
+
+The detailed audit was recorded as `cleanup-audit-phases-A-B.md` (standalone read-only deliverable); this section incorporates its findings and subsequent owner clarifications. This section supersedes earlier uncompleted or tentative recommendations in this plan where they differ.
+
+### 9.1 Snapshot and exhaustive Git file inventory — COMPLETED
+
+Recorded branch heads:
+- `mainsite:main` = `8e1f9b30deec9f2b2eac142e151cd0d14243cefb`
+- `mainsite:dev` at audit = `7604ffa27d681eda9fbb6fc80b9c22b6315cbc66`
+- `mainsite:uat` = `1ef2cd450b168a9fcd123162bbce1d1d9926998e`
+- `kemptvillecw/dev:main` observed before this plan revision = `b014213af56790bcd647790a5a2d51cfd0256ef8`.
+
+- [x] Retrieve complete recursive Git trees for `mainsite:dev` (131 tree entries) and `mainsite:main` (121 entries).
+- [x] Verify both tree API responses returned `truncated=false`.
+- [x] Compare current file paths and blob SHAs; images, hidden files, workflows, and generated artifacts included.
+- [x] Identify **10 dev-only files**, **0 main-only files**, and **14 differing shared files**.
+- [x] Confirm the 14 differing shared files are attributable to the Contests feature, its navigation links, and responsive navigation styling.
+- [x] Confirm `images/event_17941072041741938843833.jpg` has the exact same blob SHA in both branches.
+- [x] Confirm the two workflow files have identical blob SHAs in `mainsite:main`, `mainsite:dev`, and `mainsite:uat`.
+- [ ] Save a separate complete machine-readable SHA manifest if required for long-term archival.
+
+**Ten dev-only paths at audit:**
+1. `contests.html` — keep
+2. `scripts/contests.js` — keep
+3. `styles/contests.css` — keep
+4. `code-of-conduct.html` — owner approved deletion in Phase C
+5. `group-rules.html` — owner approved deletion in Phase C
+6. `share/events/66okirl57k99ubapgnmpab7re4_20261116T230000Z.html` — retain pending event lifecycle review
+7. `share/events/66okirl57k99ubapgnmpab7re4_20261123T230000Z.html` — retain pending event lifecycle review
+8. `share/events/iob2qjmi973us6lvl20atf00hg.html` — retain pending event lifecycle review
+9. `share/events/sfkmdg8v96cjfp2k1deeinra1s.html` — retain pending event lifecycle review
+10. `cleanup-plan.md` — keep, documentation only.
+
+**Fourteen differing shared files:**
+- Contests links in header/footer only: `about.html`, `archive.html`, `browse.html`, `contact.html`, `content.html`, `index.html`, `privacy.html`, `schedule.html`, `sharing-feedback-guidelines.html`.
+- Contests filtering/metadata: `scripts/calendar.js`, `scripts/event-description.js`, `scripts/events.js`, `scripts/next-meeting.js`.
+- Contests navigation layout: `styles/styles.css`.
+
+Additional checked shared files including `scripts/metadata-wrap.test.cjs`, `confirm/index.html`, `preferences/index.html`, `fb_automation_privacy.html`, and `unsubscribe/index.html` are identical. The `unfoldWrappedMetadataJson` metadata repair already exists on both main and dev, so preserve dev's contest extension rather than replacing it.
+
+### 9.2 Workflow audit — COMPLETED for repository YAML and accessible run records
+
+| Workflow | Trigger | Writes | Risk / disposition |
+|---|---|---|---|
+| `.github/workflows/sync-dev.yml` | push to `mainsite:dev` or manual dispatch (job restricted to `dev`) | Rewrites CNAME and event-share hostnames in runner; then **force-pushes** prepared HEAD to **`kemptvillecw/dev:main`** using `TARGET_TOKEN` | Confirm destination is intended to be a mirror. `--force` can erase destination-only commits. Do not blindly treat bot-created copy as a separate source of truth. |
+| `.github/workflows/enforce-cname.yml` | push or PR on main/dev, plus manual dispatch with job gate | If CNAME wrong on push, bot commits repair to originating branch; on main optionally POSTs Pages rebuild | Changes are conditional. PRs with invalid CNAME fail instead of repair. Review future workflow changes separately. |
+| GitHub-managed Pages | Native publishing events | Deploys site | Observed successful `main` Pages build; Pages settings endpoint inaccessible through this connector. |
+
+Important observed evidence: `sync-dev.yml` run `42471312302` succeeded on the previous plan creation push. The destination `kemptvillecw/dev:main` head became bot commit `b014213af56790bcd647790a5a2d51cfd0256ef8` (parent `7604ffa27d681eda9fbb6fc80b9c22b6315cbc66`). This is direct evidence that a human-initiated Git commit triggered automatic mirror publication.
+
+**Owner clarification:** Content/files are created following **human interaction** (e.g. site, Calendar Manager, or direct GitHub action); there is no asserted independent, unsupervised content-authoring process. GitHub Actions and Apps Script may **automatically perform technical generation or copying downstream of human actions**. B3 should verify the actual human-initiated write path and synchronization safety rather than presume autonomous content creation.
+
+### 9.3 Protection/settings audit
+
+- [x] Active `Protect Branches` repository ruleset `23697271` covers `main`, `dev`, and `uat` in `kemptvillecw/mainsite`.
+- [x] Rules block deletion and non-fast-forward updates; no bypass actors listed.
+- [x] That ruleset contains no required status checks or PR-review rule.
+- [x] `kemptvillecw/dev` had no repository rulesets and its `main` was reported unprotected.
+- [ ] Verify any **additional classic** branch protections through authorized settings access (direct protection endpoint returned HTTP 403).
+- [ ] Verify Pages publishing settings and actual deployed artifacts; Pages configuration API unavailable through current connector.
+
+### 9.4 Phase B owner decisions — CONFIRMED
+
+- [x] `sharing-feedback-guidelines.html` replaces legacy rules content and must be preserved.
+- [x] `code-of-conduct.html` and `group-rules.html` **may be deleted** from `mainsite:dev`. The owner confirms those previous URLs were never made public. No redirect preservation needed.
+- [x] Contests page, JavaScript, metadata, calendar filtering, and navigation must remain on `mainsite:dev`; do not release to `main` yet.
+- [x] No main-only files or other non-Contests changes were found in the audited tracked tree snapshot.
+- [x] File creation should be understood as **human-initiated**, with downstream automatic synchronization where configured.
+- [x] **New architecture clarification:** `kemptvillecw/dev:main` is intended to mirror `kemptvillecw/mainsite:dev`, **not** to hold independently developed code. The present sync workflow deliberately transforms `CNAME` and production-domain references in `share/events/*.html` to the dev domain. These two transformations are presently *known intentional exceptions* to a literal byte-identical mirror, but the owner's expectation is that all other files match. If exact byte-for-byte identity is required even for these files, deployment domain handling must be redesigned in a separately approved phase.
+- [ ] Resolve generated share-page promotion and lifecycle without deleting old Facebook URLs.
+- [ ] Decide whether `uat` has a purpose and how its promotion should work.
+- [ ] Inspect other repositories' human-initiated content generators and publication paths only as necessary to validate the four event pages.
+- [ ] Approve any actual workflow hardening, branch cleanup, or merge separately (Phase C).
+
+### 9.5 New immediate next step: cross-repository mirror verification
+
+**Compare `kemptvillecw/mainsite:dev` and `kemptvillecw/dev:main` as current recursive Git trees.** Perform this AFTER the documentation update, which itself triggers sync.
+
+Checklist:
+- [ ] Record both current head commit SHAs and check the sync workflow run for the documentation update.
+- [ ] Compare complete relative file path sets.
+- [ ] Compare Git blob SHA of every shared file, including binaries and hidden files.
+- [ ] Classify every mismatch as:
+  1. Expected CNAME substitution (production domain -> dev domain);
+  2. Expected `share/events/*.html` hostname substitutions;
+  3. Unexpected difference/drift.
+- [ ] Confirm whether the destination head descends from the exact current source `dev` head as the workflow is intended to produce.
+- [ ] Report any destination-only files, missing files or unexpected source edits.
+- [ ] **Do not modify either repository merely to make them match** during the comparison.
+- [ ] If expected transforms are the only differences, consider the mirror *logically in sync* but **not literally byte-identical**; document that distinction.
