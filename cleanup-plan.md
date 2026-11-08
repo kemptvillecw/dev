@@ -290,19 +290,23 @@ Important observed evidence: `sync-dev.yml` run `42471312302` succeeded on the p
 - [ ] Inspect other repositories' human-initiated content generators and publication paths only as necessary to validate the four event pages.
 - [ ] Approve any actual workflow hardening, branch cleanup, or merge separately (Phase C).
 
-### 9.5 New immediate next step: cross-repository mirror verification
+### 9.5 Cross-repository mirror verification — COMPLETED
 
-**Compare `kemptvillecw/mainsite:dev` and `kemptvillecw/dev:main` as current recursive Git trees.** Perform this AFTER the documentation update, which itself triggers sync.
+**Result: VERIFIED IN SYNC as designed on 2026-11-08.** The audit compared `kemptvillecw/mainsite:dev` at `2b3166cc2a3fb9b5771be2e66729d95f54940e86` with `kemptvillecw/dev:main` at `10a6a0c965bcb6b06fa4ecddf2dce49ba9e96afe`, after the prior documentation update and its completed sync Action.
 
 Checklist:
-- [ ] Record both current head commit SHAs and check the sync workflow run for the documentation update.
-- [ ] Compare complete relative file path sets.
-- [ ] Compare Git blob SHA of every shared file, including binaries and hidden files.
-- [ ] Classify every mismatch as:
-  1. Expected CNAME substitution (production domain -> dev domain);
-  2. Expected `share/events/*.html` hostname substitutions;
-  3. Unexpected difference/drift.
-- [ ] Confirm whether the destination head descends from the exact current source `dev` head as the workflow is intended to produce.
-- [ ] Report any destination-only files, missing files or unexpected source edits.
-- [ ] **Do not modify either repository merely to make them match** during the comparison.
-- [ ] If expected transforms are the only differences, consider the mirror *logically in sync* but **not literally byte-identical**; document that distinction.
+- [x] Recorded both current head SHAs and confirmed synchronization workflow run `42472420484` completed successfully.
+- [x] Retrieved complete recursive Git trees from both repositories; neither response was truncated.
+- [x] Compared all tracked file paths: **116 files in each**, **zero missing from either repository**.
+- [x] Compared all Git blob SHAs, including binaries, images and hidden files.
+- [x] Confirmed **105 byte-identical files**.
+- [x] Investigated all **11 differing files**: `CNAME` plus the **10** `share/events/*.html` pages.
+- [x] Verified the only difference in `CNAME` is the intended production-to-development domain substitution.
+- [x] Verified every one of the 10 event-share files differs **only** by the expected conversion of `https://www.kemptvillecreativewriters.com/` to `https://dev.kemptvillecreativewriters.com/`.
+- [x] Confirmed **zero unexpected differences, missing files, or destination-only additions**.
+- [x] Confirmed the destination HEAD commit's direct parent is the exact source dev commit `2b3166c...`, proving the destination was prepared from that source snapshot.
+- [x] Comparison itself was read-only, with no repair, overwrite or merge.
+
+**Disposition: CLOSED — no current cleanup work required for `kemptvillecw/dev`.** The target's `main` is an intentional published mirror of `mainsite:dev`, with expected hostname adjustments. It is logically synchronized, though not literally byte-identical. Do not attempt a branch merge or force overwrite solely to remove these intended differences. Existing cross-repository sync is operational and need not be treated as an unresolved mismatch. Its configured use of `--force` is a documented architectural characteristic; only revisit it if future requirements call for independently maintained changes in the mirror or a different synchronization strategy.
+
+**Ongoing rule:** Treat `mainsite:dev` as source of truth and `kemptvillecw/dev:main` as a generated/deployed derivative. Future source commits trigger the configured sync workflow; a new divergence concern should arise only if that workflow fails or unexpected file differences appear.
