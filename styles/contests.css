@@ -18,6 +18,11 @@
 .contest-facts small { display: block; font: 700 .75rem Arial, sans-serif; color: var(--muted); margin-bottom: 5px; }
 .contest-facts strong { font-size: .98rem; line-height: 1.3; }
 .contest-summary { white-space: pre-line; overflow-wrap: anywhere; }
+.contest-prize { margin: 12px 0; padding: 9px 12px; border-left: 4px solid var(--forest); border-radius: 4px; background: var(--mint); overflow-wrap: anywhere; }
+.contest-prize strong { color: var(--forest-dark); }
+.contest-restrictions { margin: 12px 0; overflow-wrap: anywhere; }
+.contest-restrictions-title { display: block; margin-bottom: 5px; color: var(--forest-dark); }
+.contest-restrictions p { margin: 4px 0; line-height: 1.45; }
 .contest-chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 15px 0; }
 .contest-chip { border: 1px solid var(--line); border-radius: 20px; padding: 4px 9px; font: .75rem Arial, sans-serif; }
 .contest-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
