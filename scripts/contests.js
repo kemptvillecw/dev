@@ -11,11 +11,13 @@
   const genreFilter = root.querySelector('[data-contest-genre]');
   const freeFilter = root.querySelector('[data-contest-free]');
   const searchInput = root.querySelector('[data-contest-search]');
+  const availabilityFilter = root.querySelector('[data-contest-availability]');
   const count = root.querySelector('[data-contest-count]');
   const previous = root.querySelector('[data-contest-previous]');
   const next = root.querySelector('[data-contest-next]');
   const pageLabel = root.querySelector('[data-contest-page-label]');
   const pageSize = 6;
+  const openingSoonDays = 90; // Announced opening dates within the next 90 days.
   let contests = [];
   let page = 0;
 
@@ -77,11 +79,20 @@
       : '';
   }
   function beginsOn(event) {
-    if (event.metadata.contestOpenDate) return event.metadata.contestOpenDate;
-    if (event.raw.start?.date) return event.raw.start.date;
-    return event.raw.start?.dateTime
-      ? dateParts(new Date(event.raw.start.dateTime), config.timezone)
-      : '';
+    // The Calendar start may be a storage fallback for an unknown opening date.
+    // Only the contest's explicitly recorded opening date is authoritative.
+    return event.metadata.contestOpenDate || '';
+  }
+  function daysFromToday(iso) {
+    const current = today();
+    return Math.round((Date.parse(iso + 'T00:00:00Z') -
+      Date.parse(current + 'T00:00:00Z')) / 86400000);
+  }
+  function availability(record) {
+    if (record.openDate && record.openDate > today()) return 'upcoming';
+    // An unknown opening date is not independently proof of being open.
+    // Only display it as open when the editor has published the listing.
+    return 'open';
   }
   function deadlinePassed(record) {
     const zone = record.metadata.contestDeadlineTimezone || config.timezone;
@@ -100,9 +111,9 @@
     }
   }
   function state(record) {
-    if (record.openDate && record.openDate > today()) return 'Opening soon';
-    if (!record.metadata.contestOpenDate) return 'Deadline upcoming';
-    return 'Open';
+    if (availability(record) === 'upcoming') return 'Opening soon';
+    if (!record.openDate) return 'Open — opening date unconfirmed';
+    return daysFromToday(record.deadline) < 15 ? 'Closing soon' : 'Open';
   }
   function splitTags(value) {
     return String(value || '').split(/[,;]+/).map(x => x.trim()).filter(Boolean);
@@ -211,6 +222,7 @@
     const query = searchInput.value.trim().toLowerCase();
     return contests.filter(c => {
       const m = c.metadata;
+      if (availabilityFilter.value && availability(c) !== availabilityFilter.value) return false;
       if (formFilter.value && !splitTags(m.contestForm).includes(formFilter.value)) return false;
       if (genreFilter.value && !splitTags(m.contestGenres).includes(genreFilter.value)) return false;
       if (freeFilter.checked && !isFree(m.contestEntryFee)) return false;
@@ -228,14 +240,14 @@
     page = Math.min(page, pages - 1);
     const visible = items.slice(page * pageSize, (page + 1) * pageSize);
     cards.replaceChildren(...visible.map(createCard));
-    count.textContent = `${items.length} contest${items.length === 1 ? '' : 's'} found`;
+    count.textContent = `${items.length} contest${items.length === 1 ? '' : 's'} found · ${items.filter(c => availability(c) === 'open').length} open now · ${items.filter(c => availability(c) === 'upcoming').length} opening soon`;
     pageLabel.textContent = `Page ${page + 1} of ${pages}`;
     previous.disabled = page === 0;
     next.disabled = page + 1 >= pages;
     root.querySelector('[data-contest-pagination]').hidden = items.length <= pageSize;
     status.textContent = items.length
       ? ''
-      : (contests.length ? 'No contests match these filters.' : 'No upcoming published contests are listed. Please check back soon.');
+      : (contests.length ? 'No contests match these filters.' : 'No open or soon-to-open published contests are listed. Please check back soon.');
   }
   function populateFilters() {
     const addOptions = (control, values) => {
@@ -257,12 +269,13 @@
     try {
       if (location.protocol === 'file:') throw new Error('Use a local preview server.');
       const now = new Date();
-      const start = new Date(now); start.setUTCDate(start.getUTCDate() - 366);
-      const end = new Date(now); end.setUTCDate(end.getUTCDate() + 366);
+      // Google's timeMin selects events whose END follows now: long-running
+      // contests stay visible even if their opening date was years ago.
+      const end = new Date(now); end.setUTCDate(end.getUTCDate() + 730);
       const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(config.id)}/events`);
       url.search = new URLSearchParams({
         key: config.apiKey,
-        timeMin: start.toISOString(), timeMax: end.toISOString(),
+        timeMin: now.toISOString(), timeMax: end.toISOString(),
         timeZone: config.timezone, singleEvents: 'true',
         orderBy: 'startTime', showDeleted: 'false', maxResults: '250'
       }).toString();
@@ -287,6 +300,9 @@
           record.openDate = beginsOn(record);
           if (!/^\d{4}-\d{2}-\d{2}$/.test(record.deadline) ||
               deadlinePassed(record)) continue;
+          // Upcoming means a confirmed opening date, within the next 90 days.
+          if (record.openDate && record.openDate > today() &&
+              daysFromToday(record.openDate) > openingSoonDays) continue;
           gathered.push(record);
         }
         token = data.nextPageToken;
@@ -315,7 +331,7 @@
       root.setAttribute('aria-busy', 'false');
     }
   }
-  for (const input of [formFilter, genreFilter, freeFilter, searchInput]) {
+  for (const input of [availabilityFilter, formFilter, genreFilter, freeFilter, searchInput]) {
     input.addEventListener(input === searchInput ? 'input' : 'change', () => { page = 0; render(); });
   }
   previous.addEventListener('click', () => { page -= 1; render(); root.scrollIntoView({ block: 'start' }); });
@@ -328,7 +344,7 @@
     catch { targetId = location.hash.slice(1); }
     const index = contests.findIndex(item => item.id === targetId);
     if (index >= 0) {
-      formFilter.value = ''; genreFilter.value = ''; freeFilter.checked = false; searchInput.value = '';
+      availabilityFilter.value = ''; formFilter.value = ''; genreFilter.value = ''; freeFilter.checked = false; searchInput.value = '';
       page = Math.floor(index / pageSize);
       render();
       document.getElementById(targetId)?.scrollIntoView({ block: 'center' });
