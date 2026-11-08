@@ -171,6 +171,33 @@
 
     const descriptionText = description.plainText(record.raw.description);
     addText(card, 'p', 'contest-summary', descriptionText);
+    // Present entry restrictions alongside the description, not behind disclosure.
+    const restrictionFields = [
+      ['Previously published work', m.contestPublicationPolicy],
+      ['AI assistance', m.contestAiPolicy],
+      ['Additional restrictions', m.contestRestrictions]
+    ];
+    const restrictions = restrictionFields.filter(([, value]) => String(value || '').trim());
+    if (restrictions.length) {
+      const section = document.createElement('div');
+      section.className = 'contest-restrictions';
+      addText(section, 'strong', 'contest-restrictions-title', 'Entry restrictions');
+      for (const [label, value] of restrictions) {
+        const item = document.createElement('p');
+        const prefix = document.createElement('strong');
+        prefix.textContent = label + ': ';
+        item.append(prefix, document.createTextNode(value));
+        section.append(item);
+      }
+      card.append(section);
+    }
+    if (m.contestPrize && m.contestPrize.trim()) {
+      const prize = document.createElement('div');
+      prize.className = 'contest-prize';
+      addText(prize, 'strong', '', 'Prize: ');
+      prize.append(document.createTextNode(m.contestPrize.trim()));
+      card.append(prize);
+    }
     const chips = document.createElement('div');
     chips.className = 'contest-chips';
     for (const text of [
@@ -193,11 +220,7 @@
     field(details, 'Submissions open', m.contestOpenDate ? dateLabel(m.contestOpenDate) : '');
     field(details, 'Region', m.contestRegion);
     field(details, 'Results expected', m.contestAnnouncementDate ? dateLabel(m.contestAnnouncementDate) : '');
-    field(details, 'Prizes', m.contestPrize);
     field(details, 'Languages', m.contestLanguage);
-    field(details, 'Previously published work', m.contestPublicationPolicy);
-    field(details, 'AI assistance', m.contestAiPolicy);
-    field(details, 'Additional restrictions', m.contestRestrictions);
     field(details, 'Listing last verified', m.contestVerifiedAt ? dateLabel(m.contestVerifiedAt) : '');
     if (details.childElementCount) {
       more.append(summary, details);
@@ -229,6 +252,7 @@
       if (query && ![
         m.eventTitle, c.raw.summary, m.contestOrganizer, m.contestEligibility,
         m.contestRegion, m.contestForm, m.contestGenres,
+        m.contestPrize, m.contestPublicationPolicy, m.contestAiPolicy, m.contestRestrictions,
         description.plainText(c.raw.description)
       ].join(' ').toLowerCase().includes(query)) return false;
       return true;
